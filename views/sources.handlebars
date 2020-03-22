@@ -1,25 +1,27 @@
-          <div>
-              <h3><b>Sources</b></h3>
-          </div>
-          <hr/>
-          <h4><b>Today</b></h2>
-          <form>
-  <div class="form-group">
-    <div class="togglebutton">
-        <label>
-            <input type="checkbox" checked="">
-            <span class="toggle"></span>
-            Toggle is on
-        </label>
-        </div>
+    <div>
+        <h3><b>Sources</b></h3>
+    </div>
+    <hr/>
+    <h4><b>Today</b></h2>
+    <form method="POST" action="http://localhost:3000/auth/sources/activate">
+    <div class="form-group">
         <div class="togglebutton">
-        <label>
-            <input type="checkbox">
-            <span class="toggle"></span>
-            Toggle is off
-        </label>
-        </div>
-  </div>
-  
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+            <label>
+                <input type="checkbox" checked="">
+                <span class="toggle"></span>
+                Toggle is on
+            </label>
+            </div>
+            <div class="togglebutton">
+            <label>
+                <input type="checkbox">
+                <span class="toggle"></span>
+                Toggle is off
+            </label>
+            </div>
+    </div>
+    <input type="hidden" name="callback" value="http://localhost:3001"/>
+    <input type="hidden" name="consentReceiptId" value="20f2fc315a06ed54663bdfd5efa4a51234b27fd4d4690bd58d0944120bcd31d08d28ae5891ba9243c91f5eab608d5d364c1681e2bf0d9e30c25822d8350c5a5d"/>
+    <input type="hidden" name="accessToken" value="eyJhbGciOiJLTVMiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL2FwaS5kYXRhdmlsbGFnZS5tZS8iLCJzdWIiOiJhdXRoMHw1ZTcyOGM5NWI3YTUzMDBjOGU3ZmY0YWMiLCJpYXQiOiIyMDIwLTAzLTE5VDE4OjQ4OjQ4LjQwM1oiLCJleHAiOiIyMDIwLTAzLTE5VDE4OjU4OjQ4LjQwM1oiLCJzY29wZSI6Imxpbms6c291cmNlcyJ9.AQICAHiicquW0AOzDlrHF9VXK3pZkmcMQWFNDW2TSJ2YbFcC0gEYHgfn83udJv20T/2PsDfMAAABZzCCAWMGCSqGSIb3DQEHBqCCAVQwggFQAgEAMIIBSQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAy3TRfY5+zN9++ZI5gCARCAggEaQqUnGp+d7hlWECKXdDDXPZq1yEv2VGEzyUbLcvvNQJO7oVD+9ix+O20/x4yq63D+0p219XEES1luAzoAGYqSvhWK/VZM4dTOl9R/q5sNoLemrPlA6MotBzmE24LvGo2BeXjiVeYpOTkti38yLBHRqtBptHQO0pkM8Tj8dqjfgopoaTrfrSuFEbYuy4ErxQEX/RJPsQ77a4wbzJ8y/l6x6NrFnF1jpbxzMbk/w0xQn9liShCyRBDeEIhn8YutVY0ywvuEomzabgjf+1mIRgQf/r94j/4NY4FNPdTx8bCOk44uIuqtecZ98V1zeDdtjb8OpZRgTtj5xjVK4J0Dp/ZTV0IB/kOzvV5i7t8a4xYHdPhf5G6vWaQ+awxy"/>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>

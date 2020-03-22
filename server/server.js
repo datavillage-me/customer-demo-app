@@ -58,8 +58,6 @@ if (config.env === 'production') {
 }
 
 app.use(session(sess));
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(express.static(path.join('client')));
 
 app.set('view engine', '.handlebars');
