@@ -1,27 +1,26 @@
     <div>
-        <h3><b>Sources</b></h3>
+        <h3><b>List of Sources</b></h3>
     </div>
     <hr/>
-    <h4><b>Today</b></h2>
-    <form method="POST" action="https://passport.datavillage.me/auth/sources/activate">
+    <form method="POST" action="https://passport.datavillage.me/sources/activate">
     <div class="form-group">
         <div class="togglebutton">
             <label>
                 <input type="checkbox" checked="">
                 <span class="toggle"></span>
-                Toggle is on
+                Strava
             </label>
             </div>
             <div class="togglebutton">
             <label>
                 <input type="checkbox">
                 <span class="toggle"></span>
-                Toggle is off
+                Sportify
             </label>
             </div>
     </div>
-    <input type="hidden" name="callback" value="http://localhost:3001"/>
+    <input type="hidden" name="callback" value="http://localhost:3001/sources"/>
     <input type="hidden" name="consentReceiptId" value="20f2fc315a06ed54663bdfd5efa4a51234b27fd4d4690bd58d0944120bcd31d08d28ae5891ba9243c91f5eab608d5d364c1681e2bf0d9e30c25822d8350c5a5d"/>
-    <input type="hidden" name="accessToken" value="eyJhbGciOiJLTVMiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL2FwaS5kYXRhdmlsbGFnZS5tZS8iLCJzdWIiOiJhdXRoMHw1ZTcyOGM5NWI3YTUzMDBjOGU3ZmY0YWMiLCJ1cmkiOiJodHRwczovL2FwaS5kYXRhdmlsbGFnZS5tZS91c2Vycy9hdXRoMHw1ZTcyOGM5NWI3YTUzMDBjOGU3ZmY0YWMiLCJpYXQiOiIyMDIwLTAzLTIzVDIxOjA4OjA2LjY0OVoiLCJleHAiOiIyMDIwLTAzLTIzVDIxOjE4OjA2LjY0OVoiLCJzY29wZSI6Imxpbms6c291cmNlcyJ9.AQICAHiicquW0AOzDlrHF9VXK3pZkmcMQWFNDW2TSJ2YbFcC0gFzI0BWufSDS1um8tz8qdFiAAABxzCCAcMGCSqGSIb3DQEHBqCCAbQwggGwAgEAMIIBqQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx3L4ATuYAHweqMQ9wCARCAggF6sY/x88rpdtnGrZCroTB6jJft5S97y66TBZWuzABzvGP3/0soDMpWQAIoo6AEI6Kh7yYItbeFw11gnTE/1xc2P3QcFIdFPWBRgg+mRKKe39vgJ928AwUJLCsLaw+VpNzc8jx+1eYcnqgYs6wSYsELyhvhcn2onqZJ/Dj94cwQgeCGXrfaR3kH0RM5lOQvAoTmIpAhFYj/W6BsCdAMqdehkabfR/DJd3QiayoXOc+o8IcO/FRZgF8MNcZdAgIPVWYzx3tLPe6zyilEUVILhRGP6iPbvW0RC3bqG9pcoGwAHZXFWKkPb+9r8BMORIka1F82FURTer6SUjWEWxxT+dRHzkqlhnsp3HNMbTaBVNoGJXsFfrRcQijmc54QWKySP3IsVDIc5B1/hg+fhcxVnPdgyvR2wItp7MgOfgNbUSm2p/T4jSRQo235vtxUhaCBrVKUROaGwecOIH0ikV01bamhFYaMcK1nKc/8TY0rGcWrbHsXiHVSMmz/dvHO"/>
+    <input type="hidden" name="accessToken" value="eyJhbGciOiJLTVMiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL2FwaS5kYXRhdmlsbGFnZS5tZS8iLCJzdWIiOiJjZGUwNjU4NS1lODQ4LTQ5NzgtYWQwOS03ZGQzNDdiN2RmN2IiLCJ1cmkiOiJodHRwczovL2FwaS5kYXRhdmlsbGFnZS5tZS91c2Vycy9jZGUwNjU4NS1lODQ4LTQ5NzgtYWQwOS03ZGQzNDdiN2RmN2IiLCJhenAiOiJVSDBIVG9raEoxUnNEMkYybWZYZXRRQTJncWxIWnNqUSIsImlhdCI6IjIwMjAtMDMtMjhUMTY6MzI6MTMuNzY3WiIsImV4cCI6bnVsbCwic2NvcGUiOiJzb3VyY2VzOmFjdGl2YXRlLGNvbnNlbnRzOmNyZWF0ZSxjYWdlczppbXBvcnREYXRhLGNhZ2VzOnByb2Nlc3NEYXRhIn0.AQICAHiicquW0AOzDlrHF9VXK3pZkmcMQWFNDW2TSJ2YbFcC0gFRgMFb/pCY5NF0Dn2/Xk64AAACOjCCAjYGCSqGSIb3DQEHBqCCAicwggIjAgEAMIICHAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxXhZzQ0F2MNq2F94ECARCAggHtPMnOBv1jziGJwmHWjm+Y6zO+Vtjs8/Z75k+RbehuczmBqoub9RPFPN6MEtzO9W5/67+dGSNUc+jVQjVQsV0rm/IEKkPKHj9cVA4WeQ1d4TR/MjVTGzgcG/uVbS9lAjakc2x4Kg7YjQLGuh4KJPrnqCU7d1Ws1SAk1Avs7iO91cgsp8IBG+gMDbotwoUAjfocGOSSmtjdktP+MZCXX2tg1u+Biv674GJxvtAEK6jy/NBYsBagnJbBRDAD65R+rCdfqtMOibL7Ou6xZFTfK2bKSPifPS/Y/kKP9q4BSQVdoEtDBTwe/BgU7t38Sn8nxn3lxNuzwrWqanY8PvW9H681toFFU3WzpFLyTqwUP3Clqjtt7ub/ezHhkdbtEhvLfvmFWl15xT9T+zxX20z9BaRB+on3VonS4weIS9ECQd3bmcLTNXO6gcUS/DtYUhyXKOIA6GAv6CUBp/7hOzvfRIAS819kszh+GFk08ff96IHkKpp1Fhad+HxhGA+r2TwvWz5tiZVdnHsqy6Fd5FX9geSR/vgTHfKtQo7xx/j5VKAHMvhj4EoQxM0rKqRaen6Pl03INcRW4MndMrkMlBNlCaMrEvtcPoA38KxL/tn+CZcncDEz/1VsYzGTY8oQvmCYDXVWvMJHaybW083++11pzw=="/>
     <button type="submit" class="btn btn-primary">Submit</button>
     </form>
