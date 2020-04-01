@@ -7,6 +7,7 @@
  ************************************/
 import express from 'express';
 import request from 'request';
+import config from '../config/index';
 var router = express.Router();
 
 /***********************************
@@ -60,9 +61,15 @@ router.get('/calendar', function (req, res, next) {
  * @param {res} response
  */
 function renderSources(req,res){
+  var rootDomainDemoApp=config.rootDomainDemoApp;
+  var rootDomainPassportApp=config.rootDomainPassportApp;
   res.render('sources', {
     layout: 'master',
-    sources:'active'
+    sources:'active',
+    action:rootDomainPassportApp+'/sources/activate',
+    callback:rootDomainDemoApp+'/sources',
+    callbackError:rootDomainDemoApp+'/error',
+    accessToken:config.accessToken
   });
 }
 

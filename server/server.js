@@ -18,6 +18,8 @@ import dateFormat from 'dateformat';
 //routes
 import indexRouter from '../routes/index';
 import sourcesRouter from '../routes/sources';
+import podsRouter from '../routes/pods';
+import applicationsRouter from '../routes/applications';
 
 
 
@@ -100,6 +102,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', indexRouter);
 app.use('/', sourcesRouter);
+app.use('/', podsRouter);
+app.use('/', applicationsRouter);
 
 
 /***********************************

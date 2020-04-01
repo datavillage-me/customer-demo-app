@@ -1,26 +1,91 @@
     <div>
-        <h3><b>List of Sources</b></h3>
+        <h3><b>Data Sources</b></h3>
+        Activate data sources
     </div>
     <hr/>
-    <form method="POST" action="https://passport.datavillage.me/sources/activate">
-    <div class="form-group">
-        <div class="togglebutton">
-            <label>
-                <input type="checkbox" checked="">
-                <span class="toggle"></span>
-                Strava
-            </label>
+    <h4><b>Health data sources</b></h4>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="card" >
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                               <img class="card-img" style="width:100px;" src="http://bulldogstudio.es/wp-content/uploads/uploadsold/blog/carles/strava.png" alt="Card image cap">
+                            </div>
+                            <div class="row justify-content-center">
+                                <h2 style="color:#fc4c02">Strava</h2>
+                            </div>
+                            <div class="row justify-content-center">
+                                <form method="POST" action="{{action}}">
+                                    <input type="hidden" name="callback" value="{{callback}}"/>
+                                    <input type="hidden" name="callbackError" value="{{callbackError}}"/>
+                                    <input type="hidden" name="consentReceiptId" value="20f2fc315a06ed54663bdfd5efa4a51234b27fd4d4690bd58d0944120bcd31d08d28ae5891ba9243c91f5eab608d5d364c1681e2bf0d9e30c25822d8350c5a5d"/>
+                                    <input type="hidden" name="accessToken" value="{{accessToken}}"/>
+                                    <button style="background-color:#fc4c02" class="btn btn-primary" type="submit"><i class="material-icons" style="font-size:28px">input</i>&nbsp;&nbsp;&nbsp;Use it</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="togglebutton">
-            <label>
-                <input type="checkbox">
-                <span class="toggle"></span>
-                Sportify
-            </label>
-            </div>
+        </div>
     </div>
-    <input type="hidden" name="callback" value="http://localhost:3001/sources"/>
-    <input type="hidden" name="consentReceiptId" value="20f2fc315a06ed54663bdfd5efa4a51234b27fd4d4690bd58d0944120bcd31d08d28ae5891ba9243c91f5eab608d5d364c1681e2bf0d9e30c25822d8350c5a5d"/>
-    <input type="hidden" name="accessToken" value="eyJhbGciOiJLTVMiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL2FwaS5kYXRhdmlsbGFnZS5tZS8iLCJzdWIiOiJjZGUwNjU4NS1lODQ4LTQ5NzgtYWQwOS03ZGQzNDdiN2RmN2IiLCJ1cmkiOiJodHRwczovL2FwaS5kYXRhdmlsbGFnZS5tZS91c2Vycy9jZGUwNjU4NS1lODQ4LTQ5NzgtYWQwOS03ZGQzNDdiN2RmN2IiLCJhenAiOiJVSDBIVG9raEoxUnNEMkYybWZYZXRRQTJncWxIWnNqUSIsImlhdCI6IjIwMjAtMDMtMjhUMTY6MzI6MTMuNzY3WiIsImV4cCI6bnVsbCwic2NvcGUiOiJzb3VyY2VzOmFjdGl2YXRlLGNvbnNlbnRzOmNyZWF0ZSxjYWdlczppbXBvcnREYXRhLGNhZ2VzOnByb2Nlc3NEYXRhIn0.AQICAHiicquW0AOzDlrHF9VXK3pZkmcMQWFNDW2TSJ2YbFcC0gFRgMFb/pCY5NF0Dn2/Xk64AAACOjCCAjYGCSqGSIb3DQEHBqCCAicwggIjAgEAMIICHAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxXhZzQ0F2MNq2F94ECARCAggHtPMnOBv1jziGJwmHWjm+Y6zO+Vtjs8/Z75k+RbehuczmBqoub9RPFPN6MEtzO9W5/67+dGSNUc+jVQjVQsV0rm/IEKkPKHj9cVA4WeQ1d4TR/MjVTGzgcG/uVbS9lAjakc2x4Kg7YjQLGuh4KJPrnqCU7d1Ws1SAk1Avs7iO91cgsp8IBG+gMDbotwoUAjfocGOSSmtjdktP+MZCXX2tg1u+Biv674GJxvtAEK6jy/NBYsBagnJbBRDAD65R+rCdfqtMOibL7Ou6xZFTfK2bKSPifPS/Y/kKP9q4BSQVdoEtDBTwe/BgU7t38Sn8nxn3lxNuzwrWqanY8PvW9H681toFFU3WzpFLyTqwUP3Clqjtt7ub/ezHhkdbtEhvLfvmFWl15xT9T+zxX20z9BaRB+on3VonS4weIS9ECQd3bmcLTNXO6gcUS/DtYUhyXKOIA6GAv6CUBp/7hOzvfRIAS819kszh+GFk08ff96IHkKpp1Fhad+HxhGA+r2TwvWz5tiZVdnHsqy6Fd5FX9geSR/vgTHfKtQo7xx/j5VKAHMvhj4EoQxM0rKqRaen6Pl03INcRW4MndMrkMlBNlCaMrEvtcPoA38KxL/tn+CZcncDEz/1VsYzGTY8oQvmCYDXVWvMJHaybW083++11pzw=="/>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <hr/>
+    <h4><b>Knowledge &amp; Interest data sources</b></h4>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="card" >
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                               <img class="card-img" style="width:100px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIbihWzwMDcskEjRi1G38WAf5twt1YL-DDbuRxVAS9ZF0Z2gnG&s" alt="Card image cap">
+                            </div>
+                            <div class="row justify-content-center">
+                                <h2 style="color:#1db954">Spotify</h2>
+                            </div>
+                            <div class="row justify-content-center">
+                                <form method="POST" action="{{action}}">
+                                    <input type="hidden" name="callback" value="{{callback}}"/>
+                                    <input type="hidden" name="callbackError" value="{{callbackError}}"/>
+                                    <input type="hidden" name="consentReceiptId" value="9c7eabb50816242175562fa9ae5ad4dd66c0b7b03a813a7ef021ec9c07c80f8e45a6383b82d5164342cb82d585d20ecb33d7ed7fe020c12b18d44ec5d238ede1"/>
+                                    <input type="hidden" name="accessToken" value="{{accessToken}}"/>
+                                    <button style="background-color:#1db954" class="btn btn-primary" type="submit"><i class="material-icons" style="font-size:28px">input</i>&nbsp;&nbsp;&nbsp;Use it</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <h4><b>Geospacial data sources</b></h4>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="card" >
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                               <img class="card-img" style="width:100px;" src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Maps_logo.max-500x500.png" alt="Card image cap">
+                            </div>
+                            <div class="row justify-content-center">
+                                <h3 style="color:#ea4335">Google map timeline</h3>
+                            </div>
+                            <div class="row justify-content-center">
+                                <form method="POST" action="{{action}}">
+                                    <input type="hidden" name="callback" value="{{callback}}"/>
+                                    <input type="hidden" name="callbackError" value="{{callbackError}}"/>
+                                    <input type="hidden" name="consentReceiptId" value="c9a5509d3f1ecd150f4f049a92d359482d4d41885591ad444c9762d4bf1bcad1b6e069eae7b320e5703801c985461de38e8fce0bb903e5c71a94c9b411f4a939"/>
+                                    <input type="hidden" name="accessToken" value="{{accessToken}}"/>
+                                    <button style="background-color:#ea4335" class="btn btn-primary" type="submit"><i class="material-icons" style="font-size:28px">input</i>&nbsp;&nbsp;&nbsp;Use it</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
