@@ -13,6 +13,7 @@ import passport from 'passport';
 import Auth0Strategy from 'passport-auth0';
 import flash from 'connect-flash';
 import config from '../config/index';
+import User from '../server/lib/utils/user';
 import userInViews from './lib/middleware/userInViews';
 import dateFormat from 'dateformat';
 
@@ -41,11 +42,11 @@ var strategy = new Auth0Strategy(
     //set facebook PSDID
     // asynchronous verification, for effect...
 
-   // profile=User.setUserJWTToken(profile,extraParams.id_token);
-     // User.loadUserProfile(profile,function (profile) {
-       // if (profile)
+   profile=User.setUserJWTToken(profile,extraParams.id_token);
+      User.loadUserProfile(profile,function (profile) {
+        if (profile)
           return done(null, profile);
-     // });
+      });
   }
 );
 

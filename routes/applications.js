@@ -35,7 +35,8 @@ router.get('/applications', function (req, res, next) {
 function renderApplications(req,res){
   res.render('applications', {
     layout: 'master',
-    applications:'active'
+    applications:'active',
+    user:{id:User.getUserId(req.user)}
   });
 }
 
