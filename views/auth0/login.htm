@@ -1,24 +1,80 @@
+
 <!DOCTYPE html>
-<html lang="en" style="height:100%">
-
+<html>
 <head>
-  <meta charset="utf-8" />
+  <title>Datavillage - Developer portal</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/png" href="https://developer.datavillage.me/img/favicon.ico">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <title>
-   Datavillage - Developer portal.
-  </title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
-  <!--     Fonts and icons     -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-  <!-- CSS Files -->
-  <link href="https://developer.datavillage.me/css/material-kit.css?v=2.0.4" rel="stylesheet" />
+   <!--     Fonts and icons     -->
+   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+   <!-- CSS Files -->
+   <link href="https://developer.datavillage.me/css/material-kit.css?v=2.0.4" rel="stylesheet" />
 </head>
-
 <body class="login-page sidebar-collapse" style="height:100%">
+
+  <!--[if IE 8]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
+  <![endif]-->
+
+  <!--[if lte IE 9]>
+  <script src="https://cdn.auth0.com/js/base64.js"></script>
+  <script src="https://cdn.auth0.com/js/es5-shim.min.js"></script>
+  <![endif]-->
+
+  <script src="https://cdn.auth0.com/js/lock/11.23/lock.min.js"></script>
+  <script>
+    var authParams = JSON.parse(decodeURIComponent(escape(window.atob('eyJwcm90b2NvbCI6Im9hdXRoMiIsInJlc3BvbnNlX3R5cGUiOiJjb2RlIiwic2NvcGUiOiJvcGVuaWQgZW1haWwiLCJfY3NyZiI6ImtlVUw0WnNOLXFiSHRqZlJjbTdIQVBBZkQ2bWhGQ2tJd01MRSIsIl9pbnRzdGF0ZSI6ImRlcHJlY2F0ZWQiLCJzdGF0ZSI6Imc2Rm8yU0JMYXkxTlZqVkxSVEpWZVhwTFdGY3RZWGs1VFU5S1VuSXplQzFwVG1GSmVhTjBhV1RaSUV0cGJHZGFPVXgzTFdKalJHMWtlSEJJUm5CaFNGVm9Ra2x3YmtkNVIwRmpvMk5wWk5rZ2FteFpjbEpTWkZCbmNtVm1kVlk0YVhoc1ozUmxNMVZxUTBoTWFYZG1TbVkifQ=='))));
+    var lock = new Auth0Lock(
+      'jlYrRRdPgrefuV8ixlgte3UjCHLiwfJf',
+      'datavillage.eu.auth0.com', {
+        
+        configurationBaseUrl: 'https://cdn.eu.auth0.com/',
+        
+        closable: false,
+        
+        
+        
+        languageDictionary: { title: 'Developer portal' },
+        
+        theme: {
+          logo: 'https://developer.datavillage.me/img/logo.png'
+          
+          , primaryColor: '#79d0dc'
+          
+        },
+        
+        auth: {
+          redirectUrl: 'https://developer.datavillage.me/callback',
+          responseType: 'code',
+          params: authParams
+        },
+        defaultADUsernameFromEmailPrefix: false,
+        
+        overrides: {
+          __tenant: 'datavillage',
+          __token_issuer: 'https://datavillage.eu.auth0.com/'
+        }
+      });
+
+    lock.show();
+  </script>
+
+  
+  <style>
+    .auth0-lock.auth0-lock .auth0-lock-overlay {
+      background: #fafafa;
+      background-image: linear-gradient(to bottom, rgba(255, 255,255, 1), rgba(121,208,220, 0.73)),url('https://source.unsplash.com/CyFBmFEsytU/1600x900'); 
+      background-size: cover; 
+      background-position: top center;
+      height:100%
+    }
+  </style>
   <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
-    <div class="container">
+    <div class="container ">
       
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
@@ -46,53 +102,8 @@
       </div>
     </div>
   </nav>
-  <div class="page-header header-filter" style="background-image: url('https://source.unsplash.com/ndN00KmbJ1c/1600x900'); background-size: cover; background-position: top center;height:100%">
+  <div>
     <div class="container">
-      <div class="row">
-        <div class="col-lg-4 col-md-6 ml-auto mr-auto">
-            <div style="text-align:center">
-              <h3>Datavillage</h3>
-              <h5>Unlock de value of your data.</h5>
-            </div>
-            <div id="error-message"></div>
-            <form class="form" method="" action="">
-            <div class="card">
-              <div class="card-body">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="material-icons">mail</i>
-                    </span>
-                  </div>
-                  <input type="email" class="form-control" placeholder="Email..." id="email">
-                </div>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="material-icons">lock_outline</i>
-                    </span>
-                  </div>
-                  <input type="password" class="form-control" placeholder="Password..." id="password">
-                </div>
-              </div>
-            </div>
-          <div style="text-align:center"><a href="">Forgot your password?</a></div>
-          <br/>
-          <button
-          type="submit"
-          id="btn-login"
-          class="btn btn-primary btn-block">
-            Login
-        </button>
-        <button
-          type="button"
-          id="btn-signup"
-          class="btn btn-default btn-block">
-            Create an account
-        </button>
-        </form>
-        </div>
-      </div>
     </div>
     <footer class="footer">
       <div class="container">
@@ -129,68 +140,5 @@
       </div>
     </footer>
   </div>
-  <!--   Core JS Files   -->
-  <script src="https://cdn.auth0.com/js/auth0/9.10/auth0.min.js"></script>
-  <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
-  <script>
-    window.addEventListener('load', function() {
-
-      var config = JSON.parse(
-        decodeURIComponent(escape(window.atob('@@config@@')))
-      );
-
-      var params = Object.assign({
-        /* additional configuration needed for use of custom domains
-        overrides: {
-          __tenant: config.auth0Tenant,
-          __token_issuer: 'YOUR_CUSTOM_DOMAIN'
-        }, */
-        domain: config.auth0Domain,
-        clientID: config.clientID,
-        redirectUri: config.callbackURL,
-        responseType: 'code'
-      }, config.internalOptions);
-
-      var webAuth = new auth0.WebAuth(params);
-
-      var databaseConnection = 'Username-Password-Authentication';
-
-      function login(e) {
-        e.preventDefault();
-        var username = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
-        webAuth.login({
-          realm: databaseConnection,
-          username: username,
-          password: password
-        }, function(err) {
-          if (err) displayError(err);
-        });
-      }
-
-      function signup() {
-        var email = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
-
-        webAuth.redirect.signupAndLogin({
-          connection: databaseConnection,
-          email: email,
-          password: password
-        }, function(err) {
-          if (err) displayError(err);
-        });
-      }
-
-      function displayError(err) {
-        var errorMessage = document.getElementById('error-message');
-        errorMessage.innerHTML = err.description;
-        errorMessage.style.display = 'block';
-      }
-
-      document.getElementById('btn-login').addEventListener('click', login);
-      document.getElementById('btn-signup').addEventListener('click', signup);
-    });
-  </script>
 </body>
-
 </html>
