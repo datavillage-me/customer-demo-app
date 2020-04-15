@@ -10,17 +10,55 @@ import exphbs from 'express-handlebars';
 import session from 'express-session';
 import Logger from './lib/utils/logger';
 import passport from 'passport';
+import Auth0Strategy from 'passport-auth0';
 import flash from 'connect-flash';
 import config from '../config/index';
 import userInViews from './lib/middleware/userInViews';
 import dateFormat from 'dateformat';
 
 //routes
+import authRouter from '../routes/auth';
 import indexRouter from '../routes/index';
 import sourcesRouter from '../routes/sources';
 import podsRouter from '../routes/pods';
 import applicationsRouter from '../routes/applications';
 
+/***********************************
+ * Set up passports
+ ************************************/
+var strategy = new Auth0Strategy(
+  {
+    domain: config.auth0Domain,
+    clientID: config.auth0ClientID,
+    clientSecret: config.auth0ClientSecret,
+    callbackURL:config.auth0CallbackURL 
+  },
+  function (accessToken, refreshToken, extraParams, profile, done) {
+    // accessToken is the token to call Auth0 API (not needed in the most cases)
+    // extraParams.id_token has the JSON Web Token
+    // profile has all the information from the user
+    //load auth0 user extra data in the user session
+    //set facebook PSDID
+    // asynchronous verification, for effect...
+
+    profile=User.setUserJWTToken(profile,extraParams.id_token);
+      User.loadUserProfile(profile,function (profile) {
+        if (profile)
+          return done(null, profile);
+      });
+  }
+);
+
+passport.use("datavillage",strategy);
+
+// You can use this section to keep a smaller payload
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
 
 
 /***********************************
@@ -91,7 +129,10 @@ function ensureAuthenticated(req, res, next) {
 }
 app.use(userInViews());
 app.all('*', function(req,res,next){
-  next();
+  if (req.path === '/' || req.path === '/login' || req.path === '/callback' || req.path === '/error')
+    next();
+  else
+    ensureAuthenticated(req,res,next);  
 });
 
 // for parsing application/json
@@ -99,7 +140,7 @@ app.use(bodyParser.json());
 // for parsing application/xwww-
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-
+app.use('/', authRouter);
 app.use('/', indexRouter);
 app.use('/', sourcesRouter);
 app.use('/', podsRouter);
@@ -151,7 +192,7 @@ var server=app.listen(config.port, function()  {
     var host = server.address().address;
     var port = server.address().port;
     
-    console.log("Datavillage fake app listening at http://%s:%s", host, port);
+    console.log("Datavillage developer portal listening at http://%s:%s", host, port);
 });
 
 
