@@ -6,7 +6,7 @@
  * @private
  ************************************/
 import express from 'express';
-
+import User from '../server/lib/utils/user';
 var router = express.Router();
 
 /***********************************
