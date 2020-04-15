@@ -41,11 +41,11 @@ var strategy = new Auth0Strategy(
     //set facebook PSDID
     // asynchronous verification, for effect...
 
-    profile=User.setUserJWTToken(profile,extraParams.id_token);
-      User.loadUserProfile(profile,function (profile) {
-        if (profile)
+   // profile=User.setUserJWTToken(profile,extraParams.id_token);
+     // User.loadUserProfile(profile,function (profile) {
+       // if (profile)
           return done(null, profile);
-      });
+     // });
   }
 );
 
@@ -98,8 +98,9 @@ if (config.env === 'production') {
 }
 
 app.use(session(sess));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join('client')));
-
 app.set('view engine', '.handlebars');
 app.set('views', path.join(__dirname, '../views'));
 app.use(Logger.getRequestLogger());

@@ -19,7 +19,7 @@ var router = express.Router();
  ************************************/
 
 /* GET dashboard home */
-router.get('/pods', function (req, res, next) {
+router.get('/auth/pods', function (req, res, next) {
   renderPods(req,res);
 });
 
@@ -38,8 +38,8 @@ function renderPods(req,res){
   res.render('pods', {
     layout: 'master',
     pods:'active',
-    action:rootDomainPassportApp+'/pods/activate',
-    callback:rootDomainDemoApp+'/pods',
+    action:rootDomainPassportApp+'/auth/pods/activate',
+    callback:rootDomainDemoApp+'/auth/pods',
     callbackError:rootDomainDemoApp+'/error',
     accessToken:config.accessToken
   });

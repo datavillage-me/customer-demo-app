@@ -38,13 +38,13 @@ function _processData(cb) {
 }
 
 /* GET dashboard home */
-router.get('/sources', function (req, res, next) {
+router.get('/auth/sources', function (req, res, next) {
   renderSources(req,res);
 });
 
 
 /* GET dashboard home */
-router.get('/calendar', function (req, res, next) {
+router.get('/auth/calendar', function (req, res, next) {
   _processData(function cb(body){
     renderCalendar(req,res,body);
   });
@@ -66,8 +66,8 @@ function renderSources(req,res){
   res.render('sources', {
     layout: 'master',
     sources:'active',
-    action:rootDomainPassportApp+'/sources/activate',
-    callback:rootDomainDemoApp+'/sources',
+    action:rootDomainPassportApp+'/auth/sources/activate',
+    callback:rootDomainDemoApp+'/auth/sources',
     callbackError:rootDomainDemoApp+'/error',
     accessToken:config.accessToken
   });
