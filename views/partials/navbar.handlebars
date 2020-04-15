@@ -1,36 +1,41 @@
 <!-- Navbar -->
 
 <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="10" id="sectionsNav">
-     <a class="navbar-brand" href="/auth/digitaltwin"><img style="width:48px" src="/img/logo.png"/>
-        Widgets | API | Application examples </a>
+     <a class="navbar-brand" href="/auth/digitaltwin"><img style="width:200px;margin-top:15px;" src="/img/logo2.png"/> </a>
     <div class="container">
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav">
-           <li class="nav-item {{pods}}">
-            <a class="nav-link" href="/pods" onclick="">
-              <i class="material-icons">storage</i> Personal Pods
-            </a>
-          </li>
-          <li class="nav-item {{sources}}">
-            <a class="nav-link" href="/sources">
-              <i class="material-icons">bubble_chart</i> Data Sources
-            </a>
-          </li>
-          <li class="nav-item {{apis}}">
-            <a class="nav-link" href="https://documenter.getpostman.com/view/7257320/SzYT52Me" onclick="" target="_blank">
-              <i class="material-icons">code</i> Api Documentation
-            </a>
-          </li>
           <li class="nav-item {{applications}}">
             <a class="nav-link" href="/applications" onclick="">
-              <i class="material-icons">input</i> Application Examples
+              <i class="material-icons">apps</i> Apps
             </a>
           </li>
+           <li class="nav-item {{pods}}">
+            <a class="nav-link" href="/pods" onclick="">
+              <i class="material-icons">storage</i> Pods
+            </a>
+          </li>
+          <li class="nav-item {{consents}}">
+            <a class="nav-link" href="/consents">
+              <i class="material-icons">assignment_turned_in</i> Consents
+            </a>
+          </li>
+          <li class="nav-item {{cages}}">
+            <a class="nav-link" href="/cages">
+              <i class="material-icons">policy</i> Cages
+            </a>
+          </li>
+          <li class="nav-item {{docs}}">
+            <a class="nav-link" href="https://documenter.getpostman.com/view/7257320/SzYT52Me" onclick="" target="_blank">
+              <i class="material-icons">notes</i> Documentation
+            </a>
+          </li>
+        
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="dropdown nav-item">
             <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-              <i class="material-icons">perm_identity</i> My account
+              <i class="material-icons">account_circle</i> My account
             </a>
             <div class="dropdown-menu dropdown-with-icons">
               <a href="/auth/logout" class="dropdown-item">

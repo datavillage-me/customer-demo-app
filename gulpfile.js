@@ -37,7 +37,7 @@ gulp.task('minify-css', function (callback) {
 });
 
 gulp.task('build',
-  gulp.series('lint', gulp.series(['sass', 'minify-css'])));
+  gulp.series('lint', gulp.series(['sass'])));
 /*gulp.task('build', function (callback) {
   runSequence('lint','sass','minify-css', callback);
 });*/
