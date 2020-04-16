@@ -18,7 +18,7 @@ var router = express.Router();
  ************************************/
 
 /* GET dashboard home */
-router.get('/applications', function (req, res, next) {
+router.get('/auth/applications', function (req, res, next) {
   renderApplications(req,res);
 });
 
