@@ -8371,7 +8371,7 @@ form {
   padding-left: 0;
   padding-right: 0;
   border-radius: 0;
-  font-size: 14px; }
+  font-size: 20px; }
   .form-control:focus,
   .bmd-form-group.is-focused .form-control {
     background-size: 100% 100%, 100% 100%;
@@ -8380,15 +8380,15 @@ form {
   .form-control::-moz-placeholder {
     color: #AAAAAA;
     font-weight: 400;
-    font-size: 14px; }
+    font-size: 20px; }
   .form-control:-ms-input-placeholder {
     color: #AAAAAA;
     font-weight: 400;
-    font-size: 14px; }
+    font-size: 20px; }
   .form-control::-webkit-input-placeholder {
     color: #AAAAAA;
     font-weight: 400;
-    font-size: 14px; }
+    font-size: 20px; }
   .has-white .form-control::-moz-placeholder {
     color: #fff; }
   .has-white .form-control:-ms-input-placeholder {

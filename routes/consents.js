@@ -1,5 +1,5 @@
 /***********************************
- * pods route
+ * consents route
  ************************************/
 /***********************************
  * Module dependencies.
@@ -18,14 +18,10 @@ var router = express.Router();
  ************************************/
 
 /* GET dashboard home */
-router.get('/auth/pods', function (req, res, next) {
-  renderPods(req,res);
+router.get('/auth/consents', function (req, res, next) {
+  renderConsents(req,res);
 });
 
-/* GET select pod */
-router.get('/auth/pods/select', function (req, res, next) {
-  renderPodsSelect(req,res);
-});
 
 /***********************************
  * rendering functions
@@ -36,25 +32,13 @@ router.get('/auth/pods/select', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderPods(req,res){
-  res.render('pods', {
+function renderConsents(req,res){
+  res.render('consents', {
     layout: 'master',
-    pods:'active',
+    consents:'active',
     user:{id:User.getUserId(req.user)}
   });
 }
 
-/**
- * render pods select
- * @param {req} request
- * @param {res} response
- */
-function renderPodsSelect(req,res){
-  res.render('pods-select', {
-    layout: 'master',
-    pods:'active',
-    user:{id:User.getUserId(req.user)}
-  });
-}
 
 module.exports = router;

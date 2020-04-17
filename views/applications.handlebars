@@ -1,35 +1,40 @@
           <div>
-              <h2><b>Apps</b></h2>
+              <h2><b>Apps</b>
+              {{#if application}}
+                ({{application.name}} - {{application.url}})
+            {{/if}}
+            </h2>
               </div>
           <hr/>
           <div class="container">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
                         {{#if application}}
-                        <div class="card" >
-                            <img class="card-img-top" src="/img/logo/confinement-behavior.jpeg" alt="Card image cap">
+                        <div class="card text-left" style="width: 100%;">
                             <div class="card-body">
-                                <div class="container">
-                                    <div class="row justify-content-center">
-                                        <h3 style="color:#0d64af">Confinement optimizer</h3>
-                                        <p>Connect your <b>Geospatial Profile</b> to optimize your confinement behavior.</p>
-                                        <button style="background-color:#0d64af" class="btn btn-primary"><i class="material-icons" style="font-size:28px">input</i>&nbsp;&nbsp;&nbsp;Use it</button>
-                                    </div>
-                                </div>
+                                 <h3><b>App Id:</b> {{application.clientId}} <a href="javascript:"><i class="material-icons-outlined text-primary">file_copy</i></a></h3> 
+                                 <h3><b>App Secret:</b> <input style="border:0" type="password" value="{{application.clientSecret}}">  <a href="javascript:"><i class="material-icons-outlined text-primary">file_copy</i></a></h3>
+                            </div>
+                            
+                        </div>
+                        <div class="card text-left" style="width: 100%;">
+                            <div class="card-body">
+                                 <h2 class="card-subtitle mb-2 text-muted"><b>Quickstart</b></h2>
+                                 <p class="card-text">Create your application.</p>
                             </div>
                         </div>
                         {{else}}
                         <div class="card text-center" style="width: 100%;">
                             <div class="card-body">
-                                <img  style="width:15%;" src="/img/system.png" rel="nofollow" alt="Card image cap">
+                                <img  style="width:15%;" src="/img/icons/app.png" rel="nofollow" alt="Card image cap">
                                 <h2 >Create your first app</h2>
                                 <p class="card-text">
-                                    <h4>Create your first application and give your users a way to acquire their personal data so they can create and control their own “digital profile”.</h4>
-                                    <button class="btn btn-primary"><i class="material-icons" style="font-size:28px">apps</i>&nbsp;&nbsp;&nbsp;Create app</button>
+                                    <h4>Create your first application "privacy by design" and give your users a way to acquire their personal data so they can create and control their own “digital profile”.</h4>
+                                    <a href="/auth/applications/form" class="btn btn-primary"><i class="material-icons" style="font-size:28px">apps</i>&nbsp;&nbsp;&nbsp;Create app</a>
                                 </p>
                             </div>
                         </div>
-                       {{/if}}
+                        {{/if}}
                     </div>
                 </div>
             </div>

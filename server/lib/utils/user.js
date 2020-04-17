@@ -43,15 +43,12 @@ function _loadUserProfile(profile,cb){
         if(user){
             var updatedProfile=profile;
             //set token data 
-           if(user.user_metadata){
+            if(user.user_metadata){
+                if(user.user_metadata["application-id"]){
+                    //applicationId
+                    updatedProfile.applicationId=user.user_metadata["application-id"];
+                }
             }
-            //set user data
-           /* updatedProfile=_setUsername(updatedProfile,user.short_name);
-            updatedProfile=_setFirstname(updatedProfile,user.given_name);
-            updatedProfile=_setLastname(updatedProfile,user.family_name);
-            updatedProfile=_setGender(updatedProfile,user.gender);
-            updatedProfile=_setBirthdate(updatedProfile,user.birthday);
-            updatedProfile=_setPicture(updatedProfile,user.picture_large);*/
             return cb(updatedProfile);
         }
     });
@@ -158,6 +155,29 @@ function _setUserJWTToken (profile,JWTToken) {
     return profile;
 }
 
+/**
+ * get user app id 
+ *
+ * @param {Object} profile passport object 
+ * @return {String} client id
+ * @private
+ */
+function _getApplicationId (profile) {
+    return profile.applicationId;
+}
+
+/**
+ * set user app id 
+ *
+ * @param {Object} profile passport object 
+ * @param {String} token access token
+ * @param {function} cb call back function
+ * @private
+ */
+function _setApplicationId (profile,applicationId,cb) {
+    profile.applicationId=applicationId;
+    return _setUserMetaData(profile,"application-id",applicationId,cb);
+}
 
 /**
  * get useremail for user
@@ -422,14 +442,20 @@ var self=module.exports={
     getUserId:function(profile){
         return _getUserId(profile);
     },
+    setUserId:function(profile,id){
+        return _setUserId(profile,id);
+    },
     setUserJWTToken:function(profile,JWTToken){
         return _setUserJWTToken(profile,JWTToken);
     },
     getUserJWTToken:function(profile){
         return _getUserJWTToken(profile);
     },
-    setUserId:function(profile,id){
-        return _setUserId(profile,id);
+    getApplicationId:function(profile){
+        return _getApplicationId(profile);
+    },
+    setApplicationId:function(profile,applicationId,cb){
+        return _setApplicationId(profile,applicationId,cb);
     },
     getUserEmail:function(profile){
         return _getUserEmail(profile);

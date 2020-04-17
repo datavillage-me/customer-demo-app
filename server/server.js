@@ -23,6 +23,7 @@ import indexRouter from '../routes/index';
 import sourcesRouter from '../routes/sources';
 import podsRouter from '../routes/pods';
 import applicationsRouter from '../routes/applications';
+import consentsRouter from '../routes/consents';
 
 /***********************************
  * Set up passports
@@ -147,6 +148,8 @@ app.use('/', indexRouter);
 app.use('/', sourcesRouter);
 app.use('/', podsRouter);
 app.use('/', applicationsRouter);
+app.use('/', consentsRouter);
+
 
 
 /***********************************

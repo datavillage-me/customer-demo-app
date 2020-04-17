@@ -6,7 +6,8 @@
  * @private
  ************************************/
 import express from 'express';
-import User from '../server/lib/utils/user';
+import request from 'request';
+import config from '../config/index';
 var router = express.Router();
 
 /***********************************
@@ -22,11 +23,6 @@ router.get('/auth/pods', function (req, res, next) {
   renderPods(req,res);
 });
 
-/* GET select pod */
-router.get('/auth/pods/select', function (req, res, next) {
-  renderPodsSelect(req,res);
-});
-
 /***********************************
  * rendering functions
  ************************************/
@@ -37,23 +33,15 @@ router.get('/auth/pods/select', function (req, res, next) {
  * @param {res} response
  */
 function renderPods(req,res){
+  var rootDomainDemoApp=config.rootDomainDemoApp;
+  var rootDomainPassportApp=config.rootDomainPassportApp;
   res.render('pods', {
     layout: 'master',
     pods:'active',
-    user:{id:User.getUserId(req.user)}
-  });
-}
-
-/**
- * render pods select
- * @param {req} request
- * @param {res} response
- */
-function renderPodsSelect(req,res){
-  res.render('pods-select', {
-    layout: 'master',
-    pods:'active',
-    user:{id:User.getUserId(req.user)}
+    action:rootDomainPassportApp+'/auth/pods/activate',
+    callback:rootDomainDemoApp+'/auth/pods',
+    callbackError:rootDomainDemoApp+'/error',
+    accessToken:config.accessToken
   });
 }
 

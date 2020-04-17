@@ -118,3 +118,64 @@
             </div>
         </div>
     </div>
+
+
+        <div>
+        <h3><b>Personal Pod</b></h3>
+         Examples of widget on how to integrate personal data pods in your digital channels
+    </div>
+    <hr/>
+    <h4><b>Self-managed pods</b></h4>
+          <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <h4>Google drive</h4>
+                                        <p>Use your personal <b>Google drive as Solid Pod</b>. All data will be isolated in a specific Datavillage folder. Only Datavillage can access it until you revoke access.<br/><br/></p>
+                                        <form method="POST" action="{{action}}">
+                                            <input type="hidden" name="callback" value="{{callback}}"/>
+                                            <input type="hidden" name="callbackError" value="{{callbackError}}"/>
+                                            <input type="hidden" name="consentReceiptId" value="9ef6b81a414b2432ec6e3d384c5a36cea8aa0c30d3dd2b67364126ed80856f9c20654f032eef87ad981187da8c23c1186eefe1503714835c2e952bbb3f22729c"/>
+                                            <input type="hidden" name="accessToken" value="{{accessToken}}"/>
+                                            <button style="background-color:#79d0dc" class="btn btn-primary" type="submit"><i class="material-icons" style="font-size:28px">storage</i>&nbsp;&nbsp;&nbsp;Activate</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <h4>Dropbox</h4>
+                                        <p>Use your personal <b>Dropbox as Solid Pod</b>. All data will be isolated in a specific Datavillage folder. Only Datavillage can access it until you revoke access.<br/><br/></p>
+                                        <button class="btn btn-disabled"><i class="material-icons" style="font-size:28px">storage</i>&nbsp;&nbsp;&nbsp;Soon</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <h4>Onedrive</h4>
+                                        <p>Use your personal <b>Onedrive as Solid Pod</b>. All data will be isolated in a specific Datavillage folder. Only Datavillage can access it until you revoke access.<br/><br/></p>
+                                        <button class="btn btn-disabled"><i class="material-icons" style="font-size:28px">storage</i>&nbsp;&nbsp;&nbsp;Soon</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <hr/>
+    <h4><b>Full managed pods</b></h4>
+    <hr/>
+    <h4><b>Externally managed pods</b></h4>
