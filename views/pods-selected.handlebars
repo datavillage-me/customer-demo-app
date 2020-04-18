@@ -41,12 +41,12 @@
                             <h4>Include the following HTML code (and customize it) into your application to let your users activate their personal data pod.</h4>
 <pre>
 <code class="html">
-&lt;p&gt;Use your &lt;b&gt;Google drive&lt;/b&gt;. All data will be isolated in a specific folder.&lt;/p&gt;
+&lt;p&gt;Link your &lt;b&gt;Google drive&lt;/b&gt; account to keep control of your data. All data we use are stored into your personal drive in an isolated folder.&lt;/p&gt;
 &lt;form method="POST" action="https://passport.datavillage.me/auth/pods/activate"&gt;
     &lt;input type="hidden" name="callback" value="{{callback}}"/&gt;
     &lt;input type="hidden" name="callbackError" value="{{callbackError}}"/&gt;
     &lt;input type="hidden" name="consentReceiptId" value="{{pod.podId}}"/&gt;
-    &lt;input type="hidden" name="accessToken" value="{{accessToken}}"/&gt;
+    &lt;input type="hidden" name="accessToken" value="USER_ACCESS_TOKEN"/&gt; (<a href="/auth/applications#user-access-token">Click here to get USER_ACCESS_TOKEN </a>)
     &lt;button type="submit"&gt;Activate&lt;/button&gt;
 &lt;/form&gt;
 </code>

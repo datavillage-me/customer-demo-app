@@ -94,7 +94,7 @@ request(options, function (error, response) {
     });
 </code>
 </pre>
-                            <h4>Third, get user access token to link pods, get consent and connect data sources.</h4>
+                            <a name="user-access-token"></a><h4>Third, get user access token to link pods, get consent and connect data sources.</h4>
                             <pre>
 <code class="javascript">
 var request = require('request');
@@ -121,7 +121,7 @@ import requests
 
 url = "https://api.datavillage.me/oauth/token"
 
-payload = 'client_id={{application.clientId}}&client_secret=YOUR_APPLICATION_SECRET'
+payload = 'client_id={{application.clientId}}&amp;client_secret=YOUR_APPLICATION_SECRET'
 headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -176,7 +176,7 @@ print(response.text.encode('utf8'))
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded,application/x-www-form-urlencoded");
-RequestBody body = RequestBody.create(mediaType, "client_id={{application.clientId}}&client_secret=YOUR_APPLICATION_SECRET");
+RequestBody body = RequestBody.create(mediaType, "client_id={{application.clientId}}&amp;client_secret=YOUR_APPLICATION_SECRET");
 Request request = new Request.Builder()
   .url("https://api.datavillage.me/oauth/token")
   .method("POST", body)
@@ -202,7 +202,7 @@ Request request = new Request.Builder()
 Response response = client.newCall(request).execute();
 </code>
 </pre> 
-                            <h4>Third, get user access token to link pods, get consent and connect data sources.</h4>
+                        <h4>Third, get user access token to link pods, get consent and connect data sources.</h4>
 <pre>
 <code class="java">
 OkHttpClient client = new OkHttpClient().newBuilder()
