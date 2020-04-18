@@ -1,0 +1,76 @@
+          <div>
+              <h2><b>Pods - 
+                  {{#if pod.isGoogleDrive}}
+                  (<img  style="width:48px;" src="/img/logo/google-drive.png" rel="nofollow" alt="google drive"> Google Drive)
+                  {{/if}}
+                </b></h2>
+              </div>
+          <hr/>
+          <div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
+            <div class="card text-left" style="width: 100%;">
+                <div class="card-body">
+                <div class="row justify-content-center">
+                    <div class="col-10">
+                        <div class="form-group">
+                            <h3><b>Pod Id:</b> 
+                            <div class="input-group">
+                            <input class="form-control" id="podId" readonly="true" value="{{pod.podId}}">
+                            <div class="input-group-addon">
+                                
+                                &nbsp;<a href="javascript:copyToClipboard('podId')" data-clipboard-target="#podId"><i class="material-icons-outlined text-primary" aria-hidden="true">file_copy</i></a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+            </div>
+            <div class="card text-left" style="width: 100%;">
+                <div class="card-body">
+                        <h2 class="card-subtitle mb-2 "><b>Quickstart</b></h2>
+                        <p class="card-text">
+                            <h4>Let your user link their pods with your app.<br/> <br/> 
+                            The <i>Datavillage's User-Centric Personal Data Management Platform</i> allows you to write behaviors into your application's users pod. These pods will be in full control of your users and they can decide at any time to delete these data themselves. We call it <b>"hard-revoke" with full data control.</b>.<br/><br/>
+                            All user's data sources access keys will be stored (encrypted) into user's pod. Users can decide at any time to delete these access keys themselves. We call it <b>"hard-revoke" with full data control.</b>.
+                            </h4>
+                        </p>
+                        <div class="tab-content tab-space">
+                            <div class="tab-pane active" id="pill1">
+                            <h4>Include the following HTML code (and customize it) into your application to let your users activate their personal data pod.</h4>
+<pre>
+<code class="html">
+&lt;p&gt;Use your &lt;b&gt;Google drive&lt;/b&gt;. All data will be isolated in a specific folder.&lt;/p&gt;
+&lt;form method="POST" action="https://passport.datavillage.me/auth/pods/activate"&gt;
+    &lt;input type="hidden" name="callback" value="{{callback}}"/&gt;
+    &lt;input type="hidden" name="callbackError" value="{{callbackError}}"/&gt;
+    &lt;input type="hidden" name="consentReceiptId" value="{{pod.podId}}"/&gt;
+    &lt;input type="hidden" name="accessToken" value="{{accessToken}}"/&gt;
+    &lt;button type="submit"&gt;Activate&lt;/button&gt;
+&lt;/form&gt;
+</code>
+</pre>
+                            </div>
+                            <a href="/auth/consents" class="btn btn-primary"><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Next - Create consent receipt</a>
+                        </div>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function copyToClipboard(id) {
+    /* Get the text field */
+    var copyText = document.getElementById(id);
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+}
+
+</script>
