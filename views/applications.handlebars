@@ -127,9 +127,16 @@ Response response = client.newCall(request).execute();
                             <form method="POST" action="/auth/applications/test/oauth/token">
                                 <input type="hidden" name="clientId" value="{{application.clientId}}"/>
                                 <input type="hidden" name="clientSecret" value="{{application.clientSecret}}"/>
-                                <button type="submit" class="btn btn-primary">Try</button> and get your application token (validity time limited)
+                                <button type="submit" class="btn btn-primary">Try</button>
                             </form>
-                           {{application.applicationAccessToken}}
+                            {{#if application.applicationAccessTokenResponse}}
+Response:                     
+<pre>
+<code class="json">
+{{application.applicationAccessTokenResponse}}
+</code>
+</pre>
+                            {{/if}}
                         
                             <hr/>
                             <center><a href="/auth/pods" class="btn btn-primary"><i class="material-icons" style="font-size:28px">storage</i>&nbsp;&nbsp;&nbsp;Next - Select Pods</a></center>

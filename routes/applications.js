@@ -119,9 +119,9 @@ router.post('/auth/applications/test/oauth/token', function (req, res, next) {
     request(options, function (error, response) { 
       if(response !=null)
         req.session.applicationAccessToken=JSON.parse(response.body).access_token;
-        console.log(response.body.access_token);
+        var applicationAccessTokenResponse=JSON.stringify(JSON.parse(response.body),null,'\t');
         getClient(req,function(client){
-          renderApplications(req,res,client);
+          renderApplications(req,res,client,applicationAccessTokenResponse);
         });
     });
 
@@ -136,13 +136,13 @@ router.post('/auth/applications/test/oauth/token', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderApplications(req,res,client){
+function renderApplications(req,res,client,applicationAccessTokenResponse){
   if(client!=null){
     res.render('applications', {
       layout: 'master',
       applications:'active',
       user:{id:User.getUserId(req.user)},
-      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks,applicationAccessToken:req.session.applicationAccessToken}
+      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks,applicationAccessToken:req.session.applicationAccessToken,applicationAccessTokenResponse:applicationAccessTokenResponse}
     });
   }
   else{
