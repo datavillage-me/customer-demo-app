@@ -70,6 +70,20 @@
         }
     }
 
+    &.nav-pills-secondary{
+        .nav-item {
+            .nav-link.active{
+                &,
+                &:focus,
+                &:hover{
+                    background-color: $brand-secondary;
+                    @include shadow-big-color($brand-secondary);
+                    color: $white-color;
+                }
+            }
+        }
+    }
+
     &.nav-pills-brand{
         .nav-item {
             .nav-link.active{
