@@ -104,7 +104,7 @@ router.post('/auth/applications/test/oauth/token', function (req, res, next) {
   var clientId=req.body.clientId;
   var clientSecret=req.body.clientSecret;
 
-  //create pod
+  //get application access token
   var options = {
     'method': 'POST',
     'url': 'https://api.datavillage.me/oauth/token',
@@ -124,7 +124,33 @@ router.post('/auth/applications/test/oauth/token', function (req, res, next) {
           renderApplications(req,res,client,applicationAccessTokenResponse);
         });
     });
+});
 
+/* POST try user creation end point */
+router.post('/auth/applications/test/users', function (req, res, next) {
+  var applicationAccessToken=req.body.applicationAccessToken;
+  //create user
+  var options = {
+    'method': 'POST',
+    'url': 'https://api.datavillage.me/users/',
+    'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+applicationAccessToken
+    }
+    };
+    request(options, function (error, response) { 
+      if(response !=null)
+        var jsonBody=JSON.parse(response.body);
+        var userUri=jsonBody["@id"];
+        var arr=userUri.split("/");
+        var userID=arr[arr.length-1];
+       // req.session.applicationUser=JSON.parse(response.body)["@id"];
+
+       // var applicationAccessTokenResponse=JSON.stringify(JSON.parse(response.body),null,'\t');
+        getClient(req,function(client){
+          renderApplications(req,res,client);
+        });
+    });
 });
 
 /***********************************
@@ -137,12 +163,18 @@ router.post('/auth/applications/test/oauth/token', function (req, res, next) {
  * @param {res} response
  */
 function renderApplications(req,res,client,applicationAccessTokenResponse){
+  var applicationAccessToken=req.session.applicationAccessToken;
+  var applicationAccessTokenCreated=true;
+  if(applicationAccessToken==null){
+    applicationAccessTokenCreated=false;
+    applicationAccessToken="APPLICATION_ACCESS_TOKEN";
+  }
   if(client!=null){
     res.render('applications', {
       layout: 'master',
       applications:'active',
       user:{id:User.getUserId(req.user)},
-      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks,applicationAccessToken:req.session.applicationAccessToken,applicationAccessTokenResponse:applicationAccessTokenResponse}
+      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks,applicationAccessToken:applicationAccessToken,applicationAccessTokenResponse:applicationAccessTokenResponse,applicationAccessTokenCreated:applicationAccessTokenCreated}
     });
   }
   else{
