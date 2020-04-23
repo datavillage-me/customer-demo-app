@@ -28,6 +28,8 @@ function getClient(req,cb){
       {
         client_id: User.getApplicationId(req.user)
       }, function (err, client) {
+        if(client!=null && client.client_metadata!=null)
+          req.session.applicationUserId=client.client_metadata.applicationUserId;
         cb(client) ;
   });
 }
@@ -54,6 +56,7 @@ router.post('/auth/applications/create', function (req, res, next) {
   const errors = validationResult(req);
   var appName=req.body.appName;
   var appUrl=req.body.appUrl;
+  var companyUri=req.body.companyUri;
   var allowedCallbakUrl=req.body.allowedCallbakUrl;
 
   var management = new ManagementClient({
@@ -70,6 +73,7 @@ router.post('/auth/applications/create', function (req, res, next) {
           callbacks: [
             allowedCallbakUrl
           ],
+          client_metadata:{"company_uri":companyUri},
           grant_types: [
             "client_credentials"
           ],
@@ -139,16 +143,52 @@ router.post('/auth/applications/test/users', function (req, res, next) {
     }
     };
     request(options, function (error, response) { 
-      if(response !=null)
+      if(response !=null){
         var jsonBody=JSON.parse(response.body);
         var userUri=jsonBody["@id"];
         var arr=userUri.split("/");
-        var userID=arr[arr.length-1];
-       // req.session.applicationUser=JSON.parse(response.body)["@id"];
+        var userId=arr[arr.length-1];
+        req.session.applicationUserId=userId;
+        //store user into client metadata
+        var management = new ManagementClient({
+          domain: config.auth0Domain,
+          clientId: config.auth0ManagementClientID,
+          clientSecret: config.auth0ManagementClientSecret,
+          scope: 'update:clients'
+          });
+          management.updateClient(
+            { client_id: User.getApplicationId(req.user)},
+            {"client_metadata":{"applicationUserId":userId}}, function (err, client) {
+              console.log(err);
+              var applicationUser=JSON.stringify(jsonBody,null,'\t');
+              console.log(applicationUser);
+                getClient(req,function(client){
+                  renderApplications(req,res,client,null,applicationUser);
+                });              
+        });
+      }
+    });
+});
 
-       // var applicationAccessTokenResponse=JSON.stringify(JSON.parse(response.body),null,'\t');
+/* POST try user creation end point */
+router.post('/auth/applications/test/users/token', function (req, res, next) {
+  var applicationAccessToken=req.body.applicationAccessToken;
+  var applicationUserId=req.body.applicationUserId;
+  //create user
+  var options = {
+    'method': 'GET',
+    'url': 'https://api.datavillage.me/users/'+applicationUserId+'/token',
+    'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+applicationAccessToken
+    }
+    };
+    request(options, function (error, response) { 
+      if(response !=null)
+        req.session.applicationUserAccessToken=JSON.parse(response.body).access_token;
+        var applicationUserAccessTokenResponse=JSON.stringify(JSON.parse(response.body),null,'\t');
         getClient(req,function(client){
-          renderApplications(req,res,client);
+          renderApplications(req,res,client,null,null,applicationUserAccessTokenResponse);
         });
     });
 });
@@ -162,19 +202,14 @@ router.post('/auth/applications/test/users', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderApplications(req,res,client,applicationAccessTokenResponse){
-  var applicationAccessToken=req.session.applicationAccessToken;
-  var applicationAccessTokenCreated=true;
-  if(applicationAccessToken==null){
-    applicationAccessTokenCreated=false;
-    applicationAccessToken="APPLICATION_ACCESS_TOKEN";
-  }
+function renderApplications(req,res,client,applicationAccessTokenResponse,applicationUserResponse,applicationUserAccessTokenResponse){
   if(client!=null){
     res.render('applications', {
       layout: 'master',
       applications:'active',
       user:{id:User.getUserId(req.user)},
-      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks,applicationAccessToken:applicationAccessToken,applicationAccessTokenResponse:applicationAccessTokenResponse,applicationAccessTokenCreated:applicationAccessTokenCreated}
+      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks,applicationAccessToken:req.session.applicationAccessToken,applicationAccessTokenResponse:applicationAccessTokenResponse},
+      applicationUser:{id:req.session.applicationUserId,applicationUserResponse:applicationUserResponse,applicationUserAccessTokenResponse:applicationUserAccessTokenResponse}
     });
   }
   else{

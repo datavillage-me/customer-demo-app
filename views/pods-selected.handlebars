@@ -42,18 +42,41 @@
 <pre>
 <code class="html">
 &lt;p&gt;Link your &lt;b&gt;Google drive&lt;/b&gt; account to keep control of your data. All data we use are stored into your personal drive in an isolated folder.&lt;/p&gt;
-&lt;form method="POST" action="https://passport.datavillage.me/auth/pods/activate"&gt;
+&lt;form method="POST" action="https://passport.datavillage.me/pods/activate"&gt;
     &lt;input type="hidden" name="callback" value="{{callback}}"/&gt;
     &lt;input type="hidden" name="callbackError" value="{{callbackError}}"/&gt;
     &lt;input type="hidden" name="consentReceiptId" value="{{pod.podId}}"/&gt;
-    &lt;input type="hidden" name="accessToken" value="USER_ACCESS_TOKEN"/&gt; (<a href="/auth/applications#user-access-token">Click here to get USER_ACCESS_TOKEN </a>)
+    &lt;input type="hidden" name="accessToken" value="{{#if applicationUser.token}}{{applicationUser.token}}{{else}}USER_ACCESS_TOKEN{{/if}}"/&gt; (<a href="/auth/applications#user-access-token">Click here to get USER_ACCESS_TOKEN </a>)
     &lt;button type="submit"&gt;Activate&lt;/button&gt;
 &lt;/form&gt;
 </code>
 </pre>
                             </div>
-                            <a href="/auth/consents" class="btn btn-primary"><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Next - Create consent receipt</a>
-                        </div>
+                            <h4><b>Test this endpoint</b></h4>
+                            {{#if applicationUser.token}}
+                                <form method="POST" action="{{rootDomainPassportApp}}/pods/activate">
+                                    <input type="hidden" name="accessToken" value="{{applicationUser.token}}"/>
+                                    <input type="hidden" name="callback" value="{{rootDomainDemoApp}}/auth/pods/select?podCreated=true"/>
+                                    <input type="hidden" name="callbackError" value="{{rootDomainDemoApp}}/auth/pods/select"/>
+                                    <input type="hidden" name="consentReceiptId" value="{{pod.podId}}"/>
+                                    <button type="submit" class="btn btn-primary">Try</button>
+                                </form>
+                            {{else}}
+                                To try this enpoint, first <a href="/auth/applications#user-access-token">get your user access token</a>
+                            {{/if}}
+                            {{#if podCreated}}
+                                Response:                     
+<pre>
+<code class="json">
+Pod has been created for user {{applicationUser.id}}. 
+Folder "PERSONAL-DATA-POD" has been created. 
+User's PublicKey file has been created at /PERSONAL-DATA-POD/identity.key for IBE(identity based encryption).   
+</code>
+</pre>
+                            {{/if}}
+                            <hr/>
+                            <center><a href="/auth/consents" class="btn btn-primary"><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Next - Create consent receipt</a></center>
+                            </div>
                         
                 </div>
             </div>

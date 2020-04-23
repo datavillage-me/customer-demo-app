@@ -35,13 +35,15 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <h3><b>App URL:</b> 
+                            <div class="input-group">
+                            <input class="form-control" id="url" readonly="true" value="{{application.url}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <h3><b>Allowed Callback URL's:</b> 
                             <div class="input-group">
                             <input class="form-control" id="clientCallbacks" readonly="true" value="{{application.callbacks}}">
-                            <div class="input-group-addon">
-                                
-                                &nbsp;<a href="javascript:copyToClipboard('clientCallbacks')"><i class="material-icons-outlined text-primary" aria-hidden="true">file_copy</i></a>
-                            </div>
                             </div>
                         </div>
                     </div>
@@ -155,7 +157,7 @@ var options = {
   'url': 'https://api.datavillage.me/users/',
   'headers': {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer {{application.applicationAccessToken}}'
+    'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
   }
 };
 request(options, function (error, response) { 
@@ -176,7 +178,7 @@ url = "https://api.datavillage.me/users/"
 payload  = {}
 headers = {
   'Content-Type': 'application/json',
-  'Authorization': 'Bearer {{application.applicationAccessToken}}'
+  'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
 }
 
 response = requests.request("POST", url, headers=headers, data = payload)
@@ -196,14 +198,14 @@ Request request = new Request.Builder()
   .url("https://api.datavillage.me/users/")
   .method("POST", body)
   .addHeader("Content-Type", "application/json")
-  .addHeader("Authorization", "Bearer {{application.applicationAccessToken}}")
+  .addHeader("Authorization", "Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}")
   .build();
 Response response = client.newCall(request).execute();
 </code>
 </pre> 
                             </div>
                             <h4><b>Test this endpoint</b></h4>
-                            {{#if application.applicationAccessTokenCreated}}
+                            {{#if application.applicationAccessToken}}
                             <form method="POST" action="/auth/applications/test/users">
                                 <input type="hidden" name="applicationAccessToken" value="{{application.applicationAccessToken}}"/>
                                 <button type="submit" class="btn btn-primary">Try</button>
@@ -212,11 +214,95 @@ Response response = client.newCall(request).execute();
                             To try this enpoint, first get your application access token
                             {{/if}}
                             
-                            {{#if application.userCreated}}
+                            {{#if applicationUser.applicationUserResponse}}
 Response:                     
 <pre>
 <code class="json">
-{{application.userCreated}}
+{{applicationUser.applicationUserResponse}}
+</code>
+</pre>
+                            {{/if}}
+                            <hr/>
+                            <h4><b>Third</b>, get user access token to link pods, get consent and connect data sources.</h4>
+                        <ul class="nav nav-pills nav-pills-icons nav-pills-secondary">
+                            <li class="nav-item"><a class="nav-link active" href="#pill21" data-toggle="tab">Node JS</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#pill22" data-toggle="tab">Python</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#pill23" data-toggle="tab">Java</a></li>
+                        </ul>
+                        <div class="tab-content tab-space">
+                             <div class="tab-pane active" id="pill21">
+                            
+<pre>
+<code class="javascript">
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://api.datavillage.me/users/{{#if applicationUser.id}}{{applicationUser.id}}{{else}}USER_ID{{/if}}/token',
+  'headers': {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+  }
+};
+request(options, function (error, response) { 
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+</code>
+</pre>
+                        </div>
+                            <div class="tab-pane" id="pill22">
+<pre>
+<code class="python">
+import requests
+
+url = "https://api.datavillage.me/users/{{#if applicationUser.id}}{{applicationUser.id}}{{else}}USER_ID{{/if}}/token"
+
+payload  = {}
+headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+}
+
+response = requests.request("GET", url, headers=headers, data = payload)
+
+print(response.text.encode('utf8'))
+</code>
+</pre> 
+                         </div>
+                            <div class="tab-pane" id="pill23">
+<pre>
+<code class="java">
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+Request request = new Request.Builder()
+  .url("https://api.datavillage.me/users/{{#if applicationUser.id}}{{applicationUser.id}}{{else}}USER_ID{{/if}}/token")
+  .method("GET", null)
+  .addHeader("Content-Type", "application/json")
+  .addHeader("Authorization", "Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}")
+  .build();
+Response response = client.newCall(request).execute();
+</code>
+</pre> 
+                            </div>
+                            <h4><b>Test this endpoint</b></h4>
+                            {{#if application.applicationAccessToken}}
+                                {{#if applicationUser.id}}
+                                <form method="POST" action="/auth/applications/test/users/token">
+                                    <input type="hidden" name="applicationAccessToken" value="{{application.applicationAccessToken}}"/>
+                                    <input type="hidden" name="userId" value="{{applicationUser.userId}}"/>
+                                    <button type="submit" class="btn btn-primary">Try</button>
+                                </form>
+                                {{else}}
+                                To try this enpoint, first create a user
+                                {{/if}}
+                            {{else}}
+                                To try this enpoint, first get your application access token
+                            {{/if}}
+                            {{#if applicationUser.applicationUserAccessTokenResponse}}
+Response:                     
+<pre>
+<code class="json">
+{{applicationUser.applicationUserAccessTokenResponse}}
 </code>
 </pre>
                             {{/if}}
