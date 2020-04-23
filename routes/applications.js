@@ -174,6 +174,7 @@ router.post('/auth/applications/test/users', function (req, res, next) {
 router.post('/auth/applications/test/users/token', function (req, res, next) {
   var applicationAccessToken=req.body.applicationAccessToken;
   var applicationUserId=req.body.applicationUserId;
+  console.log(applicationUserId);
   //create user
   var options = {
     'method': 'GET',

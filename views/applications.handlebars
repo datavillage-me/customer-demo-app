@@ -289,7 +289,7 @@ Response response = client.newCall(request).execute();
                                 {{#if applicationUser.id}}
                                 <form method="POST" action="/auth/applications/test/users/token">
                                     <input type="hidden" name="applicationAccessToken" value="{{application.applicationAccessToken}}"/>
-                                    <input type="hidden" name="userId" value="{{applicationUser.userId}}"/>
+                                    <input type="hidden" name="applicationUserId" value="{{applicationUser.id}}"/>
                                     <button type="submit" class="btn btn-primary">Try</button>
                                 </form>
                                 {{else}}
