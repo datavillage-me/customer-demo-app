@@ -1,0 +1,94 @@
+          <div>
+              <h2><b>Consents</b></h2>
+              </div>
+          <hr/>
+          <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
+                        <div class="card text-left" style="width: 100%;">
+                            <div class="card-body">
+                                <h2 >Create consent receipt</h2>
+                                <p class="card-text ">
+                                    <label class="form-control-danger control-label">{{errors}}</label>
+                                   <form method="POST" action="/auth/consents/create">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="consentReceiptName" placeholder="Consent Receipt Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="consentReceiptDescription" placeholder="Consent Receipt Description">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="consentReceiptPurpose" placeholder="Consent Receipt Purpose">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="createdByName">Duration</label>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-check form-check-radio">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" >
+                                                        1 week
+                                                            <span class="circle">
+                                                                <span class="check"></span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check form-check-radio">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                                                            1 month
+                                                            <span class="circle">
+                                                                <span class="check"></span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check form-check-radio">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked>
+                                                            3 months
+                                                            <span class="circle">
+                                                                <span class="check"></span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check form-check-radio">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                                                            1 year
+                                                            <span class="circle">
+                                                                <span class="check"></span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="createdByName">Created by</label>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <input type="text" class="form-control" name="createdByName" placeholder="{{#if applicationUser.companyUri}}{{applicationUser.companyUri}}{{else}}Name{{/if}}">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control" name="createdByUrl" placeholder="{{#if applicationUser.companyUri}}{{applicationUser.companyUri}}{{else}}URL{{/if}}">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control" name="createdByLogo" placeholder="{{#if applicationUser.companyUri}}{{applicationUser.companyUri}}{{else}}Logo{{/if}}">
+                                                </div>
+                                            </div>
+                                            <small id="createdByHelp" class="form-text text-muted">Consents receipt is created and managed by your organisation. This information will be shared with the user during the consent acknowledgement flow to build the trust between your organisation and your users.</small>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary"><i class="material-icons" style="font-size:28px">apps</i>&nbsp;&nbsp;&nbsp;Create app</button>
+                                        </form>
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
