@@ -1,0 +1,10 @@
+.request{
+    border:solid #f7f7f9;
+}
+.request-parameters{
+   margin:20px;
+}
+.request-payload{
+    border:solid #f7f7f9;
+    background-color: #f7f7f9;
+}

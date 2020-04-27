@@ -6,86 +6,138 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
                         <div class="card text-left" style="width: 100%;">
-                            <div class="card-body">
+                            <div class="card-body ">
                                 <h2 >Create consent receipt</h2>
-                                <p class="card-text ">
-                                    <label class="form-control-danger control-label">{{errors}}</label>
-                                   <form method="POST" action="/auth/consents/create">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="consentReceiptName" placeholder="Consent Receipt Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="consentReceiptDescription" placeholder="Consent Receipt Description">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="consentReceiptPurpose" placeholder="Consent Receipt Purpose">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="createdByName">Duration</label>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="form-check form-check-radio">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" >
-                                                        1 week
-                                                            <span class="circle">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
+                                <p class="card-text">
+                                    <h4>Consents receipt is created and managed by your organisation. This information will be shared with the user during the consent acknowledgement flow to build the trust between your organisation and your users.</h4>
+                                    <form method="POST" action="/auth/consents/create">
+                                        <div class="request">
+                                            <div class="request-parameters">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label for="consentReceiptName">Name</label>
+                                                            <input type="text" class="form-control" id="consentReceiptName">
+                                                            <span class="badge badge-default">String</span> <small>Name of the consent receipt to create.</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label for="consentReceiptDescription">Description</label>
+                                                            <input type="text" class="form-control" id="consentReceiptDescription" >
+                                                            <span class="badge badge-default">String</span> <small>Description of the consent receipt to create.</small>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col">
-                                                    <div class="form-check form-check-radio">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                                                            1 month
-                                                            <span class="circle">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
-                                                    </div>
+                                                <div class="form-group">
+                                                    <label for="consentReceiptPurpose">Purpose</label>
+                                                    <textarea class="form-control" id="consentReceiptPurpose" rows="2"></textarea>
+                                                    <span class="badge badge-default">String</span> <small>Purpose of the personal data processing.</small>
                                                 </div>
-                                                <div class="col">
-                                                    <div class="form-check form-check-radio">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked>
-                                                            3 months
-                                                            <span class="circle">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label for="consentReceiptDuration">Duration</label>
+                                                            <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptDuration">
+                                                                <option>1 Week</option>
+                                                                <option>1 Month</option>
+                                                                <option>3 Months</option>
+                                                                <option>1 Year</option>
+                                                            </select>
+                                                            <span class="badge badge-default">Integer</span> <small>Minimum duration requested for the consent.</small>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-check form-check-radio">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                                                            1 year
-                                                            <span class="circle">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label for="consentReceiptDataSources">Data sources</label>
+                                                            <div class="form-check">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <label class="form-check-label">
+                                                                            <input class="form-check-input" type="checkbox" value="">
+                                                                            <img class="card-img" style="width:18px;" src="http://bulldogstudio.es/wp-content/uploads/uploadsold/blog/carles/strava.png">
+                                                                            <a href="https://www.strava.com" target="_blank" style="color:#fc4c02">Strava</a>
+                                                                            <span class="form-check-sign">
+                                                                                <span class="check"></span>
+                                                                            </span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <label class="form-check-label">
+                                                                            <input class="form-check-input" type="checkbox" value="">
+                                                                            <img class="card-img" style="width:18px;" src="http://bulldogstudio.es/wp-content/uploads/uploadsold/blog/carles/strava.png">
+                                                                            <a href="https://www.strava.com" target="_blank" style="color:#fc4c02">Fitbit</a>
+                                                                            <span class="form-check-sign">
+                                                                                <span class="check"></span>
+                                                                            </span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <label class="form-check-label">
+                                                                            <input class="form-check-input" type="checkbox" value="">
+                                                                            <img class="card-img" style="width:18px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIbihWzwMDcskEjRi1G38WAf5twt1YL-DDbuRxVAS9ZF0Z2gnG&s">
+                                                                            <a href="https://www.strava.com" target="_blank" style="color:#1db954">Spotify</a>
+                                                                            <span class="form-check-sign">
+                                                                                <span class="check"></span>
+                                                                            </span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <label class="form-check-label">
+                                                                            <input class="form-check-input" type="checkbox" value="">
+                                                                            <img class="card-img" style="width:18px;" src="https://upload.wikimedia.org/wikipedia/commons/7/72/Colruyt_logo.png">
+                                                                            <a href="https://www.strava.com" target="_blank" style="color:#f1621e">Colruyt</a>
+                                                                            <span class="form-check-sign">
+                                                                                <span class="check"></span>
+                                                                            </span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <span class="badge badge-default">Integer</span> <small>Minimum duration requested for the consent.</small>
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                                <div class="form-group">
+                                                    <label for="createdByName">Created by</label>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <input type="text" class="form-control" id="createdByName" value="{{#if applicationUser.companyUri}}{{applicationUser.companyUri}}{{/if}}">
+                                                            <span class="badge badge-default">String</span> <small>Name of the organisation</small>
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="text" class="form-control" id="createdByUrl" value="{{#if applicationUser.companyUri}}{{applicationUser.companyUri}}{{/if}}">
+                                                            <span class="badge badge-default">String</span> <small>URI of the organisation</small>
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="text" class="form-control" id="createdByLogo" value="{{#if applicationUser.companyUri}}{{applicationUser.companyUri}}{{/if}}">
+                                                            <span class="badge badge-default">String</span> <small>URL to the Logo of the organisation</small>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="createdByName">Created by</label>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <input type="text" class="form-control" name="createdByName" placeholder="{{#if applicationUser.companyUri}}{{applicationUser.companyUri}}{{else}}Name{{/if}}">
-                                                </div>
-                                                <div class="col">
-                                                    <input type="text" class="form-control" name="createdByUrl" placeholder="{{#if applicationUser.companyUri}}{{applicationUser.companyUri}}{{else}}URL{{/if}}">
-                                                </div>
-                                                <div class="col">
-                                                    <input type="text" class="form-control" name="createdByLogo" placeholder="{{#if applicationUser.companyUri}}{{applicationUser.companyUri}}{{else}}Logo{{/if}}">
-                                                </div>
+                                            <div class="request-payload">
+                                                <pre>
+<code class="javascript">
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://api.datavillage.me/users/{{#if applicationUser.id}}{{applicationUser.id}}{{else}}USER_ID{{/if}}/token',
+  'headers': {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+  }
+};
+request(options, function (error, response) { 
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+</code>
+</pre>
                                             </div>
-                                            <small id="createdByHelp" class="form-text text-muted">Consents receipt is created and managed by your organisation. This information will be shared with the user during the consent acknowledgement flow to build the trust between your organisation and your users.</small>
                                         </div>
-                                        <button type="submit" class="btn btn-primary"><i class="material-icons" style="font-size:28px">apps</i>&nbsp;&nbsp;&nbsp;Create app</button>
-                                        </form>
+                                        <center><button type="submit" class="btn btn-primary"><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Create consent receipt</button></center>
+                                    </form>
                                     </p>
                             </div>
                         </div>
