@@ -56,7 +56,6 @@ router.post('/auth/applications/create', function (req, res, next) {
   const errors = validationResult(req);
   var appName=req.body.appName;
   var appUrl=req.body.appUrl;
-  var companyUri=req.body.companyUri;
   var allowedCallbakUrl=req.body.allowedCallbakUrl;
 
   var management = new ManagementClient({
@@ -73,7 +72,6 @@ router.post('/auth/applications/create', function (req, res, next) {
           callbacks: [
             allowedCallbakUrl
           ],
-          client_metadata:{"company_uri":companyUri},
           grant_types: [
             "client_credentials"
           ],

@@ -74,12 +74,16 @@ function renderConsents(req,res){
  */
 function renderConsentsForm(req,res,client){
   var companyUri="";
-  if(client!=null && client.client_metadata!=null)
-    companyUri=client.client_metadata.companyUri;
+  var companyName="";
+  if(client!=null){
+    companyUri=client.description;
+    companyName=client.name;
+  }
   res.render('consents-form', {
     layout: 'master',
     consents:'active',
-    application:{companyUri:companyUri},
+    company:{name:companyName,uri:companyUri},
+    application:{applicationAccessToken:req.session.applicationAccessToken},
     user:{id:User.getUserId(req.user)}
   });
 }
