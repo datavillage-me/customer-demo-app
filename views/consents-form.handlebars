@@ -1,191 +1,64 @@
-          <div>
-              <h2><b>Consents</b></h2>
-              </div>
-          <hr/>
-          <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
-                        <div class="card text-left" style="width: 100%;">
-                            <div class="card-body ">
-                                <h2 >Create consent receipt</h2>
-                                <p class="card-text">
-                                    <h4>Consents receipts are created and managed by your organisation. The attributes from consent receipt are shared with the user during the consent acknowledgement flow to build the trust between your organisation and your users. The proof of creation by your organisation is not available in <span class="badge badge-pill badge-primary">BETA</span> version.</h4>
-                                    <form method="POST" action="/auth/consents/create">
-                                        <div class="request">
-                                            <div class="request-parameters">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label for="consentReceiptName">Name</label>
-                                                            <input type="text" class="form-control" id="consentReceiptName" onchange="modifyRequestPayload(this.id,this.value)">
-                                                            <span class="badge badge-default">String</span> <small>Name of the consent receipt to create.</small>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label for="consentReceiptDescription">Description</label>
-                                                            <input type="text" class="form-control" id="consentReceiptDescription" onchange="modifyRequestPayload(this.id,this.value)">
-                                                            <span class="badge badge-default">String</span> <small>Description of the consent receipt to create.</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="consentReceiptPurpose">Purpose</label>
-                                                    <textarea class="form-control" id="consentReceiptPurpose" rows="2" onchange="modifyRequestPayload(this.id,this.value)"></textarea>
-                                                    <span class="badge badge-default">String</span> <small>Purpose of the personal data processing.</small>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label for="consentReceiptDuration">Duration</label>
-                                                            <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptDuration" onchange="modifyRequestPayload(this.id,this.value)">
-                                                                <option>None Selected</option>
-                                                                <option value="1">1 Week</option>
-                                                                <option value="4">1 Month</option>
-                                                                <option value="12">3 Months</option>
-                                                                <option value="52">1 Year</option>
-                                                            </select>
-                                                            <span class="badge badge-default">Integer</span> <small>Minimum duration requested for the consent.</small>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                    <div class="form-group">
-                                                        <label for="consentReceiptDataSources">Data sources</label>
-                                                            <div>
-                                                            <select id="consentReceiptDataSources"  class="form-control selectpicker" multiple="multiple">
-                                                                <optgroup label="Health">
-                                                                        <option value="20f2fc315a06ed54663bdfd5efa4a51234b27fd4d4690bd58d0944120bcd31d08d28ae5891ba9243c91f5eab608d5d364c1681e2bf0d9e30c25822d8350c5a5d">Strava</option>
-                                                                        <option value="800fa4d4b990b2eabaa9d56d27fbaa797a25801c40e2d17456bf16b91a41b9c0181c429e384d516f901460038c1aa575d6da582c34a609eb3f46c0d99cda8b1f">Fitbit</option>
-                                                                </optgroup>
-                                                                <optgroup label="Consumption">
-                                                                        <option value="3c3305760fce447f9a489d7c28dbe84e46c918dcffb2c2838843ef4be3d121bef011d89fd9c4ea543a65134bfbddb0a57a5bec6ebff007724ec74a73eef7c2e3">Colruyt</option>
-                                                                </optgroup>
-                                                                <optgroup label="Knowledge&Interest">
-                                                                        <option value="9c7eabb50816242175562fa9ae5ad4dd66c0b7b03a813a7ef021ec9c07c80f8e45a6383b82d5164342cb82d585d20ecb33d7ed7fe020c12b18d44ec5d238ede1">Spotify</option>
-                                                                </optgroup>
-                                                                
-                                                            </select>
-                                                            <script>
-                                                            var consentReceiptDataSourcesValue=[];
-                                                            $(document).ready(function() {  
-                                                                $('#consentReceiptDataSources').multiselect({
-                                                                    buttonClass: 'btn-light btn-sm form-control',
-                                                                    onChange: function(element, checked) {
-                                                                        if(consentReceiptDataSourcesValue[element.val()]==null)
-                                                                            consentReceiptDataSourcesValue[element.val()]=element.val();
-                                                                        else
-                                                                            consentReceiptDataSourcesValue[element.val()]=null;
-                                                                        consentReceiptDataSourcesValueString="";
-                                                                        for (var key in consentReceiptDataSourcesValue) {
-                                                                            if(consentReceiptDataSourcesValue[key]!=null)
-                                                                                consentReceiptDataSourcesValueString+=consentReceiptDataSourcesValue[key]+",";
-                                                                        }
-                                                                        consentReceiptDataSourcesValueString=consentReceiptDataSourcesValueString.substr(0,consentReceiptDataSourcesValueString.length-1)
-                                                                        modifyRequestPayload("consentReceiptDataSources",consentReceiptDataSourcesValueString);
-                                                                    }
-                                                                });
-                                                            });
-
-                                                            function modifyRequestPayload(id,value){
-                                                                payloadRequestElement=document.getElementById(id+"Request");
-                                                                payloadRequestElement.innerText=value;
-                                                            }
-                                                            </script>
-                                                        </div>
-                                                        <span class="badge badge-default">Array</span> <small>UUID's of data sources used for data processing.</small>
-                                                    </div>
-                                                    </div>
-                                                </div>  
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label for="consentReceiptBehaviorExtractedCategory">Behavior extracted category</label>
-                                                            <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptBehaviorExtractedCategory" onchange="modifyRequestPayload(this.id,this.value)">
-                                                                <option>None Selected</option>
-                                                                <option>Geospatial</option>
-                                                                <option>Health</option>
-                                                                <option>Consumption</option>
-                                                                <option>KnowledgeAndInterest</option>
-                                                                <option>Social</option>
-                                                            </select>
-                                                            <span class="badge badge-default">String</span> <small>Category of the data (Behavior) created after processing.</small>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label for="consentReceiptBehaviorExtractedFrequency">Behavior extracted frequency</label>
-                                                            <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptBehaviorExtractedFrequency" onchange="modifyRequestPayload(this.id,this.value)">
-                                                                <option>None Selected</option>
-                                                                <option value="unitHour">Hourly</option>
-                                                                <option value="unitDay">Daily</option>
-                                                                <option value="unitWeek">Weekly</option>
-                                                                <option value="unitMonth">Monthly</option>
-                                                            </select>
-                                                            <span class="badge badge-default">Frequency of processing to create the behavior.</span> <small>F</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="createdByName">Created by</label>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <input type="text" class="form-control" id="consentReceiptCreatorName" value="{{#if company.name}}{{company.name}}{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
-                                                            <span class="badge badge-default">String</span> <small>Name of the organisation</small>
-                                                        </div>
-                                                        <div class="col">
-                                                            <input type="text" class="form-control" id="consentReceiptCreatorUrl" value="{{#if company.uri}}{{company.uri}}{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
-                                                            <span class="badge badge-default">String</span> <small>URI of the organisation</small>
-                                                        </div>
-                                                        <div class="col">
-                                                            <input type="text" class="form-control" id="consentReceiptCreatorLogo" value="{{#if company.uri}}{{company.uri}}/logo.png{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
-                                                            <span class="badge badge-default">String</span> <small>URL to the Logo of the organisation</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
-                                            <div class="request-payload">
-                                                <pre>
-<code class="javascript">
-var request = require('request');
-var options = {
-  'method': 'POST',
-  'url': 'https://api.datavillage.me/consentReceipts',
-  'headers': {
-    'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}',
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
-  form: {
-    'name': '<span id="consentReceiptNameRequest"></span>',
-    'description': '<span id="consentReceiptDescriptionRequest"></span>',
-    'purpose': '<span id="consentReceiptPurposeRequest"></span>',
-    'duration': '<span id="consentReceiptDurationRequest"></span>',
-    'data-sources': '<span id="consentReceiptDataSourcesRequest"></span>',
-    'creator-name': '<span id="consentReceiptCreatorNameRequest">{{#if company.uri}}{{company.name}}{{/if}}</span>',
-    'creator-uri': '<span id="consentReceiptCreatorUriRequest">{{#if company.uri}}{{company.uri}}{{/if}}</span>',
-    'creator-logo': '<span id="consentReceiptcreatorLogoRequest">{{#if company.uri}}{{company.uri}}{{/if}}/logo.png</span>',
-    'behavior-extracted-category': '<span id="consentReceiptBehaviorExtractedCategoryRequest"></span>',
-    'behavior-extracted-frequency': '<span id="consentReceiptBehaviorExtractedFrequencyRequest"></span>',
-  }
-};
-request(options, function (error, response) { 
-  if (error) throw new Error(error);
-  console.log(response.body);
-});
-</code>
-</pre>
-                                            </div>
-                                        </div>
-                                        <h4><b>Test this endpoint</b></h4>
-                                        {{#if application.applicationAccessToken}}
-                                         <button type="submit" class="btn btn-primary">Try</button>
-                                        {{else}}
-                                        To try this enpoint, first get your application access token
-                                        {{/if}}
-                                    </form>
+<div>
+    <h2><b>Consents</b></h2>
+    </div>
+<hr/>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
+            <div class="card text-left" style="width: 100%;">
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-10">
+                            <div class="form-group">
+                                <h3><b>List of consent receipts created:</b> 
+                                <br/>
+                                {{#if application.applicationAccessToken}}
+                                {{#each consentReceiptsList.consentReceipts}}
+                                    <div class="input-group">
+                                    {{this.name}}:&nbsp;
+                                    <input class="form-control" id="consentReceipt{{this.id}}" readonly="true" value="{{this.id}}">
+                                    <div class="input-group-addon">
+                                        &nbsp;<a href="javascript:copyToClipboard('consentReceipt{{this.id}}')" data-clipboard-target="#consentReceipt{{this.id}}"><i class="material-icons-outlined text-primary" aria-hidden="true">file_copy</i></a>
+                                    </div>
+                                    </div>
+                                {{/each}}
+                                {{else}}
+                                <br/>To get the list, first <a href="/auth/applications#application-access-token">get your application access token</a>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card text-left" style="width: 100%;">
+                <div class="card-body ">
+                    <h2 class="card-subtitle mb-2 "><b>Quickstart</b></h2>
+                    <p class="card-text">
+                        <h4>Consents receipts are created and managed by your organisation. The attributes from consent receipt are shared with the user during the consent acknowledgement flow to build the trust between your organisation and your users. The proof of creation by your organisation is not available in <span class="badge badge-pill badge-primary">BETA</span> version.</h4>
+                        <br/>
+                        <ul class="nav nav-pills nav-pills-icons nav-pills-primary">
+                            <li class="nav-item"><a class="nav-link {{#if creation}}active{{/if}}" href="/auth/consents/form/creation">Create consent receipt</a></li>
+                            <li class="nav-item"><a class="nav-link {{#if read}}active{{/if}}" href="/auth/consents/form/read">Get consent receipt</a></li>
+                        </ul>
+                        <hr/>
+                        {{#if creation}}
+{{> consent-create}}
+                        {{/if}}
+                        {{#if read}}
+{{> consent-read}}
+                        {{/if}}
+                        </div>
+                                    </div>
                                     </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+<script>
+    function modifyRequestPayload(id,value){
+        payloadRequestElement=document.getElementById(id+"Request");
+        payloadRequestElement.innerText=value;
+    }
+    
+</script>

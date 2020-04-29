@@ -8,3 +8,8 @@
     border:solid #f7f7f9;
     background-color: #f7f7f9;
 }
+
+.response-payload{
+    border:0;
+    width:100%;
+}

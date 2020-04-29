@@ -3,4 +3,9 @@
   <script src="/js/core/bootstrap-material-design.min.js" type="text/javascript"></script>
   <script src="/js/material-kit.js?v=2.0.4" type="text/javascript"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    hljs.initHighlightingOnLoad();
+    function adjustIframeHeight(iFrameId,height) { 
+      document.getElementById(iFrameId).style.height = parseInt(height) + "px"; 
+    }
+  </script>

@@ -72,7 +72,7 @@ var app = express();
  * Templating
  ************************************/
 var hbs = exphbs.create(
-  { defaultLayout: 'main', 
+  { defaultLayout: 'master', 
     extname: '.handlebars',
     layoutsDir:'views/layouts',
     partialsDir:'views/partials',

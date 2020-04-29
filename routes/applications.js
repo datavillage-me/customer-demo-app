@@ -38,10 +38,31 @@ function getClient(req,cb){
  * routes functions
  ************************************/
 
-/* GET dashboard home */
+/* GET application home */
 router.get('/auth/applications', function (req, res, next) {
   getClient(req,function(client){
-    renderApplications(req,res,client);
+    renderApplications(req,res,client,"applicationToken");
+  });
+});
+
+/* GET application applicationToken tab */
+router.get('/auth/applications/applicationToken', function (req, res, next) {
+  getClient(req,function(client){
+    renderApplications(req,res,client,"applicationToken");
+  });
+});
+
+/* GET application userCreation tab */
+router.get('/auth/applications/userCreation', function (req, res, next) {
+  getClient(req,function(client){
+    renderApplications(req,res,client,"userCreation");
+  });
+});
+
+/* GET application userToken tab */
+router.get('/auth/applications/userToken', function (req, res, next) {
+  getClient(req,function(client){
+    renderApplications(req,res,client,"userToken");
   });
 });
 
@@ -119,12 +140,12 @@ router.post('/auth/applications/test/oauth/token', function (req, res, next) {
     }
     };
     request(options, function (error, response) { 
-      if(response !=null)
+      if(response !=null){
         req.session.applicationAccessToken=JSON.parse(response.body).access_token;
-        var applicationAccessTokenResponse=JSON.stringify(JSON.parse(response.body),null,'\t');
-        getClient(req,function(client){
-          renderApplications(req,res,client,applicationAccessTokenResponse);
-        });
+        renderHttpResponse(req,res,response.body,"applicationAccessTokenResponseiFrame","250");
+      }
+      else
+        renderHttpResponse(req,res,"applicationAccessTokenResponseiFrame","10");
     });
 });
 
@@ -159,9 +180,11 @@ router.post('/auth/applications/test/users', function (req, res, next) {
             {"client_metadata":{"applicationUserId":userId}}, function (err, client) {
               console.log(err);
               var applicationUser=JSON.stringify(jsonBody,null,'\t');
-              console.log(applicationUser);
                 getClient(req,function(client){
-                  renderApplications(req,res,client,null,applicationUser);
+                  if(response !=null)
+                    renderHttpResponse(req,res,response.body,"userCreationResponseiFrame","300");
+                  else
+                    renderHttpResponse(req,res,"userCreationResponseiFrame","10");
                 });              
         });
       }
@@ -185,11 +208,13 @@ router.post('/auth/applications/test/users/token', function (req, res, next) {
     request(options, function (error, response) { 
       if(response !=null)
         req.session.applicationUserAccessToken=JSON.parse(response.body).access_token;
-        var applicationUserAccessTokenResponse=JSON.stringify(JSON.parse(response.body),null,'\t');
-        getClient(req,function(client){
-          renderApplications(req,res,client,null,null,applicationUserAccessTokenResponse);
-        });
-    });
+        if(response !=null){
+          req.session.applicationAccessToken=JSON.parse(response.body).access_token;
+          renderHttpResponse(req,res,response.body,"userTokenResponseiFrame","250");
+        }
+        else
+          renderHttpResponse(req,res,"applicationAccessTokenResponseiFrame","10");
+      });
 });
 
 /***********************************
@@ -201,14 +226,31 @@ router.post('/auth/applications/test/users/token', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderApplications(req,res,client,applicationAccessTokenResponse,applicationUserResponse,applicationUserAccessTokenResponse){
+function renderApplications(req,res,client,tab){
   if(client!=null){
+    var applicationToken;
+    var userCreation;
+    var userToken;
+    switch(tab){
+      case "applicationToken":
+        applicationToken='active';
+      break;
+      case "userCreation":
+        userCreation='active';
+      break;
+      case "userToken":
+        userToken='active';
+      break;
+    }
     res.render('applications', {
       layout: 'master',
       applications:'active',
       user:{id:User.getUserId(req.user)},
-      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks,applicationAccessToken:req.session.applicationAccessToken,applicationAccessTokenResponse:applicationAccessTokenResponse},
-      applicationUser:{id:req.session.applicationUserId,applicationUserResponse:applicationUserResponse,applicationUserAccessTokenResponse:applicationUserAccessTokenResponse}
+      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks,applicationAccessToken:req.session.applicationAccessToken},
+      applicationUser:{id:req.session.applicationUserId},
+      applicationToken:applicationToken,
+      userCreation:userCreation,
+      userToken:userToken
     });
   }
   else{
@@ -232,6 +274,27 @@ function renderApplicationsForm(req,res,err){
     applications:'active',
     errors:err,
     user:{id:User.getUserId(req.user)}
+  });
+}
+
+/**
+ * render http response home
+ * @param {req} request
+ * @param {res} response
+ */
+function renderHttpResponse(req,res,responseBody,iFrameId,iFrameHeight){
+  var responseToShow=responseBody;
+  try{
+    responseToShow=JSON.stringify(JSON.parse(responseBody),null,'\t');
+  }
+  catch(err){
+    responseToShow=responseBody;
+  }
+  res.render('http-response', {
+    layout: 'httpResponse',
+    httpResponse:responseToShow,
+    iFrameId:iFrameId,
+    iFrameHeight:iFrameHeight
   });
 }
 

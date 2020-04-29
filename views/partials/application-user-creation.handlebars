@@ -1,0 +1,74 @@
+<h4><b>Second</b>, create a user each time new user is created into your application and get user identifiers. The user creation is limited to one single user by application in the <span class="badge badge-pill badge-primary">BETA</span> version.</h4>
+<ul class="nav">
+    <li class="nav-item"><a class="nav-link active" href="#pill11" data-toggle="tab">Node JS</a></li>
+    <li class="nav-item"><a class="nav-link" href="#pill12" data-toggle="tab">Python</a></li>
+    <li class="nav-item"><a class="nav-link" href="#pill13" data-toggle="tab">Java</a></li>
+</ul>
+<div class="tab-content tab-space">
+      <div class="tab-pane active" id="pill11">
+                            
+<pre>
+<code class="javascript">
+var request = require('request');
+var options = {
+  'method': 'POST',
+  'url': 'https://api.datavillage.me/users/',
+  'headers': {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+  }
+};
+request(options, function (error, response) { 
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+    });
+</code>
+</pre>
+                        </div>
+                            <div class="tab-pane" id="pill12">
+<pre>
+<code class="python">
+import requests
+
+url = "https://api.datavillage.me/users/"
+
+payload  = {}
+headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+}
+
+response = requests.request("POST", url, headers=headers, data = payload)
+
+print(response.text.encode('utf8'))
+</code>
+</pre> 
+                         </div>
+                            <div class="tab-pane" id="pill13">
+<pre>
+<code class="java">
+OkHttpClient client = new OkHttpClient().newBuilder()
+  .build();
+MediaType mediaType = MediaType.parse("application/json");
+RequestBody body = RequestBody.create(mediaType, "");
+Request request = new Request.Builder()
+  .url("https://api.datavillage.me/users/")
+  .method("POST", body)
+  .addHeader("Content-Type", "application/json")
+  .addHeader("Authorization", "Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}")
+  .build();
+Response response = client.newCall(request).execute();
+</code>
+</pre> 
+                            </div>
+                            <h4><b>Test this endpoint</b></h4>
+                            {{#if application.applicationAccessToken}}
+                            <form method="POST" action="/auth/applications/test/users" target="userCreationResponseiFrame">
+                                <input type="hidden" name="applicationAccessToken" value="{{application.applicationAccessToken}}"/>
+                                <button type="submit" class="btn btn-primary">Try &amp; create user</button>
+                            </form>
+                            <iframe class="response-payload" style="height:0px" id="userCreationResponseiFrame" name="userCreationResponseiFrame"></iframe> 
+                            {{else}}
+                            To try this enpoint, first <a href="/auth/applications/applicationToken">get your application access token</a>
+                            {{/if}}
