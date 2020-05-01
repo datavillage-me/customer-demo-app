@@ -35,6 +35,25 @@ function getClient(req,cb){
   });
 }
 
+function getConsentReceiptByUri(req,consentReceiptUri,cb){
+  var options = {
+    'method': 'GET',
+    'url': consentReceiptUri,
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+req.session.applicationAccessToken
+    }
+    };
+    request(options, function (error, response) { 
+      cb(response);
+    });
+
+}
+
+function getConsentReceipt(req,consentReceiptId,cb){
+  getConsentReceiptByUri(req,'https://api.datavillage.me/consentReceipts/'+consentReceiptId,cb);
+}
+
 function getConsentReceiptsList(applicationAccessToken,cb){
   if(applicationAccessToken!=null){
     var options = {
@@ -47,8 +66,13 @@ function getConsentReceiptsList(applicationAccessToken,cb){
     };
     request(options, function (error, response) { 
       if(response !=null){
-        var jsonBody=JSON.parse(response.body);
-        cb(jsonBody);
+        try{
+          var jsonBody=JSON.parse(response.body);
+          cb(jsonBody);
+        }
+        catch(error){
+          cb(null);
+        }
       }
     });
   }
@@ -166,6 +190,48 @@ router.post('/auth/consents/get', function (req, res, next) {
     });
 });
 
+/* GET privacy center */
+router.get('/auth/consents/privacyCenter', function (req, res, next) {
+  getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
+    getClient(req,function(client){
+      renderPrivacyCenter(req,res,client,consentReceiptsList);
+    });
+  });
+});
+
+/* POST generate privacy center widget */
+router.post('/auth/consents/privacyCenterCreateWidget', function (req, res, next) {
+  var consentReceiptSelected=req.body.consentReceiptSelected;
+  var dataSources="";
+
+  getConsentReceipt(req,consentReceiptSelected,function(consentReceipt){
+    if(consentReceipt !=null){
+      getClient(req,function(client){
+        var consentReceiptJson=JSON.parse(consentReceipt.body);
+          var dataSources="{";
+          for (var i=0;i<consentReceiptJson["gl:instructions"].length;i++){
+            var instruction=consentReceiptJson["gl:instructions"][i];
+            var sourceConsentReceiptUri="source:"+instruction["gl:forPersonalData"]["gl:where"][0]["rml:source"];
+            getConsentReceiptByUri(req,sourceConsentReceiptUri,function(consentReceiptDataSource){
+              if(consentReceiptDataSource !=null){
+                var consentReceiptDataSourceJson=JSON.parse(consentReceiptDataSource.body);
+                console.log(consentReceiptDataSourceJson);
+              }
+            });
+          }
+          
+          renderPrivacyCenterWidget(req,res,client,dataSources);
+
+      });
+    }
+    else
+      renderPrivacyCenterWidget(req,res);
+  });
+});
+
+
+
+
 
 /***********************************
  * rendering functions
@@ -236,6 +302,35 @@ function renderHttpResponse(req,res,responseBody,iFrameId,iFrameHeight){
     httpResponse:responseToShow,
     iFrameId:iFrameId,
     iFrameHeight:iFrameHeight
+  });
+}
+
+/**
+ * render dashboard home
+ * @param {req} request
+ * @param {res} response
+ */
+function renderPrivacyCenter(req,res,client,consentReceiptsList){
+  res.render('privacy-center', {
+    layout: 'master',
+    consents:'active',
+    application:{applicationAccessToken:req.session.applicationAccessToken},
+    consentReceiptsList:consentReceiptsList,
+    user:{id:User.getUserId(req.user),applicationUserAccessToken:req.session.applicationUserAccessToken}
+  });
+}
+
+/**
+ * render dashboard home
+ * @param {req} request
+ * @param {res} response
+ */
+function renderPrivacyCenterWidget(req,res,client,dataSources){
+ 
+  res.render('privacy-center-widget', {
+    layout: 'httpResponse',
+    dataSources:JSON.parse (dataSources),
+    user:{id:User.getUserId(req.user),applicationUserAccessToken:req.session.applicationUserAccessToken}
   });
 }
 

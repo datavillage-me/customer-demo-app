@@ -1,0 +1,47 @@
+<div>
+    <h2><b>Consents - Create privacy center</b></h2>
+    </div>
+<hr/>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
+            <div class="card text-left" style="width: 100%;">
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-10">
+                            <div class="form-group">
+                                <h3><b>Select consent receipt and create your privacy center</b> 
+                                <br/>
+                                <form id="consentReceiptSelectForm" method="POST" action="/auth/consents/privacyCenterCreateWidget" target="privacyCenterWidget">
+                                <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="document.getElementById('consentReceiptSelectForm').submit();">
+                                    <option>{{#if application.applicationAccessToken}}None Selected{{else}}To get the list, first get your application access token{{/if}}</option>
+                                    {{#each consentReceiptsList.consentReceipts}}
+                                        <option value="{{this.id}}">{{this.name}}</option>
+                                    {{/each}}
+                                </select>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card text-left" style="width: 100%;">
+                <div class="card-body ">
+                    <h2 class="card-subtitle mb-2 "><b>Quickstart</b></h2>
+                    <p class="card-text">
+                        <h4>Privacy center is the space where your users feel in trust with your organisation and get confident on how their personal data are managed and used. Create privacy checkup widgets based on consent receipt and integrate into your app.</h4>
+                        <div class="card card-nav-tabs card-plain">
+                            {{#if user.applicationUserAccessToken}}
+                                {{#if consentReceiptsList.consentReceipts}}
+                                    <iframe name="privacyCenterWidget" ></iframe>
+                                {{else}}
+                                    <h4>To create privacy center, first <a href="/auth/consents/form/creation">create a consent receipt</a></h4>
+                                {{/if}}
+                            {{else}}<h4>To create privacy center, first <a href="/auth/applications/userToken">get your user access token</a></h4>{{/if}}
+                         </div>
+                    </p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

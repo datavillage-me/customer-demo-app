@@ -1,5 +1,5 @@
 <div>
-    <h2><b>Consents</b></h2>
+    <h2><b>Consents - Manage consent receipts</b></h2>
     </div>
 <hr/>
 <div class="container">
@@ -10,20 +10,27 @@
                     <div class="row justify-content-center">
                         <div class="col-10">
                             <div class="form-group">
-                                <h3><b>List of consent receipts created:</b> 
-                                <br/>
-                                {{#if application.applicationAccessToken}}
-                                {{#each consentReceiptsList.consentReceipts}}
-                                    <div class="input-group">
-                                    {{this.name}}:&nbsp;
-                                    <input class="form-control" id="consentReceipt{{this.id}}" readonly="true" value="{{this.id}}">
-                                    <div class="input-group-addon">
-                                        &nbsp;<a href="javascript:copyToClipboard('consentReceipt{{this.id}}')" data-clipboard-target="#consentReceipt{{this.id}}"><i class="material-icons-outlined text-primary" aria-hidden="true">file_copy</i></a>
-                                    </div>
-                                    </div>
-                                {{/each}}
+                                {{#if consentReceiptsList.consentReceipts}}
+                                    <h3><b>List of consent receipts created:</b> 
+                                    <br/>
+                                    {{#if application.applicationAccessToken}}
+                                        <ul class="list-group">
+                                        {{#each consentReceiptsList.consentReceipts}}
+                                            <li class="list-group-item"><div class="input-group">
+                                                {{this.name}}:&nbsp;
+                                                <input class="form-control" id="consentReceipt{{this.id}}" readonly="true" value="{{this.id}}">
+                                                <div class="input-group-addon">
+                                                    &nbsp;<a href="javascript:copyToClipboard('consentReceipt{{this.id}}')" data-clipboard-target="#consentReceipt{{this.id}}"><i class="material-icons-outlined text-primary" aria-hidden="true">file_copy</i></a>
+                                                </div>
+                                                </div>
+                                            </li>
+                                        {{/each}}
+                                        </ul>
+                                    {{else}}
+                                        <br/>To get the list, first <a href="/auth/applications/applicationToken">get your application access token</a>
+                                    {{/if}}
                                 {{else}}
-                                <br/>To get the list, first <a href="/auth/applications#application-access-token">get your application access token</a>
+                                    <h3><b>No consent receipt created</b> 
                                 {{/if}}
                             </div>
                         </div>
@@ -36,11 +43,16 @@
                     <p class="card-text">
                         <h4>Consents receipts are created and managed by your organisation. The attributes from consent receipt are shared with the user during the consent acknowledgement flow to build the trust between your organisation and your users. The proof of creation by your organisation is not available in <span class="badge badge-pill badge-primary">BETA</span> version.</h4>
                         <br/>
-                        <ul class="nav nav-pills nav-pills-icons nav-pills-primary">
+                        <div class="card card-nav-tabs card-plain">
+    <div class="card-header card-header-primary">
+        <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+        <div class="nav-tabs-navigation">
+            <div class="nav-tabs-wrapper">
+                        <ul class="nav nav-tabs" data-tabs="tabs">
                             <li class="nav-item"><a class="nav-link {{#if creation}}active{{/if}}" href="/auth/consents/form/creation">Create consent receipt</a></li>
                             <li class="nav-item"><a class="nav-link {{#if read}}active{{/if}}" href="/auth/consents/form/read">Get consent receipt</a></li>
                         </ul>
-                        <hr/>
+            </div></div></div></div>
                         {{#if creation}}
 {{> consent-create}}
                         {{/if}}

@@ -59,12 +59,17 @@
                             </h4>
                         </p>
                         <br/>
-                        <ul class="nav nav-pills nav-pills-icons nav-pills-primary">
+                        <div class="card card-nav-tabs card-plain">
+                        <div class="card-header card-header-primary">
+        <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+        <div class="nav-tabs-navigation">
+            <div class="nav-tabs-wrapper">
+                        <ul class="nav nav-tabs">
                             <li class="nav-item"><a class="nav-link {{#if applicationToken}}active{{/if}}" href="/auth/applications/applicationToken">Get application token</a></li>
                             <li class="nav-item"><a class="nav-link {{#if userCreation}}active{{/if}}" href="/auth/applications/userCreation">Create user</a></li>
                             <li class="nav-item"><a class="nav-link {{#if userToken}}active{{/if}}" href="/auth/applications/userToken">Get user token</a></li>
                         </ul>
-                        <hr/>
+            </div></div></div></div>
                         {{#if applicationToken}}
 {{> application-token}}
                         {{/if}}
