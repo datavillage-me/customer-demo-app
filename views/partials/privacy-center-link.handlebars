@@ -1,0 +1,45 @@
+
+<form method="POST" target="consentReceiptResponseiFrame" action="/auth/consents/privacyCenterCreateWidget">
+    <div class="request">
+        <div class="request-parameters">
+            <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="modifyRequestPayload(this.id,this.value)">
+                <option>{{#if application.applicationAccessToken}}Select consent receipt{{else}}To get the list, first get your application access token{{/if}}</option>
+                {{#each consentReceiptsList.consentReceipts}}
+                    <option value="{{this.id}}">{{this.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="request-payload">
+                <pre>
+    <code class="javascript">
+    var request = require('request');
+    var options = {
+    'method': 'GET',
+    'url': 'https://api.datavillage.me/consentReceipts/<span id="consentReceiptSelectedRequest"></span>?consentReceiptChain=true',
+    'headers': {
+        'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+    }
+    };
+    request(options, function (error, response) { 
+    if (error) throw new Error(error);
+    console.log(response.body);
+    });
+    </code>
+    </pre>
+        </div>
+    </div>
+    <h4><b>Test this endpoint</b></h4>
+    {{#if application.applicationAccessToken}}
+        <button type="submit" class="btn btn-primary">Try &amp; create your privacy center</button>
+    {{else}}
+    To try this enpoint, first <a href="/auth/applications/applicationToken">get your application access token</a>
+    {{/if}}
+</form>
+<iframe class="response-payload" style="height:0px" id="consentReceiptResponseiFrame" name="consentReceiptResponseiFrame"></iframe>
+<script>
+    function modifyRequestPayload(id,value){
+        payloadRequestElement=document.getElementById(id+"Request");
+        payloadRequestElement.innerText=value;
+    }
+    
+</script>

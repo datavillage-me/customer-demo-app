@@ -2,7 +2,7 @@
 <div class="request">
     <div class="request-parameters">
         <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="modifyRequestPayload(this.id,this.value)">
-            <option>{{#if application.applicationAccessToken}}None Selected{{else}}To get the list, first get your application access token{{/if}}</option>
+            <option>{{#if application.applicationAccessToken}}Select consent receipt{{else}}To get the list, first get your application access token{{/if}}</option>
             {{#each consentReceiptsList.consentReceipts}}
                 <option value="{{this.id}}">{{this.name}}</option>
             {{/each}}

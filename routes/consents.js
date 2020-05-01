@@ -35,10 +35,10 @@ function getClient(req,cb){
   });
 }
 
-function getConsentReceiptByUri(req,consentReceiptUri,cb){
+function getConsentReceiptByUri(req,consentReceiptUri,loadConsentReceiptsChain,cb){
   var options = {
     'method': 'GET',
-    'url': consentReceiptUri,
+    'url': consentReceiptUri+"?consentReceiptChain="+loadConsentReceiptsChain,
     'headers': {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer '+req.session.applicationAccessToken
@@ -50,8 +50,8 @@ function getConsentReceiptByUri(req,consentReceiptUri,cb){
 
 }
 
-function getConsentReceipt(req,consentReceiptId,cb){
-  getConsentReceiptByUri(req,'https://api.datavillage.me/consentReceipts/'+consentReceiptId,cb);
+function getConsentReceipt(req,consentReceiptId,loadConsentReceiptsChain,cb){
+  getConsentReceiptByUri(req,'https://api.datavillage.me/consentReceipts/'+consentReceiptId,loadConsentReceiptsChain,cb);
 }
 
 function getConsentReceiptsList(applicationAccessToken,cb){
@@ -171,30 +171,38 @@ router.post('/auth/consents/get', function (req, res, next) {
 
   const errors = validationResult(req);
   var consentReceiptSelected=req.body.consentReceiptSelected;
-  var applicationAccessToken=req.session.applicationAccessToken;
-
-  //create user
-  var options = {
-    'method': 'GET',
-    'url': 'https://api.datavillage.me/consentReceipts/'+consentReceiptSelected,
-    'headers': {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+applicationAccessToken
-    }
-    };
-    request(options, function (error, response) { 
-      if(response !=null)
-        renderHttpResponse(req,res,response.body,"consentReceiptResponseiFrame","500");
-      else
-        renderHttpResponse(req,res,"consentReceiptResponseiFrame","10");
-    });
+  
+  getConsentReceipt(req,consentReceiptSelected,false,function(consentReceipt){
+    if(consentReceipt !=null)
+      renderHttpResponse(req,res,consentReceipt.body,"consentReceiptResponseiFrame","500");
+    else
+      renderHttpResponse(req,res,"consentReceiptResponseiFrame","10");
+  });
 });
 
 /* GET privacy center */
 router.get('/auth/consents/privacyCenter', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
     getClient(req,function(client){
-      renderPrivacyCenter(req,res,client,consentReceiptsList);
+      renderPrivacyCenter(req,res,client,consentReceiptsList,"creation");
+    });
+  });
+});
+
+/* GET privacy center creation */
+router.get('/auth/consents/privacyCenter/creation', function (req, res, next) {
+  getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
+    getClient(req,function(client){
+      renderPrivacyCenter(req,res,client,consentReceiptsList,"creation");
+    });
+  });
+});
+
+/* GET privacy center link */
+router.get('/auth/consents/privacyCenter/link', function (req, res, next) {
+  getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
+    getClient(req,function(client){
+      renderPrivacyCenter(req,res,client,consentReceiptsList,"link");
     });
   });
 });
@@ -204,28 +212,11 @@ router.post('/auth/consents/privacyCenterCreateWidget', function (req, res, next
   var consentReceiptSelected=req.body.consentReceiptSelected;
   var dataSources="";
 
-  getConsentReceipt(req,consentReceiptSelected,function(consentReceipt){
-    if(consentReceipt !=null){
-      getClient(req,function(client){
-        var consentReceiptJson=JSON.parse(consentReceipt.body);
-          var dataSources="{";
-          for (var i=0;i<consentReceiptJson["gl:instructions"].length;i++){
-            var instruction=consentReceiptJson["gl:instructions"][i];
-            var sourceConsentReceiptUri="source:"+instruction["gl:forPersonalData"]["gl:where"][0]["rml:source"];
-            getConsentReceiptByUri(req,sourceConsentReceiptUri,function(consentReceiptDataSource){
-              if(consentReceiptDataSource !=null){
-                var consentReceiptDataSourceJson=JSON.parse(consentReceiptDataSource.body);
-                console.log(consentReceiptDataSourceJson);
-              }
-            });
-          }
-          
-          renderPrivacyCenterWidget(req,res,client,dataSources);
-
-      });
-    }
+  getConsentReceipt(req,consentReceiptSelected,true,function(consentReceipt){
+    if(consentReceipt !=null)
+      renderHttpResponse(req,res,consentReceipt.body,"consentReceiptResponseiFrame","500");
     else
-      renderPrivacyCenterWidget(req,res);
+      renderHttpResponse(req,res,"consentReceiptResponseiFrame","10");
   });
 });
 
@@ -310,13 +301,25 @@ function renderHttpResponse(req,res,responseBody,iFrameId,iFrameHeight){
  * @param {req} request
  * @param {res} response
  */
-function renderPrivacyCenter(req,res,client,consentReceiptsList){
+function renderPrivacyCenter(req,res,client,consentReceiptsList,tab){
+  var creation;
+  var link;
+  switch(tab){
+    case "creation":
+      creation='active';
+    break;
+    case "link":
+      link='link';
+    break;
+  }
   res.render('privacy-center', {
     layout: 'master',
     consents:'active',
     application:{applicationAccessToken:req.session.applicationAccessToken},
     consentReceiptsList:consentReceiptsList,
-    user:{id:User.getUserId(req.user),applicationUserAccessToken:req.session.applicationUserAccessToken}
+    user:{id:User.getUserId(req.user),applicationUserAccessToken:req.session.applicationUserAccessToken},
+    creation:creation,
+    link:link
   });
 }
 
