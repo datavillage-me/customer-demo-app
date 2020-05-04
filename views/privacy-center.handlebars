@@ -11,16 +11,12 @@
                     <p class="card-text">
                         <h4>Privacy center is the space where your users feel in trust with your organisation and get confident on how their personal data are managed and used. Create your privacy center based on consent receipt, link it to the consent ledger and integrate into your app.</h4>
                         <br/>
-                        <div class="card card-nav-tabs card-plain">
-                            <div class="card-header card-header-primary">
-        <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
-        <div class="nav-tabs-navigation">
-            <div class="nav-tabs-wrapper">
-                        <ul class="nav nav-tabs" data-tabs="tabs">
-                            <li class="nav-item"><a class="nav-link {{#if creation}}active{{/if}}" href="/auth/consents/privacyCenter/creation">Create privacy center</a></li>
-                            <li class="nav-item"><a class="nav-link {{#if link}}active{{/if}}" href="/auth/consents/privacyCenter/link">Link it to consent ledger</a></li>
+                        
+                        <ul class="nav nav-pills nav-pills-icons" role="tablist">
+                            <li class="nav-item"><a class="nav-link {{#if creation}}active{{/if}}" href="/auth/consents/privacyCenter/creation"><i class="material-icons">looks_one</i>Create privacy center</a></li>
+                            <li class="nav-item"><a class="nav-link {{#if link}}active{{/if}}" href="/auth/consents/privacyCenter/link"><i class="material-icons">looks_two</i>Link to consent ledger</a></li>
                         </ul>
-            </div></div></div></div>
+                        <hr/>
                         {{#if creation}}
 {{> privacy-center-create}}
                         {{/if}}
@@ -30,10 +26,7 @@
                         </div>
                                     </div>
                                     </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                           
             </div>
 <script>
     function modifyRequestPayload(id,value){
@@ -42,18 +35,3 @@
     }
     
 </script> 
-                        </div>
-                    </p>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<script>
-    function modifyRequestPayload(id,value){
-        payloadRequestElement=document.getElementById(id+"Request");
-        payloadRequestElement.innerText=value;
-    }
-    
-</script>

@@ -1,5 +1,5 @@
 
-<form method="POST" target="consentReceiptResponseiFrame" action="/auth/consents/privacyCenterCreateWidget">
+<form method="POST" target="consentReceiptResponseiFrame" action="/auth/consents/privacyCenter/get">
     <div class="request">
         <div class="request-parameters">
             <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="modifyRequestPayload(this.id,this.value)">
@@ -30,17 +30,15 @@
     </div>
     <h4><b>Test this endpoint</b></h4>
     {{#if application.applicationAccessToken}}
-        <button type="submit" class="btn btn-primary">Try &amp; create your privacy center</button>
+        <button type="submit" class="btn btn-primary">Try &amp; create privacy center</button>
     {{else}}
     To try this enpoint, first <a href="/auth/applications/applicationToken">get your application access token</a>
     {{/if}}
 </form>
-<iframe class="response-payload" style="height:0px" id="consentReceiptResponseiFrame" name="consentReceiptResponseiFrame"></iframe>
 <iframe class="response-payload" style="height:0px" id="consentReceiptResponseiFrame" name="consentReceiptResponseiFrame"></iframe>
 <script>
     function modifyRequestPayload(id,value){
         payloadRequestElement=document.getElementById(id+"Request");
         payloadRequestElement.innerText=value;
     }
-    
 </script>

@@ -1,3 +1,89 @@
-{{#each dataSources}}
-    {{this}}
+<form method="POST" action="/auth/consents/create" target="consentReceiptCreationiFrame">
+    <div class="request">
+        <center>
+        <h3><i class="material-icons-outlined" style="font-size:40px">verified_user</i><br/>Privacy center</h3>
+        Review key settings &amp; the data Company uses to personalize your experience
+        </center>
+        <div class="card" style="width: 50%;">
+            <div class="card-body">
+                <h3>{{consentReceipt.description}}</h3>
+                <h5>{{consentReceipt.description}}</h5>
+                <hr/>
+                <div class="form-group">
+                    {{#each dataSources.sources}}
+                    <div class="togglebutton">
+                        <label>
+                            <input type="checkbox" onclick="activateDataSource(this,'{{this.id}}')">
+                            <span class="toggle"></span>
+                            {{this.name}}<br/>
+                            <small>{{this.description}}</small>
+                                                
+                        </label>
+                    </div> 
+                    {{/each}}
+                </div>
+                <i class="material-icons-outlined">verified_user</i> Only you can see this data. Company protects your privacy and security.
+                <hr/>
+                <h5>{{consentReceipt.purpose}}</h5>
+                <h5>Duration of your consent:</h5>
+                <div class="form-check form-check-radio form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1 Week
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
+                <div class="form-check form-check-radio form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1 Month
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
+                <div class="form-check form-check-radio form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 3 Months
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
+                <div class="form-check form-check-radio form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1 Year
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
+                <div class="form-check form-check-radio form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Always
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
+                
+                <center><button type="submit" class="btn btn-primary">I agree</button></center>
+            </div>
+        </div>
+    </div>
+</form>
+{{#each dataSources.sources}}
+<form method="POST" id="{{this.id}}" action="{{../action}}">
+    <input type="hidden" name="callback" value="{{../callback}}"/>
+    <input type="hidden" name="callbackError" value="{{../callbackError}}"/>
+    <input type="hidden" name="consentReceiptId" value="{{this.id}}"/>
+    <input type="hidden" name="accessToken" value="{{../applicationUserAccessToken}}"/>
+</form>
 {{/each}}
+<script>
+    function activateDataSource(element,consentReceiptId){
+        if(element.checked){
+            document.getElementById(consentReceiptId).submit();
+        }
+    }
+</script>

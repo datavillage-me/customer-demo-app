@@ -7963,11 +7963,11 @@ label {
     cursor: pointer;
     padding-left: 0; }
     .form-group.is-focused .form-check .form-check-label {
-      color: rgba(0,0,0, 0.26); }
+      color: rgba(0,0,0, 0.87); }
       .form-group.is-focused .form-check .form-check-label:hover, .form-group.is-focused .form-check .form-check-label:focus {
         color: rgba(0,0,0, .54); }
       fieldset[disabled] .form-group.is-focused .form-check .form-check-label {
-        color: rgba(0,0,0, 0.26); }
+        color: rgba(0,0,0, 0.87); }
   .form-check .form-check-input {
     opacity: 0;
     position: absolute;
@@ -8158,11 +8158,11 @@ label {
   padding-left: 25px;
   position: relative; }
   .form-group.is-focused .form-check .form-check-label {
-    color: rgba(0,0,0, 0.26); }
+    color: rgba(0,0,0, 0.87); }
     .form-group.is-focused .form-check .form-check-label:hover, .form-group.is-focused .form-check .form-check-label:focus {
       color: rgba(0,0,0, .54); }
     fieldset[disabled] .form-group.is-focused .form-check .form-check-label {
-      color: rgba(0,0,0, 0.26); }
+      color: rgba(0,0,0, 0.87); }
   .form-check .form-check-label span {
     display: block;
     position: absolute;
@@ -11169,13 +11169,13 @@ h2.title {
     user-select: none; }
   .togglebutton label {
     cursor: pointer;
-    color: rgba(0,0,0, 0.26); }
+    color: rgba(0,0,0, 0.87); }
     .form-group.is-focused .togglebutton label {
-      color: rgba(0,0,0, 0.26); }
+      color: rgba(0,0,0, 0.87); }
       .form-group.is-focused .togglebutton label:hover, .form-group.is-focused .togglebutton label:focus {
         color: rgba(0,0,0, .54); }
       fieldset[disabled] .form-group.is-focused .togglebutton label {
-        color: rgba(0,0,0, 0.26); }
+        color: rgba(0,0,0, 0.87); }
     .togglebutton label input[type=checkbox] {
       opacity: 0;
       width: 0;
