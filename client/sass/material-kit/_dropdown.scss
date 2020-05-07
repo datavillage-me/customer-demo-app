@@ -89,7 +89,7 @@
     font-weight: normal;
     text-decoration: none;
 
-    font-size: .8125rem;
+    font-size: $mdb-btn-font-size-lg;
     border-radius: $border-radius / 2;
     margin: 0 $bmd-dropdown-margin-y;
     @include transitions($fast-transition-time, $transition-linear);

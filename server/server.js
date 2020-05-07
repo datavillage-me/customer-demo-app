@@ -77,7 +77,7 @@ var hbs = exphbs.create(
     layoutsDir:'views/layouts',
     partialsDir:'views/partials',
     helpers: {
-      formatDate: function (datetime, format) { return dateFormat(datetime,format); },
+      formatDate: function (datetime, format) { return dateFormat(datetime,format); }
     }
   });
 
@@ -100,6 +100,10 @@ if (config.env === 'production') {
 }
 
 app.use(session(sess));
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join('client')));
@@ -131,6 +135,7 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 app.use(userInViews());
+
 app.all('*', function(req,res,next){
   if (req.path === '/' || req.path === '/login' || req.path === '/callback' || req.path === '/error')
     next();

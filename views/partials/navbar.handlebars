@@ -1,5 +1,4 @@
 <!-- Navbar -->
-
 <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="10" id="sectionsNav">
     <a class="navbar-brand" href="/auth/applications"><img style="width:100px;margin-top:-15px;" src="/img/logo2.png"/><span class="badge badge-pill badge-primary">BETA</span></a>
     <div class="container">
@@ -38,6 +37,34 @@
               <i class="material-icons">account_circle</i> {{user.id}}
             </a>
             <div class="dropdown-menu dropdown-with-icons">
+              <a href="/auth/logout" class="dropdown-item">
+                {{#if session.applicationAccessToken}}
+                  <span class="badge badge-pill badge-success"><i class="material-icons">done</i>Application access token</span>
+                {{else}}
+                  <span class="badge badge-pill badge-warning"><i class="material-icons">warning</i>Application access token</span>
+                {{/if}}
+              </a>
+              <a href="/auth/logout" class="dropdown-item">
+                {{#if session.applicationUserId}}
+                  <span class="badge badge-pill badge-success"><i class="material-icons">done</i>Default user created</span>
+                {{else}}
+                  <span class="badge badge-pill badge-warning"><i class="material-icons">warning</i>Default user created</span>
+                {{/if}}
+              </a>
+              <a href="/auth/logout" class="dropdown-item">
+                {{#if session.userApplicationAccessToken}}
+                  <i class="material-icons">done</i>
+                {{else}}
+                  <span class="badge badge-pill badge-warning"><i class="material-icons">warning</i>User access token</span>
+                {{/if}}
+              </a>
+              <a href="/auth/logout" class="dropdown-item">
+                {{#if session.podTypeId}}
+                  <i class="material-icons">done</i>
+                {{else}}
+                  <span class="badge badge-pill badge-warning"><i class="material-icons">warning</i>Pod selected</span>
+                {{/if}}
+              </a>
               <a href="/auth/logout" class="dropdown-item">
                 <i class="material-icons">power_settings_new</i> Logout
               </a>
