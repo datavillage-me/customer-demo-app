@@ -18,23 +18,6 @@ var ManagementClient = require('auth0').ManagementClient;
  * Private functions
  ************************************/
 
-function getClient(req,cb){
-  var management = new ManagementClient({
-    domain: config.auth0Domain,
-    clientId: config.auth0ManagementClientID,
-    clientSecret: config.auth0ManagementClientSecret,
-    scope: 'read:clients read:client_keys'
-    });
-    management.getClient(
-      {
-        client_id: User.getApplicationId(req.user)
-      }, function (err, client) {
-        if(client!=null && client.client_metadata!=null)
-          req.session.applicationUserId=client.client_metadata.applicationUserId;
-        cb(client) ;
-  });
-}
-
 function getConsentReceiptByUri(req,consentReceiptUri,loadConsentReceiptsChain,cb){
   var options = {
     'method': 'GET',
@@ -93,36 +76,28 @@ router.get('/auth/consents', function (req, res, next) {
 /* GET form */
 router.get('/auth/consents/form', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    getClient(req,function(client){
-      renderConsentsForm(req,res,client,consentReceiptsList,"creation");
-    });
+    renderConsentsForm(req,res,consentReceiptsList,"creation");
   });
 });
 
 /* GET creation tab */
 router.get('/auth/consents/form/creation', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    getClient(req,function(client){
-      renderConsentsForm(req,res,client,consentReceiptsList,"creation");
-    });
+    renderConsentsForm(req,res,consentReceiptsList,"creation");
   });
 });
 
 /* GET read tab */
 router.get('/auth/consents/form/read', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    getClient(req,function(client){
-      renderConsentsForm(req,res,client,consentReceiptsList,"read");
-    });
+    renderConsentsForm(req,res,consentReceiptsList,"read");
   });
 });
 
 /* GET activate tab */
 router.get('/auth/consents/form/activate', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    getClient(req,function(client){
-      renderConsentsForm(req,res,client,consentReceiptsList,"activate");
-    });
+    renderConsentsForm(req,res,consentReceiptsList,"activate");
   });
 });
 
@@ -190,27 +165,21 @@ router.post('/auth/consents/get', function (req, res, next) {
 /* GET privacy center */
 router.get('/auth/consents/privacyCenter', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    getClient(req,function(client){
-      renderPrivacyCenter(req,res,client,consentReceiptsList,"creation");
-    });
+    renderPrivacyCenter(req,res,consentReceiptsList,"creation");
   });
 });
 
 /* GET privacy center creation */
 router.get('/auth/consents/privacyCenter/creation', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    getClient(req,function(client){
-      renderPrivacyCenter(req,res,client,consentReceiptsList,"creation");
-    });
+    renderPrivacyCenter(req,res,consentReceiptsList,"creation");
   });
 });
 
 /* GET privacy center link */
 router.get('/auth/consents/privacyCenter/link', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    getClient(req,function(client){
-      renderPrivacyCenter(req,res,client,consentReceiptsList,"link");
-    });
+    renderPrivacyCenter(req,res,consentReceiptsList,"link");
   });
 });
 
@@ -281,9 +250,7 @@ function renderConsents(req,res){
  * @param {req} request
  * @param {res} response
  */
-function renderConsentsForm(req,res,client,consentReceiptsList,tab){
-  var companyUri="";
-  var companyName="";
+function renderConsentsForm(req,res,consentReceiptsList,tab){
   var creation;
   var read;
   var activate;
@@ -298,15 +265,9 @@ function renderConsentsForm(req,res,client,consentReceiptsList,tab){
     activate='active';
     break;
   }
-  if(client!=null){
-    companyUri=client.description;
-    companyName=client.name;
-  }
   res.render('consents-form', {
     layout: 'master',
     consents:'active',
-    company:{name:companyName,uri:companyUri},
-    application:{applicationAccessToken:req.session.applicationAccessToken},
     consentReceiptsList:consentReceiptsList,
     user:{id:User.getUserId(req.user)},
     creation:creation,
@@ -342,7 +303,7 @@ function renderHttpResponse(req,res,responseBody,iFrameId,iFrameHeight,widget){
  * @param {req} request
  * @param {res} response
  */
-function renderPrivacyCenter(req,res,client,consentReceiptsList,tab){
+function renderPrivacyCenter(req,res,consentReceiptsList,tab){
   var creation;
   var link;
   switch(tab){
@@ -356,9 +317,8 @@ function renderPrivacyCenter(req,res,client,consentReceiptsList,tab){
   res.render('privacy-center', {
     layout: 'master',
     consents:'active',
-    application:{applicationAccessToken:req.session.applicationAccessToken},
     consentReceiptsList:consentReceiptsList,
-    user:{id:User.getUserId(req.user),applicationUserAccessToken:req.session.applicationUserAccessToken},
+    user:{id:User.getUserId(req.user)},
     creation:creation,
     link:link
   });
@@ -385,13 +345,12 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
   var rootDomainPassportApp=config.rootDomainPassportApp;
   res.render('privacy-center-widget', {
     layout: 'singlePage',
-    user:{id:User.getUserId(req.user),applicationUserAccessToken:req.session.applicationUserAccessToken},
+    user:{id:User.getUserId(req.user)},
     consentReceipt:{name:consentReceiptJson.main["gl:name"],description:consentReceiptJson.main["gl:description"],purpose:consentReceiptJson.main["gl:forPurpose"]["gl:description"]},
     dataSources:JSON.parse(dataSources),
     action:rootDomainPassportApp+'/sources/activate',
     callback:rootDomainDemoApp+'/auth/consents/privacyCenter/createWidgetCallback?consentReceiptSelected='+consentReceiptSelected,
     callbackError:rootDomainDemoApp+'/auth/consents/privacyCenter/createWidgetCallback?consentReceiptSelected='+consentReceiptSelected,
-    applicationUserAccessToken:req.session.applicationUserAccessToken,
   });
 }
 

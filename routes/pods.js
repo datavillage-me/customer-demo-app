@@ -21,47 +21,19 @@ var ManagementClient = require('auth0').ManagementClient;
 
 /* GET dashboard home */
 router.get('/auth/pods', function (req, res, next) {
-  var management = new ManagementClient({
-    domain: config.auth0Domain,
-    clientId: config.auth0ManagementClientID,
-    clientSecret: config.auth0ManagementClientSecret,
-    scope: 'read:clients read:client_keys'
-    });
-    management.getClient(
-      {
-        client_id: User.getApplicationId(req.user)
-      }, function (err, client) {
-        if(err || (client==null || client.client_metadata==null || client.client_metadata.podTypeId==null))
-          renderPods(req,res);
-        else{
-          var podId=client.client_metadata.podTypeId;
-          renderPodsSelected(req,res,podId,client.callbacks);
-        }
-  });
-  
+  if(req.session.podTypeId!=null)
+    renderPodsSelected(req,res);
+  else 
+    renderPods(req,res);
 });
 
 /* GET select pod */
 router.get('/auth/pods/select', function (req, res, next) {
   var podCreated=req.query.podCreated;
-  var management = new ManagementClient({
-    domain: config.auth0Domain,
-    clientId: config.auth0ManagementClientID,
-    clientSecret: config.auth0ManagementClientSecret,
-    scope: 'read:clients read:client_keys'
-    });
-    management.getClient(
-      {
-        client_id: User.getApplicationId(req.user)
-      }, function (err, client) {
-        if(err || (client==null || client.client_metadata==null || client.client_metadata.podTypeId==null))
-          renderPodsSelect(req,res);
-        else{
-          var podId=client.client_metadata.podTypeId;
-          renderPodsSelected(req,res,podId,client.callbacks,podCreated);
-        }
-  });
-  
+  if(req.session.podTypeId!=null)
+    renderPodsSelected(req,res,podCreated);
+  else 
+    renderPodsSelect(req,res);
 });
 
 /* GET select pod */
@@ -81,7 +53,8 @@ router.get('/auth/pods/form', function (req, res, next) {
         if(err)
           renderPodsSelect(req,res);
         else{
-          renderPodsSelected(req,res,podId,client.callbacks);
+          req.session.podTypeId=podId;
+          renderPodsSelected(req,res);
         }
           
   });
@@ -123,22 +96,20 @@ function renderPodsSelect(req,res){
  * @param {req} request
  * @param {res} response
  */
-function renderPodsSelected(req,res,podId,callbacks,podCreated){
-  var callback=callbacks[0];
+function renderPodsSelected(req,res,podCreated){
+  var callback=req.session.callbacks[0];
   var isGoogleDrive=false;
-  if(podId=="9ef6b81a414b2432ec6e3d384c5a36cea8aa0c30d3dd2b67364126ed80856f9c20654f032eef87ad981187da8c23c1186eefe1503714835c2e952bbb3f22729c")
+  if(req.session.podTypeId=="9ef6b81a414b2432ec6e3d384c5a36cea8aa0c30d3dd2b67364126ed80856f9c20654f032eef87ad981187da8c23c1186eefe1503714835c2e952bbb3f22729c")
     isGoogleDrive=true;
   res.render('pods-selected', {
     layout: 'master',
     pods:'active',
-    pod:{podId:podId,isGoogleDrive:isGoogleDrive},
+    pod:{isGoogleDrive:isGoogleDrive,podCreated:podCreated},
     callback:callback,
     callbackError:callback+"/error",
     user:{id:User.getUserId(req.user)},
-    applicationUser:{token:req.session.applicationUserAccessToken,id:req.session.applicationUserId},
     rootDomainDemoApp:config.rootDomainDemoApp,
-    rootDomainPassportApp:config.rootDomainPassportApp,
-    podCreated:podCreated
+    rootDomainPassportApp:config.rootDomainPassportApp
   });
 }
 

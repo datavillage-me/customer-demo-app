@@ -28,8 +28,13 @@ function getClient(req,cb){
       {
         client_id: User.getApplicationId(req.user)
       }, function (err, client) {
-        if(client!=null && client.client_metadata!=null)
+        if(client!=null && client.client_metadata!=null){
           req.session.applicationUserId=client.client_metadata.applicationUserId;
+          req.session.callbacks=client.callbacks;
+          req.session.companyUri=client.description;
+          req.session.companyName=client.name;
+          req.session.podTypeId=client.client_metadata.podTypeId;
+        }
         cb(client) ;
   });
 }
@@ -68,7 +73,7 @@ router.get('/auth/applications/userToken', function (req, res, next) {
 
 /* GET form */
 router.get('/auth/applications/form', function (req, res, next) {
-  renderApplicationsForm(req,res);
+    renderApplicationsForm(req,res);
 });
 
 /* POSTcreate application */
@@ -113,7 +118,10 @@ router.post('/auth/applications/create', function (req, res, next) {
                   renderApplicationsForm(req,res,err);
                 else{
                   User.setApplicationId(req.user,clientId,function (profile){
-                    renderApplications(req,res,client);
+                    req.session.callbacks=client.allowedCallbakUrl;
+                    req.session.companyUri=appName;
+                    req.session.companyName=appUrl;
+                    renderApplications(req,res,client,"applicationToken");
                   });  
                 }
                   
@@ -195,7 +203,6 @@ router.post('/auth/applications/test/users', function (req, res, next) {
 router.post('/auth/applications/test/users/token', function (req, res, next) {
   var applicationAccessToken=req.body.applicationAccessToken;
   var applicationUserId=req.body.applicationUserId;
-  console.log(applicationUserId);
   //create user
   var options = {
     'method': 'GET',
@@ -246,8 +253,7 @@ function renderApplications(req,res,client,tab){
       layout: 'master',
       applications:'active',
       user:{id:User.getUserId(req.user)},
-      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks,applicationAccessToken:req.session.applicationAccessToken},
-      applicationUser:{id:req.session.applicationUserId},
+      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks},
       applicationToken:applicationToken,
       userCreation:userCreation,
       userToken:userToken

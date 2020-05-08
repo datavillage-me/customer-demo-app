@@ -16,7 +16,7 @@
                         <div class="form-group">
                             <h3><b>Pod Type Id:</b> 
                             <div class="input-group">
-                            <input class="form-control" id="podId" readonly="true" value="{{pod.podId}}">
+                            <input class="form-control" id="podId" readonly="true" value="{{session.podTypeId}}">
                             <div class="input-group-addon">
                                 
                                 &nbsp;<a href="javascript:copyToClipboard('podId')" data-clipboard-target="#podId"><i class="material-icons-outlined text-primary" aria-hidden="true">file_copy</i></a>
@@ -45,30 +45,30 @@
 &lt;form method="POST" action="https://passport.datavillage.me/pods/activate"&gt;
     &lt;input type="hidden" name="callback" value="{{callback}}"/&gt;
     &lt;input type="hidden" name="callbackError" value="{{callbackError}}"/&gt;
-    &lt;input type="hidden" name="consentReceiptId" value="{{pod.podId}}"/&gt;
-    &lt;input type="hidden" name="accessToken" value="{{#if applicationUser.token}}{{applicationUser.token}}{{else}}USER_ACCESS_TOKEN{{/if}}"/&gt;
+    &lt;input type="hidden" name="consentReceiptId" value="{{session.podTypeId}}"/&gt;
+    &lt;input type="hidden" name="accessToken" value="{{#if session.applicationUserAccessToken}}{{session.applicationUserAccessToken}}{{else}}USER_ACCESS_TOKEN{{/if}}"/&gt;
     &lt;button type="submit"&gt;Activate&lt;/button&gt;
 &lt;/form&gt;
 </code>
 </pre>
                             </div>
                             <h4><b>Test this endpoint</b></h4>
-                            {{#if applicationUser.token}}
+                            {{#if session.applicationUserAccessToken}}
                                 <form method="POST" action="{{rootDomainPassportApp}}/pods/activate">
-                                    <input type="hidden" name="accessToken" value="{{applicationUser.token}}"/>
+                                    <input type="hidden" name="accessToken" value="{{session.applicationUserAccessToken}}"/>
                                     <input type="hidden" name="callback" value="{{rootDomainDemoApp}}/auth/pods/select?podCreated=true"/>
                                     <input type="hidden" name="callbackError" value="{{rootDomainDemoApp}}/auth/pods/select"/>
-                                    <input type="hidden" name="consentReceiptId" value="{{pod.podId}}"/>
+                                    <input type="hidden" name="consentReceiptId" value="{{session.podTypeId}}"/>
                                     <button type="submit" class="btn btn-primary">Try &amp; activate pod for current user</button>
                                 </form>
                             {{else}}
                                 To try this enpoint, first <a href="/auth/applications/userToken">get your user access token</a>
                             {{/if}}
-                            {{#if podCreated}}
+                            {{#if pod.podCreated}}
                                 Response:                     
 <pre>
 <code class="json">
-Pod has been created for user {{applicationUser.id}}. 
+Pod has been created for user {{session.applicationUserId}}. 
 Folder "PERSONAL-DATA-POD" has been created. 
 User's PublicKey file has been created at /PERSONAL-DATA-POD/personal-public.key for IBE(identity based encryption).   
 </code>

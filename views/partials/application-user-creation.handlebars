@@ -15,7 +15,7 @@ var options = {
   'url': 'https://api.datavillage.me/users/',
   'headers': {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+    'Authorization': 'Bearer {{#if session.applicationAccessToken}}{{session.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
   }
 };
 request(options, function (error, response) { 
@@ -36,7 +36,7 @@ url = "https://api.datavillage.me/users/"
 payload  = {}
 headers = {
   'Content-Type': 'application/json',
-  'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+  'Authorization': 'Bearer {{#if session.applicationAccessToken}}{{session.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
 }
 
 response = requests.request("POST", url, headers=headers, data = payload)
@@ -56,16 +56,16 @@ Request request = new Request.Builder()
   .url("https://api.datavillage.me/users/")
   .method("POST", body)
   .addHeader("Content-Type", "application/json")
-  .addHeader("Authorization", "Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}")
+  .addHeader("Authorization", "Bearer {{#if session.applicationAccessToken}}{{session.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}")
   .build();
 Response response = client.newCall(request).execute();
 </code>
 </pre> 
                             </div>
                             <h4><b>Test this endpoint</b></h4>
-                            {{#if application.applicationAccessToken}}
+                            {{#if session.applicationAccessToken}}
                             <form method="POST" action="/auth/applications/test/users" target="userCreationResponseiFrame">
-                                <input type="hidden" name="applicationAccessToken" value="{{application.applicationAccessToken}}"/>
+                                <input type="hidden" name="applicationAccessToken" value="{{session.applicationAccessToken}}"/>
                                 <button type="submit" class="btn btn-primary">Try &amp; create user</button>
                             </form>
                             <iframe class="response-payload" style="height:0px" id="userCreationResponseiFrame" name="userCreationResponseiFrame"></iframe> 

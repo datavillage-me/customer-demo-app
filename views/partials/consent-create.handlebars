@@ -86,15 +86,15 @@
                 <label for="createdByName">Created by</label>
                 <div class="row">
                     <div class="col">
-                        <input type="text" class="form-control" id="consentReceiptCreatorName" name="consentReceiptCreatorName" value="{{#if company.name}}{{company.name}}{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
+                        <input type="text" class="form-control" id="consentReceiptCreatorName" name="consentReceiptCreatorName" value="{{#if session.companyName}}{{session.companyName}}{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
                         <span class="badge badge-default">String</span> <small>Name of the organisation</small>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" id="consentReceiptCreatorUrl" name="consentReceiptCreatorUrl" value="{{#if company.uri}}{{company.uri}}{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
+                        <input type="text" class="form-control" id="consentReceiptCreatorUrl" name="consentReceiptCreatorUrl" value="{{#if session.companyUri}}{{session.companyUri}}{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
                         <span class="badge badge-default">String</span> <small>URI of the organisation</small>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" id="consentReceiptCreatorLogo" name="consentReceiptCreatorLogo" value="{{#if company.uri}}{{company.uri}}/logo.png{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
+                        <input type="text" class="form-control" id="consentReceiptCreatorLogo" name="consentReceiptCreatorLogo" value="{{#if session.companyUri}}{{session.companyUri}}/logo.png{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
                         <span class="badge badge-default">String</span> <small>URL to the Logo of the organisation</small>
                     </div>
                 </div>
@@ -109,7 +109,7 @@ var options = {
   'method': 'POST',
   'url': 'https://api.datavillage.me/consentReceipts',
   'headers': {
-    'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}',
+    'Authorization': 'Bearer {{#if session.applicationAccessToken}}{{session.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}',
     'Content-Type': 'application/x-www-form-urlencoded'
   },
   form: {
@@ -119,9 +119,9 @@ var options = {
     'duration': '<span id="consentReceiptDurationRequest"></span>',
     'data-categories': '<span id="consentReceiptDataCategoriesRequest"></span>',
     'data-sources': '<span id="consentReceiptDataSourcesRequest"></span>',
-    'creator-name': '<span id="consentReceiptCreatorNameRequest">{{#if company.uri}}{{company.name}}{{/if}}</span>',
-    'creator-uri': '<span id="consentReceiptCreatorUriRequest">{{#if company.uri}}{{company.uri}}{{/if}}</span>',
-    'creator-logo': '<span id="consentReceiptcreatorLogoRequest">{{#if company.uri}}{{company.uri}}{{/if}}/logo.png</span>',
+    'creator-name': '<span id="consentReceiptCreatorNameRequest">{{#if req.session.companyUri}}{{req.session.companyName}}{{/if}}</span>',
+    'creator-uri': '<span id="consentReceiptCreatorUriRequest">{{#if req.session.companyUri}}{{req.session.companyUri}}{{/if}}</span>',
+    'creator-logo': '<span id="consentReceiptcreatorLogoRequest">{{#if req.session.companyUri}}{{req.session.companyUri}}{{/if}}/logo.png</span>',
     'behavior-extracted-frequency': '<span id="consentReceiptBehaviorExtractedFrequencyRequest"></span>',
   }
 };
@@ -134,7 +134,7 @@ request(options, function (error, response) {
         </div>
     </div>
     <h4><b>Test this endpoint</b></h4>
-    {{#if application.applicationAccessToken}}
+    {{#if session.applicationAccessToken}}
         <button type="submit" class="btn btn-primary">Try &amp; create consent receipt</button>
     {{else}}
     To try this enpoint, first <a href="/auth/applications/applicationToken">get your application access token</a>

@@ -12,10 +12,10 @@
 var request = require('request');
 var options = {
   'method': 'GET',
-  'url': 'https://api.datavillage.me/users/{{#if applicationUser.id}}{{applicationUser.id}}{{else}}USER_ID{{/if}}/token',
+  'url': 'https://api.datavillage.me/users/{{#if session.applicationUserId}}{{session.applicationUserId}}{{else}}USER_ID{{/if}}/token',
   'headers': {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+    'Authorization': 'Bearer {{#if session.applicationAccessToken}}{{session.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
   }
 };
 request(options, function (error, response) { 
@@ -30,12 +30,12 @@ request(options, function (error, response) {
 <code class="python">
 import requests
 
-url = "https://api.datavillage.me/users/{{#if applicationUser.id}}{{applicationUser.id}}{{else}}USER_ID{{/if}}/token"
+url = "https://api.datavillage.me/users/{{#if session.applicationUserId}}{{session.applicationUserId}}{{else}}USER_ID{{/if}}/token"
 
 payload  = {}
 headers = {
   'Content-Type': 'application/json',
-  'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+  'Authorization': 'Bearer {{#if session.applicationAccessToken}}{{session.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
 }
 
 response = requests.request("GET", url, headers=headers, data = payload)
@@ -50,21 +50,21 @@ print(response.text.encode('utf8'))
 OkHttpClient client = new OkHttpClient().newBuilder()
   .build();
 Request request = new Request.Builder()
-  .url("https://api.datavillage.me/users/{{#if applicationUser.id}}{{applicationUser.id}}{{else}}USER_ID{{/if}}/token")
+  .url("https://api.datavillage.me/users/{{#if session.applicationUserId}}{{session.applicationUserId}}{{else}}USER_ID{{/if}}/token")
   .method("GET", null)
   .addHeader("Content-Type", "application/json")
-  .addHeader("Authorization", "Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}")
+  .addHeader("Authorization", "Bearer {{#if session.applicationAccessToken}}{{session.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}")
   .build();
 Response response = client.newCall(request).execute();
 </code>
 </pre> 
                             </div>
                             <h4><b>Test this endpoint</b></h4>
-                            {{#if application.applicationAccessToken}}
-                                {{#if applicationUser.id}}
+                            {{#if session.applicationAccessToken}}
+                                {{#if session.applicationUserId}}
                                 <form method="POST" target="userTokenResponseiFrame" action="/auth/applications/test/users/token">
-                                    <input type="hidden" name="applicationAccessToken" value="{{application.applicationAccessToken}}"/>
-                                    <input type="hidden" name="applicationUserId" value="{{applicationUser.id}}"/>
+                                    <input type="hidden" name="applicationAccessToken" value="{{session.applicationAccessToken}}"/>
+                                    <input type="hidden" name="applicationUserId" value="{{session.applicationUserId}}"/>
                                     <button type="submit" class="btn btn-primary">Try &amp; get user access token</button>
                                 </form>
                                 <iframe class="response-payload" style="height:0px" id="userTokenResponseiFrame" name="userTokenResponseiFrame"></iframe> 

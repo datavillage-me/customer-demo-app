@@ -77,7 +77,7 @@
     <input type="hidden" name="callback" value="{{../callback}}"/>
     <input type="hidden" name="callbackError" value="{{../callbackError}}"/>
     <input type="hidden" name="consentReceiptId" value="{{this.id}}"/>
-    <input type="hidden" name="accessToken" value="{{../applicationUserAccessToken}}"/>
+    <input type="hidden" name="accessToken" value="{{{../session.applicationUserAccessToken}}}"/>
 </form>
 {{/each}}
 <script>

@@ -2,7 +2,7 @@
 <div class="request">
     <div class="request-parameters">
         <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="modifyRequestPayload(this.id,this.value)">
-            <option>{{#if application.applicationAccessToken}}Select consent receipt{{else}}To get the list, first get your application access token{{/if}}</option>
+            <option>{{#if session.applicationAccessToken}}Select consent receipt{{else}}To get the list, first get your application access token{{/if}}</option>
             {{#each consentReceiptsList.consentReceipts}}
                 <option value="{{this.id}}">{{this.name}}</option>
             {{/each}}
@@ -16,7 +16,7 @@ var options = {
   'method': 'GET',
   'url': 'https://api.datavillage.me/consentReceipts/<span id="consentReceiptSelectedRequest"></span>',
   'headers': {
-    'Authorization': 'Bearer {{#if application.applicationAccessToken}}{{application.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+    'Authorization': 'Bearer {{#if session.applicationAccessToken}}{{session.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
   }
 };
 request(options, function (error, response) { 
@@ -28,7 +28,7 @@ request(options, function (error, response) {
     </div>
 </div>
 <h4><b>Test this endpoint</b></h4>
-{{#if application.applicationAccessToken}}
+{{#if session.applicationAccessToken}}
     <button type="submit" class="btn btn-primary">Try &amp; get consent receipt</button>
 {{else}}
 To try this enpoint, first <a href="/auth/applications/applicationToken">get your application access token</a>

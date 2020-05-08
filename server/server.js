@@ -77,7 +77,13 @@ var hbs = exphbs.create(
     layoutsDir:'views/layouts',
     partialsDir:'views/partials',
     helpers: {
-      formatDate: function (datetime, format) { return dateFormat(datetime,format); }
+      formatDate: function (datetime, format) { return dateFormat(datetime,format); },
+      ifOr: function(v1, v2, v3,v4,options) {
+        if(v1==null || v2==null || v3==null || v4==null ) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      }
     }
   });
 
