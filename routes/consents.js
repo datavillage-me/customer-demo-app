@@ -191,8 +191,7 @@ router.post('/auth/consents/privacyCenter/get', function (req, res, next) {
   getConsentReceipt(req,consentReceiptSelected,true,function(consentReceipt){
     if(consentReceipt !=null){
       //create HTML widget
-      var widget="<form method='POST' target='_blank' action='/auth/consents/privacyCenter/createWidget'><input type='hidden' name='consentReceiptSelected' value='"+consentReceiptSelected+"'/><b>Generate privacy center widget from response</b><br/><button type='submit' class='btn btn-primary'>Generate</button></form>";
-      renderHttpResponse(req,res,consentReceipt.body,"consentReceiptResponseiFrame","500",widget);
+      renderHttpResponse(req,res,consentReceipt.body,"consentReceiptResponseiFrame","500");
     }
     else
       renderHttpResponse(req,res,"consentReceiptResponseiFrame","10");
