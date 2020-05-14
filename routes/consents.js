@@ -64,6 +64,8 @@ function getConsentReceiptsList(applicationAccessToken,cb){
 
 }
 
+
+
 /***********************************
  * routes functions
  ************************************/
@@ -178,7 +180,7 @@ router.get('/auth/consents/privacyCenter/creation', function (req, res, next) {
 
 /* GET privacy center link */
 router.get('/auth/consents/privacyCenter/link', function (req, res, next) {
-  getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
+  getConsentReceiptForConsentList(req.session.applicationAccessToken,function (consentReceiptsList){
     renderPrivacyCenter(req,res,consentReceiptsList,"link");
   });
 });
@@ -204,7 +206,10 @@ router.post('/auth/consents/privacyCenter/createWidget', function (req, res, nex
   var consentReceiptSelected=req.body.consentReceiptSelected;
   getConsentReceipt(req,consentReceiptSelected,true,function(consentReceipt){
     if(consentReceipt !=null){
-      renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt.body);
+      //get consent receipt of the pod
+      getConsentReceipt(req,req.session.podTypeId,false,function(consentReceiptPod){
+        renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt.body,consentReceiptPod.body);
+      });
     }
       else
     renderPrivacyCenterWidget(req,res,consentReceiptSelected);
@@ -216,7 +221,10 @@ router.get('/auth/consents/privacyCenter/createWidgetCallback', function (req, r
   var consentReceiptSelected=req.query.consentReceiptSelected;
   getConsentReceipt(req,consentReceiptSelected,true,function(consentReceipt){
     if(consentReceipt !=null){
-      renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt.body);
+      //get consent receipt of the pod
+      getConsentReceipt(req,req.session.podTypeId,false,function(consentReceiptPod){
+        renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt.body,consentReceiptPod.body);
+      });
     }
       else
     renderPrivacyCenterWidget(req,res,consentReceiptSelected);
@@ -328,8 +336,9 @@ function renderPrivacyCenter(req,res,consentReceiptsList,tab){
  * @param {req} request
  * @param {res} response
  */
-function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt){
+function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentReceiptPod){
   var consentReceiptJson=JSON.parse(consentReceipt);
+  var consentReceiptPodJson=JSON.parse(consentReceiptPod);
   var dataSources="{\"sources\":[";
   for(var i=0;i<consentReceiptJson.sources.length;i++){
     dataSources+="{\"name\":\""+consentReceiptJson.sources[i]["gl:name"]+"\",";
@@ -345,9 +354,12 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
   res.render('privacy-center-widget', {
     layout: 'singlePage',
     user:{id:User.getUserId(req.user)},
-    consentReceipt:{name:consentReceiptJson.main["gl:name"],description:consentReceiptJson.main["gl:description"],purpose:consentReceiptJson.main["gl:forPurpose"]["gl:description"]},
+    consentReceipt:{id:consentReceiptSelected,name:consentReceiptJson.main["gl:name"],description:consentReceiptJson.main["gl:description"],purpose:consentReceiptJson.main["gl:forPurpose"]["gl:description"]},
+    consentReceiptPod:{name:consentReceiptPodJson["gl:name"],description:consentReceiptPodJson["gl:description"],purpose:consentReceiptPodJson["gl:forPurpose"]["gl:description"]},
     dataSources:JSON.parse(dataSources),
     action:rootDomainPassportApp+'/sources/activate',
+    actionConsent:rootDomainPassportApp+'/consents/activate',
+    actionPod:rootDomainPassportApp+'/pods/activate',
     callback:rootDomainDemoApp+'/auth/consents/privacyCenter/createWidgetCallback?consentReceiptSelected='+consentReceiptSelected,
     callbackError:rootDomainDemoApp+'/auth/consents/privacyCenter/createWidgetCallback?consentReceiptSelected='+consentReceiptSelected,
   });
