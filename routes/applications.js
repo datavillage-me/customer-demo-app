@@ -213,10 +213,8 @@ router.post('/auth/applications/test/users/token', function (req, res, next) {
     }
     };
     request(options, function (error, response) { 
-      if(response !=null)
-        req.session.applicationUserAccessToken=JSON.parse(response.body).access_token;
         if(response !=null){
-          req.session.applicationAccessToken=JSON.parse(response.body).access_token;
+          req.session.applicationUserAccessToken=JSON.parse(response.body).access_token;
           renderHttpResponse(req,res,response.body,"userTokenResponseiFrame","250");
         }
         else

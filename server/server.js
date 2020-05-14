@@ -83,6 +83,11 @@ var hbs = exphbs.create(
           return options.fn(this);
         }
         return options.inverse(this);
+      },
+      ifConsentActif:function(consents,id,options){
+        if(consents[id])
+          return options.fn(this);
+        return options.inverse(this);
       }
     }
   });

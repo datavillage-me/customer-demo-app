@@ -16,7 +16,7 @@
                         <h4><b>{{consentReceiptPod.name}}</b></h4> 
                         <div class="row">
                             <div class="col-lg-1"></div>
-                            <div class="col-lg-2 align-self-center"><label class="switch"><input type="checkbox" onclick="activateDataSource(this,'{{session.podTypeId}}')"><span class="slider round"></span></label>      
+                            <div class="col-lg-2 align-self-center"><label class="switch"><input type="checkbox" onclick="activateDataSource(this,'{{session.podTypeId}}')" {{#ifConsentActif consents session.podTypeId}}checked{{/ifConsentActif}}><span class="slider round"></span></label>      
                             </div>
                             <div class="col-lg-8 align-self-center" ><h5>{{consentReceiptPod.description}}</h5></div>
                         </div>
@@ -47,7 +47,7 @@
                     <h4><b>{{this.name}}</b></h4> 
                     <div class="row">
                         <div class="col-lg-1"></div>
-                        <div class="col-lg-2 align-self-center"><label class="switch"><input type="checkbox" onclick="activateDataSource(this,'{{this.id}}')"><span class="slider round"></span></label>      
+                        <div class="col-lg-2 align-self-center"><label class="switch"><input type="checkbox" onclick="activateDataSource(this,'{{this.id}}')" {{#ifConsentActif ../consents this.id}}checked{{/ifConsentActif}}><span class="slider round"></span></label>      
                         </div>
                         <div class="col-lg-8 align-self-center"><h5>{{this.description}}</h5></div>
                         <form method="POST" id="{{this.id}}" action="{{../action}}">
@@ -70,12 +70,20 @@
                         </select> 
                     </div>
                     <br/>
-                    <form method="POST" action="{{actionConsent}}">
+                    <form method="POST" action="{{#ifConsentActif consents consentReceipt.id}}{{actionDesactivateConsent}}{{else}}{{actionActivateConsent}}{{/ifConsentActif}}">
                         <input type="hidden" name="callback" value="{{callback}}"/>
                         <input type="hidden" name="callbackError" value="{{callbackError}}"/>
                         <input type="hidden" name="consentReceiptId" value="{{consentReceipt.id}}"/>
                         <input type="hidden" name="accessToken" value="{{{session.applicationUserAccessToken}}}"/>
-                        <center><button type="submit" class="btn btn-primary">I agree</button></center>
+                        <center>
+                            {{#ifConsentActif consents consentReceipt.id}}
+                                 <button type="submit" class="btn btn-primary">I want to revoke "{{consentReceipt.name}}"</button>
+                            {{else}}
+                                <button type="submit" class="btn btn-primary">I agree</button>
+                            {{/ifConsentActif}}
+                            
+                            
+                        </center>
                     </form>
                     <hr/>
                     <div class="row">

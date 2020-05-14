@@ -64,6 +64,39 @@ function getConsentReceiptsList(applicationAccessToken,cb){
 
 }
 
+function getConsentsChain(req,consentReceiptId,cb){
+  var options = {
+    'method': 'GET',
+    'url': 'https://api.datavillage.me/consents/'+consentReceiptId+"?consentChain=true",
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+req.session.applicationUserAccessToken
+    }
+    };
+    request(options, function (error, response) { 
+      if(response.statusCode!=200)
+        cb(null);
+      else
+        cb(response.body);
+    });
+}
+
+function getConsent(req,consentReceiptId,cb){
+  var options = {
+    'method': 'GET',
+    'url': 'https://api.datavillage.me/consents/'+consentReceiptId,
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+req.session.applicationUserAccessToken
+    }
+    };
+    request(options, function (error, response) { 
+      if(response.statusCode!=200)
+        cb(null);
+      else
+        cb(response.body);
+    });
+}
 
 
 /***********************************
@@ -200,40 +233,33 @@ router.post('/auth/consents/privacyCenter/get', function (req, res, next) {
   });
 });
 
-
-/* POST generate privacy center widget */
-router.post('/auth/consents/privacyCenter/createWidget', function (req, res, next) {
-  var consentReceiptSelected=req.body.consentReceiptSelected;
+function routePrivacyCenterWidget(req,res,consentReceiptSelected){
   getConsentReceipt(req,consentReceiptSelected,true,function(consentReceipt){
     if(consentReceipt !=null){
       //get consent receipt of the pod
       getConsentReceipt(req,req.session.podTypeId,false,function(consentReceiptPod){
-        renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt.body,consentReceiptPod.body);
+        getConsentsChain(req,consentReceiptSelected,function(consents){
+          getConsent(req,req.session.podTypeId,function(consentPod){
+            renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt.body,consentReceiptPod.body,consents,consentPod);
+          });
+        });
       });
     }
       else
     renderPrivacyCenterWidget(req,res,consentReceiptSelected);
   });
+
+}
+
+/* POST generate privacy center widget */
+router.post('/auth/consents/privacyCenter/createWidget', function (req, res, next) {
+  routePrivacyCenterWidget(req,res,req.body.consentReceiptSelected);
 });
 
 /* GET generate privacy center widget */
 router.get('/auth/consents/privacyCenter/createWidgetCallback', function (req, res, next) {
-  var consentReceiptSelected=req.query.consentReceiptSelected;
-  getConsentReceipt(req,consentReceiptSelected,true,function(consentReceipt){
-    if(consentReceipt !=null){
-      //get consent receipt of the pod
-      getConsentReceipt(req,req.session.podTypeId,false,function(consentReceiptPod){
-        renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt.body,consentReceiptPod.body);
-      });
-    }
-      else
-    renderPrivacyCenterWidget(req,res,consentReceiptSelected);
-  });
+  routePrivacyCenterWidget(req,res,req.query.consentReceiptSelected);
 });
-
-
-
-
 
 /***********************************
  * rendering functions
@@ -336,9 +362,10 @@ function renderPrivacyCenter(req,res,consentReceiptsList,tab){
  * @param {req} request
  * @param {res} response
  */
-function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentReceiptPod){
+function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentReceiptPod,consentsChain,consentPod){
   var consentReceiptJson=JSON.parse(consentReceipt);
   var consentReceiptPodJson=JSON.parse(consentReceiptPod);
+  
   var dataSources="{\"sources\":[";
   for(var i=0;i<consentReceiptJson.sources.length;i++){
     dataSources+="{\"name\":\""+consentReceiptJson.sources[i]["gl:name"]+"\",";
@@ -349,6 +376,49 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
       dataSources+=",";
   }
   dataSources+="]}";
+  
+
+  var consents="{";
+
+  if(consentPod){
+    var consentPodJson=JSON.parse(consentPod);
+    //pod consent
+    var arrayId=consentPodJson["@id"].split("/");
+    var consentStatus=consentPodJson["gl:hasStatus"]["@id"];
+    var consentStatusBoolean=false;
+    if(consentStatus=="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven")
+      consentStatusBoolean=true;
+    consents+="\""+arrayId[arrayId.length-1]+"\":\""+consentStatusBoolean+"\",";
+  }
+
+  if(consentsChain){
+    var consentsJson=JSON.parse(consentsChain);
+    if(consentsJson.main){
+      //main consent
+      arrayId=consentsJson.main["@id"].split("/");
+      var consentStatus=consentsJson.main["gl:hasStatus"]["@id"];
+      var consentStatusBoolean=false;
+      if(consentStatus=="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven")
+        consentStatusBoolean=true;
+      consents+="\""+arrayId[arrayId.length-1]+"\":\""+consentStatusBoolean+"\",";
+    }
+    if(consentsJson.sources){
+      //data sources consent
+      for(i=0;i<consentsJson.sources.length;i++){
+        arrayId=consentsJson.sources[i]["@id"].split("/");
+        consentStatus=consentsJson.sources[i]["gl:hasStatus"]["@id"];
+        consentStatusBoolean=false;
+        if(consentStatus=="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven")
+          consentStatusBoolean=true;
+        consents+="\""+arrayId[arrayId.length-1]+"\":\""+consentStatusBoolean+"\"";
+        consents+=",";
+      }
+    }
+  }
+  if(consentPod || consentsChain)
+    consents=consents.substr(0,consents.length-1);
+  consents+="}";
+console.log(consents);
   var rootDomainDemoApp=config.rootDomainDemoApp;
   var rootDomainPassportApp=config.rootDomainPassportApp;
   res.render('privacy-center-widget', {
@@ -357,8 +427,10 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
     consentReceipt:{id:consentReceiptSelected,name:consentReceiptJson.main["gl:name"],description:consentReceiptJson.main["gl:description"],purpose:consentReceiptJson.main["gl:forPurpose"]["gl:description"]},
     consentReceiptPod:{name:consentReceiptPodJson["gl:name"],description:consentReceiptPodJson["gl:description"],purpose:consentReceiptPodJson["gl:forPurpose"]["gl:description"]},
     dataSources:JSON.parse(dataSources),
+    consents:JSON.parse(consents),
     action:rootDomainPassportApp+'/sources/activate',
-    actionConsent:rootDomainPassportApp+'/consents/activate',
+    actionActivateConsent:rootDomainPassportApp+'/consents/activate',
+    actionDesactivateConsent:rootDomainPassportApp+'/consents/desactivate',
     actionPod:rootDomainPassportApp+'/pods/activate',
     callback:rootDomainDemoApp+'/auth/consents/privacyCenter/createWidgetCallback?consentReceiptSelected='+consentReceiptSelected,
     callbackError:rootDomainDemoApp+'/auth/consents/privacyCenter/createWidgetCallback?consentReceiptSelected='+consentReceiptSelected,
