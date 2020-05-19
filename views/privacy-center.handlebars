@@ -13,15 +13,15 @@
                         <br/>
                         
                         <ul class="nav nav-pills nav-pills-icons" role="tablist">
-                            <li class="nav-item"><a class="nav-link {{#if creation}}active{{/if}}" href="/auth/consents/privacyCenter/creation"><i class="material-icons">looks_one</i>Create privacy center</a></li>
-                            <li class="nav-item"><a class="nav-link {{#if link}}active{{/if}}" href="/auth/consents/privacyCenter/link"><i class="material-icons">looks_two</i>Link to consent ledger</a></li>
+                            <li class="nav-item"><a class="nav-link {{#if link}}active{{/if}}" href="/auth/consents/privacyCenter/link"><i class="material-icons">looks_one</i>Link with consent ledger</a></li>
+                            <li class="nav-item"><a class="nav-link {{#if creation}}active{{/if}}" href="/auth/consents/privacyCenter/creation"><i class="material-icons">looks_two</i>Create privacy center</a></li>
                         </ul>
                         <hr/>
-                        {{#if creation}}
-{{> privacy-center-create}}
-                        {{/if}}
                         {{#if link}}
 {{> privacy-center-link}}
+                        {{/if}}
+                        {{#if creation}}
+{{> privacy-center-create}}
                         {{/if}}
                         </div>
                                     </div>

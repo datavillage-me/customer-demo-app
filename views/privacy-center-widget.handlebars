@@ -58,19 +58,19 @@
                         </form>
                     </div>
                     {{/each}}
-                    <h4><b>Duration of your consent</b></h4> 
-                    <div class="form-group">
-                        <select class="form-control selectpicker" data-style="btn btn-link" id="consentDuration" name="consentDuration" onchange="modifyRequestPayload(this.id,this.value)">
-                            <option>None Selected</option>
-                            <option value="7">1 Week</option>
-                            <option value="30">1 Month</option>
-                            <option value="90">3 Months</option>
-                            <option value="365">1 Year</option>
-                            <option value="0">Always</option>
-                        </select> 
-                    </div>
-                    <br/>
                     <form method="POST" action="{{#ifConsentActif consents consentReceipt.id}}{{actionDesactivateConsent}}{{else}}{{actionActivateConsent}}{{/ifConsentActif}}">
+                        <h4><b>Duration of your consent</b></h4> 
+                        <div class="form-group">
+                            <select class="form-control selectpicker" data-style="btn btn-link" id="consentDuration" name="consentDuration">
+                                <option>None Selected</option>
+                                <option value="7">1 Week</option>
+                                <option value="30">1 Month</option>
+                                <option value="90">3 Months</option>
+                                <option value="365">1 Year</option>
+                                <option value="999999">Always</option>
+                            </select> 
+                        </div>
+                        <br/>
                         <input type="hidden" name="callback" value="{{callback}}"/>
                         <input type="hidden" name="callbackError" value="{{callbackError}}"/>
                         <input type="hidden" name="consentReceiptId" value="{{consentReceipt.id}}"/>

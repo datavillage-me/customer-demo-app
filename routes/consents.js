@@ -200,7 +200,7 @@ router.post('/auth/consents/get', function (req, res, next) {
 /* GET privacy center */
 router.get('/auth/consents/privacyCenter', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    renderPrivacyCenter(req,res,consentReceiptsList,"creation");
+    renderPrivacyCenter(req,res,consentReceiptsList,"link");
   });
 });
 
@@ -213,23 +213,23 @@ router.get('/auth/consents/privacyCenter/creation', function (req, res, next) {
 
 /* GET privacy center link */
 router.get('/auth/consents/privacyCenter/link', function (req, res, next) {
-  getConsentReceiptForConsentList(req.session.applicationAccessToken,function (consentReceiptsList){
+  getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
     renderPrivacyCenter(req,res,consentReceiptsList,"link");
   });
 });
 
 
-/* POST generate privacy center widget */
-router.post('/auth/consents/privacyCenter/get', function (req, res, next) {
+/* POST get consents */
+router.post('/auth/consents/privacyCenter/link/getConsents', function (req, res, next) {
   var consentReceiptSelected=req.body.consentReceiptSelected;
 
-  getConsentReceipt(req,consentReceiptSelected,true,function(consentReceipt){
-    if(consentReceipt !=null){
+  getConsentsChain(req,consentReceiptSelected,function(consents){
+    if(consents !=null){
       //create HTML widget
-      renderHttpResponse(req,res,consentReceipt.body,"consentReceiptResponseiFrame","500");
+      renderHttpResponse(req,res,consents,"consentResponseiFrame","500");
     }
     else
-      renderHttpResponse(req,res,"consentReceiptResponseiFrame","10");
+      renderHttpResponse(req,res,"consentResponseiFrame","10");
   });
 });
 
@@ -388,7 +388,8 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
     var consentStatusBoolean=false;
     if(consentStatus=="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven")
       consentStatusBoolean=true;
-    consents+="\""+arrayId[arrayId.length-1]+"\":\""+consentStatusBoolean+"\",";
+    var consentDuration=consentPodJson["gl:hasDuration"]["time:numericDuration"];
+    consents+="\""+arrayId[arrayId.length-1]+"\":{\"status\":\""+consentStatusBoolean+"\",\"duration\":\""+consentDuration+"\"},";
   }
 
   if(consentsChain){
@@ -400,7 +401,8 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
       var consentStatusBoolean=false;
       if(consentStatus=="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven")
         consentStatusBoolean=true;
-      consents+="\""+arrayId[arrayId.length-1]+"\":\""+consentStatusBoolean+"\",";
+      var consentDuration=consentsJson.main["gl:hasDuration"]["time:numericDuration"];
+      consents+="\""+arrayId[arrayId.length-1]+"\":{\"status\":\""+consentStatusBoolean+"\",\"duration\":\""+consentDuration+"\"},";
     }
     if(consentsJson.sources){
       //data sources consent
@@ -410,15 +412,15 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
         consentStatusBoolean=false;
         if(consentStatus=="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven")
           consentStatusBoolean=true;
-        consents+="\""+arrayId[arrayId.length-1]+"\":\""+consentStatusBoolean+"\"";
-        consents+=",";
+        
+        var consentDuration=consentsJson.sources[i]["gl:hasDuration"]["time:numericDuration"];
+        consents+="\""+arrayId[arrayId.length-1]+"\":{\"status\":\""+consentStatusBoolean+"\",\"duration\":\""+consentDuration+"\"},";
       }
     }
   }
   if(consentPod || consentsChain)
     consents=consents.substr(0,consents.length-1);
   consents+="}";
-console.log(consents);
   var rootDomainDemoApp=config.rootDomainDemoApp;
   var rootDomainPassportApp=config.rootDomainPassportApp;
   res.render('privacy-center-widget', {

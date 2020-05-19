@@ -85,7 +85,7 @@ var hbs = exphbs.create(
         return options.inverse(this);
       },
       ifConsentActif:function(consents,id,options){
-        if(consents[id])
+        if(consents[id].status)
           return options.fn(this);
         return options.inverse(this);
       }
