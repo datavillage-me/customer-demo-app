@@ -3,21 +3,18 @@
     <a class="navbar-brand" href="/home"><img style="width:100px;margin-top:-15px;" src="/img/logo2.png"/><span class="badge badge-pill badge-primary">BETA</span></a>
     <div class="container">
       <div class="collapse navbar-collapse">
+        {{#if user}}
         <ul class="navbar-nav">
-           {{#if user}}
+          <li class="nav-item {{home}}">
+              <a class="nav-link" href="/home" onclick="">
+                <i class="material-icons-outlined">home</i> Home
+              </a>
+            </li>
            <li class="nav-item {{applications}}">
               <a class="nav-link" href="/auth/applications" onclick="">
                 <i class="material-icons-outlined">apps</i> Apps
               </a>
             </li>
-            
-           {{else}}
-            <li class="nav-item {{home}}">
-              <a class="nav-link" href="/home" onclick="">
-                <i class="material-icons-outlined">home</i> Home
-              </a>
-            </li>
-          {{/if}}
            <li class="nav-item {{pods}}">
             <a class="nav-link" href="/pods" onclick="">
               <i class="material-icons-outlined">storage</i> Pods
@@ -39,6 +36,7 @@
             </a>
           </li>
         </ul>
+        {{/if}}
         {{#if user}}
         <ul class="navbar-nav ml-auto">
           <li class="dropdown nav-item">
@@ -89,7 +87,7 @@
         </ul>
         {{else}}
         <li class="navbar-nav ml-auto">
-          <a href="/login" class="btn btn-primary"><i class="material-icons">account_circle</i>&nbsp;&nbsp;Login</a>&nbsp;<a href="/login" class="btn btn-primary">Sign up</a>
+          <a href="/login" class="btn btn-primary" style="border:1px; border-color:white;border-style: solid;"><i class="material-icons" style="font-size:28px">account_circle</i>&nbsp;&nbsp;Login</a>&nbsp;<a href="/login" class="btn btn-primary" style="border:1px; border-color:white;border-style: solid;">Sign up</a>
         </li>
           {{/if}}
       </div>
