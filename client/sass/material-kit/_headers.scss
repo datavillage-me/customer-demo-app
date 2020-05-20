@@ -1,5 +1,5 @@
 .page-header{
-    height: 20vh;
+    height: 100vh;
     background-position: center center;
     background-size: cover;
     margin: 0;
@@ -33,6 +33,10 @@
                         0 8px 10px -5px rgba(0, 0, 0, 0.2);
         }
     }
+}
+
+.page-header-small{
+    height: 10vh;
 }
 
 .header-filter{
@@ -69,3 +73,10 @@
   background: -moz-linear-gradient(135deg, rgba(101, 47, 142, 0.88) 0%, rgba(125, 46, 185, 0.45) 100%);
   background: -webkit-linear-gradient(135deg, rgba(101, 47, 142, 0.88) 0%, rgba(125, 46, 185, 0.45) 100%);
 }
+
+.primary-filter:after{
+    background: rgba(80,221,223, 1);
+    background: linear-gradient(45deg, rgba(80,221,223, 0.88) 0%, rgba(80,221,223, 0.45) 100%);
+    background: -moz-linear-gradient(135deg, rgba(80,221,223, 0.88) 0%, rgba(80,221,223, 0.45) 100%);
+    background: -webkit-linear-gradient(135deg, rgba(80,221,223, 0.88) 0%, rgba(80,221,223, 0.45) 100%);
+  }

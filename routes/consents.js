@@ -104,7 +104,7 @@ function getConsent(req,consentReceiptId,cb){
  ************************************/
 
 /* GET dashboard home */
-router.get('/auth/consents', function (req, res, next) {
+router.get('/consents', function (req, res, next) {
   renderConsents(req,res);
 });
 
@@ -273,8 +273,7 @@ router.get('/auth/consents/privacyCenter/createWidgetCallback', function (req, r
 function renderConsents(req,res){
   res.render('consents', {
     layout: 'master',
-    consents:'active',
-    user:{id:User.getUserId(req.user)}
+    consents:'active'
   });
 }
 

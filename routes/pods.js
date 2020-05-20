@@ -20,7 +20,7 @@ var ManagementClient = require('auth0').ManagementClient;
  ************************************/
 
 /* GET dashboard home */
-router.get('/auth/pods', function (req, res, next) {
+router.get('/pods', function (req, res, next) {
   if(req.session.podTypeId!=null)
     renderPodsSelected(req,res);
   else 
@@ -73,7 +73,6 @@ function renderPods(req,res){
   res.render('pods', {
     layout: 'master',
     pods:'active',
-    user:{id:User.getUserId(req.user)}
   });
 }
 

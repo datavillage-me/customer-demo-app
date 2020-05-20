@@ -19,7 +19,7 @@ import config from '../config/index';
  ************************************/
 
 /* GET dashboard home */
-router.get('/auth/cages', function (req, res, next) {
+router.get('/cages', function (req, res, next) {
     renderCages(req,res);
 });
 
@@ -36,8 +36,7 @@ router.get('/auth/cages', function (req, res, next) {
 function renderCages(req,res){
   res.render('cages', {
     layout: 'master',
-    cages:'active',
-    user:{id:User.getUserId(req.user)}
+    cages:'active'
   });
 }
 

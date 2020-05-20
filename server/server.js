@@ -40,14 +40,13 @@ var strategy = new Auth0Strategy(
     // accessToken is the token to call Auth0 API (not needed in the most cases)
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
-    //load auth0 user extra data in the user session
-    //set facebook PSDID
     // asynchronous verification, for effect...
 
-   profile=User.setUserJWTToken(profile,extraParams.id_token);
+      profile=User.setUserJWTToken(profile,extraParams.id_token);
       User.loadUserProfile(profile,function (profile) {
-        if (profile)
+        if (profile){
           return done(null, profile);
+        }
       });
   }
 );
@@ -149,7 +148,7 @@ function ensureAuthenticated(req, res, next) {
 app.use(userInViews());
 
 app.all('*', function(req,res,next){
-  if (req.path === '/' || req.path === '/login' || req.path === '/callback' || req.path === '/error')
+  if (req.path === '/' || req.path === '/home' || req.path === '/pods' || req.path === '/consents' || req.path === '/cages' || req.path === '/login' || req.path === '/callback' || req.path === '/error')
     next();
   else
     ensureAuthenticated(req,res,next);  

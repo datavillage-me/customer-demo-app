@@ -17,8 +17,29 @@ var router = express.Router();
  ************************************/
 /* GET home login/register page. */
 router.get('/', function (req, res, next) {
-  res.redirect("/login");
+  res.redirect("/home");
 });
+
+/* GET home login/register page. */
+router.get('/home', function (req, res, next) {
+  renderHome(req, res);
+});
+
+/***********************************
+ * rendering functions
+ ************************************/
+
+/**
+ * render  home
+ * @param {req} request
+ * @param {res} response
+ */
+function renderHome(req,res){
+  res.render('home', {
+    layout: 'master-anonymous',
+    home:'active',
+  });
+}
 
 
 module.exports = router;
