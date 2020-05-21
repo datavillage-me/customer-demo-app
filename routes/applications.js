@@ -46,6 +46,38 @@ function getClient(req,cb){
 /* GET application home */
 router.get('/auth/applications', function (req, res, next) {
   getClient(req,function(client){
+    if(req.session.applicationUserId!=null){
+      //automatically generate tokens (app & user)
+      var options = {
+        'method': 'POST',
+        'url': 'https://api.datavillage.me/oauth/token',
+        'headers': {
+            'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded']
+        },
+        form: {
+            'client_id': client.client_id,
+            'client_secret': client.client_secret
+        }
+        };
+        request(options, function (error, response) { 
+          if(response !=null){
+            req.session.applicationAccessToken=JSON.parse(response.body).access_token;
+            var options = {
+              'method': 'GET',
+              'url': 'https://api.datavillage.me/users/'+req.session.applicationUserId+'/token',
+              'headers': {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer '+req.session.applicationAccessToken
+              }
+              };
+              request(options, function (error, response) { 
+                  if(response !=null){
+                    req.session.applicationUserAccessToken=JSON.parse(response.body).access_token;
+                  }
+                });   
+          }
+        });
+    }
     renderApplications(req,res,client,"applicationToken");
   });
 });
@@ -78,7 +110,6 @@ router.get('/auth/applications/form', function (req, res, next) {
 
 /* POSTcreate application */
 router.post('/auth/applications/create', function (req, res, next) {
-
   const errors = validationResult(req);
   var appName=req.body.appName;
   var appUrl=req.body.appUrl;

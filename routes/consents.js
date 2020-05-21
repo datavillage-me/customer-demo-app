@@ -200,7 +200,7 @@ router.post('/auth/consents/get', function (req, res, next) {
 /* GET privacy center */
 router.get('/auth/consents/privacyCenter', function (req, res, next) {
   getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    renderPrivacyCenter(req,res,consentReceiptsList,"link");
+    renderPrivacyCenter(req,res,consentReceiptsList,"creation");
   });
 });
 
