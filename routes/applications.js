@@ -78,7 +78,6 @@ router.get('/auth/applications/form', function (req, res, next) {
 
 /* POSTcreate application */
 router.post('/auth/applications/create', function (req, res, next) {
-
   const errors = validationResult(req);
   var appName=req.body.appName;
   var appUrl=req.body.appUrl;
