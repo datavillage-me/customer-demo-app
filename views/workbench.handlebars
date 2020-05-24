@@ -16,6 +16,7 @@
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
     var requestOptions = {
       method: 'POST',
       mode: "cors",
