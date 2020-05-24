@@ -25,6 +25,8 @@ import podsRouter from '../routes/pods';
 import cagesRouter from '../routes/cages';
 import applicationsRouter from '../routes/applications';
 import consentsRouter from '../routes/consents';
+import workbenchRouter from '../routes/workbench';
+import pythonRouter from '../routes/python';
 
 /***********************************
  * Set up passports
@@ -166,6 +168,8 @@ app.use('/', podsRouter);
 app.use('/', cagesRouter);
 app.use('/', applicationsRouter);
 app.use('/', consentsRouter);
+app.use('/', workbenchRouter);
+app.use('/', pythonRouter);
 
 
 

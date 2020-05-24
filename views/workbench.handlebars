@@ -1,0 +1,46 @@
+<div>
+  <h2><b>Workbench</b></h2>
+</div>
+<div>
+  <h4><i>Simple Graph QL editor to query your data</i></h4> </br>
+</div>
+<hr />
+<div id="graphiql" style="height: 100vh;"></div>
+
+<script crossorigin src="https://unpkg.com/react/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/graphiql/graphiql.min.js"></script>
+<script>
+  function graphQLFetcher(graphQLParams) {
+    var token = "Bearer {{session.applicationUserAccessToken}}"
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: 'POST',
+      mode: "cors",
+      credentials: "omit",
+      redirect: "follow",
+      headers: myHeaders,
+      body: JSON.stringify(graphQLParams)
+    }
+    return fetch(
+      'https://api.datavillage.me/query/graphql',
+      requestOptions,
+    ).then(res => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw Error(`Request rejected with status ${res.status}`);
+      }
+    }).catch(err => console.error('Caught error: ', err));
+  }
+
+  ReactDOM.render(
+    React.createElement(GraphiQL, {
+      fetcher: graphQLFetcher,
+
+    }),
+    document.getElementById('graphiql'),
+  );
+</script>
