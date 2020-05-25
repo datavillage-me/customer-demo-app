@@ -19,7 +19,7 @@ import config from '../config/index';
  ************************************/
 
 /* GET dashboard home */
-router.get('/workbench', function (req, res, next) {
+router.get('/auth/workbench', function (req, res, next) {
     renderWorkbench(req,res);
 });
 
