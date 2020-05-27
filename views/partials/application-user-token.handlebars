@@ -1,4 +1,4 @@
-<h4><b>Third</b>, get user access token to link pods, get consent and connect data sources.</h4>
+<h4><i>Get your <b>test user access token</b> to first link pods and activate consent for your test user via the privacy center.<br/>Second to import, explore and process test data via Data workbench</i></h4>
 <ul class="nav">
     <li class="nav-item"><a class="nav-link active" href="#pill21" data-toggle="tab">Node JS</a></li>
     <li class="nav-item"><a class="nav-link" href="#pill22" data-toggle="tab">Python</a></li>
@@ -62,14 +62,14 @@ Response response = client.newCall(request).execute();
                             <h4><b>Test this endpoint</b></h4>
                             {{#if session.applicationAccessToken}}
                                 {{#if session.applicationUserId}}
-                                <form method="POST" target="userTokenResponseiFrame" action="/auth/applications/test/users/token">
+                                <form method="POST" target="userTokenResponseiFrame" action="/auth/pods/test/users/token">
                                     <input type="hidden" name="applicationAccessToken" value="{{session.applicationAccessToken}}"/>
                                     <input type="hidden" name="applicationUserId" value="{{session.applicationUserId}}"/>
                                     <button type="submit" class="btn btn-primary">Try &amp; get user access token</button>
                                 </form>
                                 <iframe class="response-payload" style="height:0px" id="userTokenResponseiFrame" name="userTokenResponseiFrame"></iframe> 
                                 {{else}}
-                                To try this enpoint, <a href="/auth/applications/userToken">first create a user</a>
+                                To try this enpoint, <a href="/auth/pods/userCreation">first create a user</a>
                                 {{/if}}
                             {{else}}
                                 To try this enpoint, first <a href="/auth/applications/applicationToken">get your application access token</a>

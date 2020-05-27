@@ -1,47 +1,32 @@
 <div>
-  <h2><b>Workbench</b></h2>
-</div>
-<div>
-  <h4><i>Simple Graph QL editor to query your data</i></h4> </br>
-</div>
-<hr />
-<div id="graphiql" style="height: 100vh;"></div>
-
-<script crossorigin src="https://unpkg.com/react/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/graphiql/graphiql.min.js"></script>
-<script>
-  function graphQLFetcher(graphQLParams) {
-    var token = "Bearer {{session.applicationUserAccessToken}}"
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", token);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", "*");
-    var requestOptions = {
-      method: 'POST',
-      mode: "cors",
-      credentials: "omit",
-      redirect: "follow",
-      headers: myHeaders,
-      body: JSON.stringify(graphQLParams)
-    }
-    return fetch(
-      'https://api.datavillage.me/query/graphql',
-      requestOptions,
-    ).then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        throw Error(`Request rejected with status ${res.status}`);
-      }
-    }).catch(err => console.error('Caught error: ', err));
-  }
-
-  ReactDOM.render(
-    React.createElement(GraphiQL, {
-      fetcher: graphQLFetcher,
-
-    }),
-    document.getElementById('graphiql'),
-  );
-</script>
+    <h2><b>Cages - Data workbench</b></h2>
+    </div>
+<hr/>
+<div class="container">
+    <div class="row">
+            <div class="card text-left" style="width: 100%;">
+                <div class="card-body ">
+                    <h2 class="card-subtitle mb-2 "><b>Quickstart</b></h2>
+                    <p class="card-text">
+                        <h4>Data workbench lets you import test user data and query these data through our graphQL editor. Before using the Data workbench, you need first <a href="/auth/consents/form">create consent receipt</a> with linked data sources and activate consents for your test user through <a href="/auth/consents/privacyCenter">the privacy center</a>.</h4>
+                        <br/>
+                        
+                         <ul class="nav nav-pills nav-pills-icons" role="tablist">
+                            <li class="nav-item"><a class="nav-link {{#if import}}active{{/if}}" href="/auth/workbench/import"><i class="material-icons">looks_one</i>Import test data</a></li>
+                            <li class="nav-item"><a class="nav-link {{#if graphql}}active{{/if}}" href="/auth/workbench/graphql"><i class="material-icons">looks_two</i>Query test data</a></li>
+                        </ul>
+                        <hr/>
+                        {{#if import}}
+{{> workbench-import-data}}
+                        {{/if}}
+                        {{#if graphql}}
+{{> workbench-graphql-explorer}}
+                        {{/if}}
+                        </div>
+                                    </div>
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

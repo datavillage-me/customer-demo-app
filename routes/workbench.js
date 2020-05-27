@@ -17,10 +17,19 @@ import config from '../config/index';
 /***********************************
  * routes functions
  ************************************/
-
 /* GET dashboard home */
 router.get('/auth/workbench', function (req, res, next) {
-    renderWorkbench(req,res);
+  renderWorkbench(req,res);
+});
+
+/* GET import */
+router.get('/auth/workbench/import', function (req, res, next) {
+  renderWorkbench(req,res,"import");
+});
+
+/* GET graphql */
+router.get('/auth/workbench/graphql', function (req, res, next) {
+    renderWorkbench(req,res,"graphql");
 });
 
 
@@ -33,10 +42,25 @@ router.get('/auth/workbench', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderWorkbench(req,res){
+function renderWorkbench(req,res,tab){
+  var importTab;
+  var graphqlTab;
+  switch(tab){
+    case "graphql":
+      graphqlTab='active';
+    break;
+    case "import":
+      importTab='active';
+    break;
+    default:
+      importTab='active';
+    break;
+  }
   res.render('workbench', {
     layout: 'master',
-    workbench:'active'
+    workbench:'active',
+    graphql:graphqlTab,
+    import:importTab
   });
 }
 

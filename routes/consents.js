@@ -104,7 +104,7 @@ function getConsent(req,consentReceiptId,cb){
  ************************************/
 
 /* GET dashboard home */
-router.get('/consents', function (req, res, next) {
+router.get('/auth/consents', function (req, res, next) {
   renderConsents(req,res);
 });
 

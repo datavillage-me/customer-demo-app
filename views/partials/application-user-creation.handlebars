@@ -1,4 +1,4 @@
-<h4><b>Second</b>, create a user and use it as default user within your developer portal. The user creation is limited to one single user by application in the <span class="badge badge-pill badge-primary">BETA</span> version.</h4>
+<h4><i>Create <b>test user</b> and use it as default user within your developer environement. Test user is limited to one single user by application in the <span class="badge badge-pill badge-primary">BETA</span> version.</i></h4>
 <ul class="nav">
     <li class="nav-item"><a class="nav-link active" href="#pill11" data-toggle="tab">Node JS</a></li>
     <li class="nav-item"><a class="nav-link" href="#pill12" data-toggle="tab">Python</a></li>
@@ -64,9 +64,9 @@ Response response = client.newCall(request).execute();
                             </div>
                             <h4><b>Test this endpoint</b></h4>
                             {{#if session.applicationAccessToken}}
-                            <form method="POST" action="/auth/applications/test/users" target="userCreationResponseiFrame">
+                            <form method="POST" action="/auth/pods/test/users" target="userCreationResponseiFrame">
                                 <input type="hidden" name="applicationAccessToken" value="{{session.applicationAccessToken}}"/>
-                                <button type="submit" class="btn btn-primary">Try &amp; create user</button>
+                                <button type="submit" class="btn btn-primary">Try &amp; create test user</button>
                             </form>
                             <iframe class="response-payload" style="height:0px" id="userCreationResponseiFrame" name="userCreationResponseiFrame"></iframe> 
                             {{else}}

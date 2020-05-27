@@ -53,28 +53,8 @@
             <div class="card text-left" style="width: 100%;">
                 <div class="card-body">
                         <h2 class="card-subtitle mb-2 "><b>Quickstart</b></h2>
-                        <p class="card-text">
-                            <h4>Integrate rapidly into your application by following the steps below.<br/> <br/> 
-                            The <i>Datavillage's User-Centric Personal Data Management Platform</i> allows you to process data of your users and extract behaviors. Through <a href="/auth/pods"><b>Pods</b></a>, <a href="/auth/consents"><b>Consents</b></a> and <a href="/auth/cages"><b>Cages</b></a>, you process personal data while ensuring privacy and control from your users.
-                            </h4>
-                        </p>
-                        <br/>
-                        
-                        <ul class="nav nav-pills nav-pills-icons" role="tablist">
-                            <li class="nav-item"><a class="nav-link {{#if applicationToken}}active{{/if}}" href="/auth/applications/applicationToken"><i class="material-icons">looks_one</i>Get app token</a></li>
-                            <li class="nav-item"><a class="nav-link {{#if userCreation}}active{{/if}}" href="/auth/applications/userCreation"><i class="material-icons">looks_two</i>Default user</a></li>
-                            <li class="nav-item"><a class="nav-link {{#if userToken}}active{{/if}}" href="/auth/applications/userToken"><i class="material-icons">looks_3</i>Get user token</a></li>
-                        </ul>
-                        <hr/>
-                        {{#if applicationToken}}
 {{> application-token}}
-                        {{/if}}
-                        {{#if userCreation}}
-{{> application-user-creation}}
-                        {{/if}}
-                        {{#if userToken}}
-{{> application-user-token}}
-                        {{/if}}
+                        
                         </div>
                         
                 </div>

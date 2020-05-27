@@ -36,46 +36,18 @@
                             All user's data sources access keys will be stored (encrypted) into user's pod. Users can decide at any time to delete these access keys themselves. We call it <b>"hard-revoke" with full data control.</b>.
                             </h4>
                         </p>
-                        <div class="tab-content tab-space">
-                            <div class="tab-pane active" id="pill1">
-                            <h4>Include the following HTML code (and customize it) into your application to let your users activate their personal data pod.</h4>
-<pre>
-<code class="html">
-&lt;p&gt;Link your &lt;b&gt;Google drive&lt;/b&gt; account to keep control of your data. All data we use are stored into your personal drive in an isolated folder.&lt;/p&gt;
-&lt;form method="POST" action="https://passport.datavillage.me/pods/activate"&gt;
-    &lt;input type="hidden" name="callback" value="{{callback}}"/&gt;
-    &lt;input type="hidden" name="callbackError" value="{{callbackError}}"/&gt;
-    &lt;input type="hidden" name="consentReceiptId" value="{{session.podTypeId}}"/&gt;
-    &lt;input type="hidden" name="accessToken" value="{{#if session.applicationUserAccessToken}}{{session.applicationUserAccessToken}}{{else}}USER_ACCESS_TOKEN{{/if}}"/&gt;
-    &lt;button type="submit"&gt;Activate&lt;/button&gt;
-&lt;/form&gt;
-</code>
-</pre>
-                            </div>
-                            <h4><b>Test this endpoint</b></h4>
-                            {{#if session.applicationUserAccessToken}}
-                                <form method="POST" action="{{rootDomainPassportApp}}/pods/activate">
-                                    <input type="hidden" name="accessToken" value="{{session.applicationUserAccessToken}}"/>
-                                    <input type="hidden" name="callback" value="{{rootDomainDemoApp}}/auth/pods/select?podCreated=true"/>
-                                    <input type="hidden" name="callbackError" value="{{rootDomainDemoApp}}/auth/pods/select"/>
-                                    <input type="hidden" name="consentReceiptId" value="{{session.podTypeId}}"/>
-                                    <button type="submit" class="btn btn-primary">Try &amp; activate pod for current user</button>
-                                </form>
-                            {{else}}
-                                To try this enpoint, first <a href="/auth/applications/userToken">get your user access token</a>
-                            {{/if}}
-                            {{#if pod.podCreated}}
-                                Response:                     
-<pre>
-<code class="json">
-Pod has been created for user {{session.applicationUserId}}. 
-Folder "PERSONAL-DATA-POD" has been created. 
-User's PublicKey file has been created at /PERSONAL-DATA-POD/personal-public.key for IBE(identity based encryption).   
-</code>
-</pre>
-                            {{/if}}
-                            
-                </div>
+                        <br/>
+                        <ul class="nav nav-pills nav-pills-icons" role="tablist">
+                            <li class="nav-item"><a class="nav-link {{#if userCreation}}active{{/if}}" href="/auth/pods/userCreation"><i class="material-icons">looks_one</i>Test user</a></li>
+                            <li class="nav-item"><a class="nav-link {{#if userToken}}active{{/if}}" href="/auth/pods/userToken"><i class="material-icons">looks_two</i>User token</a></li>
+                        </ul>
+                        <hr/>
+                        {{#if userCreation}}
+{{> application-user-creation}}
+                        {{/if}}
+                        {{#if userToken}}
+{{> application-user-token}}
+                        {{/if}}
             </div>
         </div>
     </div>

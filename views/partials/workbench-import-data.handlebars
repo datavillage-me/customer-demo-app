@@ -1,0 +1,39 @@
+<h4><i>Select consent receipt for which you want to <b>import test user data</b></i>.</h4>
+<form method="POST" target="consentReceiptResponseiFrame" action="/auth/consents/get">
+<div class="request">
+    <div class="request-parameters">
+        <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="modifyRequestPayload(this.id,this.value)">
+            <option>{{#if session.applicationAccessToken}}Select consent receipt{{else}}To get the list, first get your application access token{{/if}}</option>
+            {{#each consentReceiptsList.consentReceipts}}
+                <option value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div class="request-payload">
+            <pre>
+<code class="javascript">
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://api.datavillage.me/consentReceipts/<span id="consentReceiptSelectedRequest"></span>',
+  'headers': {
+    'Authorization': 'Bearer {{#if session.applicationAccessToken}}{{session.applicationAccessToken}}{{else}}APPLICATION_ACCESS_TOKEN{{/if}}'
+  }
+};
+request(options, function (error, response) { 
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+</code>
+</pre>
+    </div>
+</div>
+<h4><b>Test this endpoint</b></h4>
+{{#if session.applicationUserAccessToken}}
+    <button type="submit" class="btn btn-primary">Try &amp; import test user data</button>
+{{else}}
+To try this enpoint, first <a href="/auth/pods/userToken">get your user access token</a>
+{{/if}}
+</form>
+<iframe class="response-payload" style="height:0px" id="consentReceiptResponseiFrame" name="consentReceiptResponseiFrame"></iframe> 
+                                    

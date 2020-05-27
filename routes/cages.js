@@ -19,7 +19,7 @@ import config from '../config/index';
  ************************************/
 
 /* GET dashboard home */
-router.get('/cages', function (req, res, next) {
+router.get('/auth/cages', function (req, res, next) {
     renderCages(req,res);
 });
 
