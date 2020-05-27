@@ -181,6 +181,9 @@ function renderPodsSelected(req,res,tab){
       userToken='active';
     break;
     default:
+    if(req.session.applicationUserId)
+      userToken='active';
+    else
     userCreation='active';
     break;
   }
