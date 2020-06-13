@@ -9779,7 +9779,7 @@ textarea {
   .list-group-item .material-icons ~ .material-icons:last-child {
     padding-left: 1rem; }
   .list-group-item .list-group-item-text {
-    font-size: .875rem;
+    font-size: 1rem;
     color: #555; }
 
 .nav-link {

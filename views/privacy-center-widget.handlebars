@@ -6,36 +6,6 @@
                 <h3><i class="material-icons-outlined" style="font-size:48px">verified_user</i><br/>Privacy center</h3>
                 Review key settings &amp; the data <b>{{session.companyName}}</b> uses to personalize your experience.
             </center>
-                <div class="card" >
-                    <div class="card-body">
-                        <h3>Personal data pod</h3>
-                        <h5>Keep control on your data. Link your personal data pod fully managed by you.</h5>
-                        <hr/>
-                        <center><img  style="width:15%;" src="/img/icons/pods-self-managed.png" rel="nofollow" alt="Card image cap"></center>
-                        <br/>
-                        <h4><b>{{consentReceiptPod.name}}</b></h4> 
-                        <div class="row">
-                            <div class="col-lg-1"></div>
-                            <div class="col-lg-2 align-self-center"><label class="switch"><input type="checkbox" onclick="activateDataSource(this,'{{session.podTypeId}}')" {{#ifConsentActif consents session.podTypeId}}checked{{/ifConsentActif}}><span class="slider round"></span></label>      
-                            </div>
-                            <div class="col-lg-8 align-self-center" ><h5>{{consentReceiptPod.description}}</h5></div>
-                        </div>
-            
-                        <hr/>
-                        <div class="row">
-                            <div class="col-lg-1 align-self-center"><i class="material-icons-outlined" style="font-size:32px">verified_user</i></div>
-                            <div class="col-lg-11 align-self-center"><i>All your personal data are under your control within your Personal data pod. {{session.companyName}} can only access the data they create in your pod and under your explicit consent.</i></div>
-                        </div>
-                        
-                        
-                        <form method="POST" id="{{session.podTypeId}}" action="{{actionPod}}">
-                            <input type="hidden" name="accessToken" value="{{session.applicationUserAccessToken}}"/>
-                            <input type="hidden" name="callback" value="{{callback}}"/>
-                            <input type="hidden" name="callbackError" value="{{callbackError}}"/>
-                            <input type="hidden" name="consentReceiptId" value="{{session.podTypeId}}"/>
-                        </form>
-                    </div>
-            </div>
             <div class="card" >
                 <div class="card-body">
                     <h3>{{consentReceipt.name}} - {{consentReceipt.description}}</h3>
@@ -58,33 +28,13 @@
                         </form>
                     </div>
                     {{/each}}
-                    <form method="POST" action="{{#ifConsentActif consents consentReceipt.id}}{{actionDesactivateConsent}}{{else}}{{actionActivateConsent}}{{/ifConsentActif}}">
-                        <h4><b>Duration of your consent</b></h4> 
-                        <div class="form-group">
-                            <select class="form-control selectpicker" data-style="btn btn-link" id="consentDuration" name="consentDuration">
-                                <option>None Selected</option>
-                                <option value="7">1 Week</option>
-                                <option value="30">1 Month</option>
-                                <option value="90">3 Months</option>
-                                <option value="365">1 Year</option>
-                                <option value="999999">Always</option>
-                            </select> 
-                        </div>
-                        <br/>
-                        <input type="hidden" name="callback" value="{{callback}}"/>
-                        <input type="hidden" name="callbackError" value="{{callbackError}}"/>
-                        <input type="hidden" name="consentReceiptId" value="{{consentReceipt.id}}"/>
-                        <input type="hidden" name="accessToken" value="{{{session.applicationUserAccessToken}}}"/>
-                        <center>
-                            {{#ifConsentActif consents consentReceipt.id}}
-                                 <button type="submit" class="btn btn-primary">I want to revoke "{{consentReceipt.name}}"</button>
-                            {{else}}
-                                <button type="submit" class="btn btn-primary">I agree</button>
-                            {{/ifConsentActif}}
-                            
-                            
-                        </center>
-                    </form>
+                    <center>
+                    {{#ifConsentActif consents consentReceipt.id}}
+                        <a href="{{actionActivateConsent}}" class="btn btn-primary">I want to revoke "{{consentReceipt.name}}"</a>
+                    {{else}}
+                        <img style="width:48px" src="/img/logo.png"/><a href="{{actionActivateConsent}}" class="btn btn-primary">Authorize with Datavillage</a>
+                    {{/ifConsentActif}}
+                    </center>
                     <hr/>
                     <div class="row">
                         <div class="col-lg-1 align-self-center"><i class="material-icons-outlined" style="font-size:32px">verified_user</i></div>

@@ -7,6 +7,7 @@
  ************************************/
 import express from 'express';
 import User from '../server/lib/utils/user';
+import Authentication from '../server/lib/utils/authentication';
 var router = express.Router();
 const { check, validationResult } = require('express-validator/check');
 import sanitizeBody from 'express-validator/filter';
@@ -17,25 +18,18 @@ var ManagementClient = require('auth0').ManagementClient;
 /***********************************
  * Private functions
  ************************************/
-function getClient(req,cb){
-  var management = new ManagementClient({
-    domain: config.auth0Domain,
-    clientId: config.auth0ManagementClientID,
-    clientSecret: config.auth0ManagementClientSecret,
-    scope: 'read:clients read:client_keys'
-    });
-    management.getClient(
-      {
-        client_id: User.getApplicationId(req.user)
-      }, function (err, client) {
-        if(client!=null && client.client_metadata!=null){
-          req.session.applicationUserId=client.client_metadata.applicationUserId;
-          req.session.callbacks=client.callbacks;
-          req.session.companyUri=client.description;
-          req.session.companyName=client.name;
-          req.session.podTypeId=client.client_metadata.podTypeId;
-        }
-        cb(client) ;
+
+function initClientSession(req,client,done){
+  if(client!=null){
+    req.session.clientId=client.id;
+    req.session.clientSecret=client.secret;
+    req.session.callbacks=client.callbacks;
+    req.session.companyUri=client.description;
+    req.session.companyName=client.name;
+  }
+  Authentication.getApplicationToken(client.id,client.secret,function (accessToken){
+    req.session.applicationAccessToken=accessToken;
+    done();
   });
 }
 
@@ -45,17 +39,13 @@ function getClient(req,cb){
 
 /* GET application home */
 router.get('/auth/applications', function (req, res, next) {
-  getClient(req,function(client){
-    renderApplications(req,res,client);
+  Authentication.getClient(User.getApplicationId(req.user),null,function(client){
+    initClientSession(req,client,function(){
+      renderApplications(req,res,client);
+    });
   });
 });
 
-/* GET application applicationToken tab */
-router.get('/auth/applications/applicationToken', function (req, res, next) {
-  getClient(req,function(client){
-    renderApplications(req,res,client);
-  });
-});
 
 /* GET form */
 router.get('/auth/applications/form', function (req, res, next) {
@@ -103,7 +93,7 @@ router.post('/auth/applications/create', function (req, res, next) {
                   renderApplicationsForm(req,res,err);
                 else{
                   User.setApplicationId(req.user,clientId,function (profile){
-                    req.session.callbacks=client.allowedCallbakUrl;
+                    req.session.callbacks=client.callbacks;
                     req.session.companyUri=appName;
                     req.session.companyName=appUrl;
                     renderApplications(req,res,client);
@@ -158,7 +148,7 @@ function renderApplications(req,res,client){
       layout: 'master',
       applications:'active',
       user:{id:User.getUserId(req.user)},
-      application:{name:client.name,clientId:client.client_id,clientSecret:client.client_secret,url:client.description,callbacks:client.callbacks},
+      application:{name:client.name,clientId:client.id,clientSecret:client.secret,url:client.description,callbacks:client.callbacks},
     });
   }
   else{
@@ -184,27 +174,5 @@ function renderApplicationsForm(req,res,err){
     user:{id:User.getUserId(req.user)}
   });
 }
-
-/**
- * render http response home
- * @param {req} request
- * @param {res} response
- */
-function renderHttpResponse(req,res,responseBody,iFrameId,iFrameHeight){
-  var responseToShow=responseBody;
-  try{
-    responseToShow=JSON.stringify(JSON.parse(responseBody),null,'\t');
-  }
-  catch(err){
-    responseToShow=responseBody;
-  }
-  res.render('http-response', {
-    layout: 'httpResponse',
-    httpResponse:responseToShow,
-    iFrameId:iFrameId,
-    iFrameHeight:iFrameHeight
-  });
-}
-
 
 module.exports = router;

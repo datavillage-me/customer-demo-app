@@ -20,9 +20,6 @@ import dateFormat from 'dateformat';
 //routes
 import authRouter from '../routes/auth';
 import indexRouter from '../routes/index';
-import sourcesRouter from '../routes/sources';
-import podsRouter from '../routes/pods';
-import cagesRouter from '../routes/cages';
 import applicationsRouter from '../routes/applications';
 import consentsRouter from '../routes/consents';
 import workbenchRouter from '../routes/workbench';
@@ -162,9 +159,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', authRouter);
 app.use('/', indexRouter);
-app.use('/', sourcesRouter);
-app.use('/', podsRouter);
-app.use('/', cagesRouter);
 app.use('/', applicationsRouter);
 app.use('/', consentsRouter);
 app.use('/', workbenchRouter);

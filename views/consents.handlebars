@@ -1,33 +1,52 @@
-          <div>
-              <h2><b>Consents</b></h2>
-              </div>
-          <hr/>
-          <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="card text-center" style="width: 100%;">
-                            <div class="card-body">
-                                <img  style="width:15%;" src="/img/icons/consent.png" rel="nofollow" alt="Card image cap">
-                                <h2 >Manage consent receipts</h2>
-                                <p class="card-text">
-                                    <h4>Manage data processing and link the personal data that will be used. Describe the purpose of data processing and frequency.<br/><br/></h4>
-                                    <a href="/auth/consents/form" class="btn btn-primary"><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Manage consent receipts</a>
-                                </p>
-                            </div>
+<div>
+        <h2><b>Consents</b>
+        {{#if hasConsentReceipts}}- Manage consent receipts
+        {{/if}}
+        </h2>
+</div>
+<hr/>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
+            {{#if hasConsentReceipts}}
+{{#each consentReceiptsList.consentReceipts}}
+            <div class="card text-left" style="width: 100%;">
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h3 class="mb-1"><b>{{this.name}}</b></h3>
+                                    <small class="text-muted">
+                                        Created at {{#formatDate this.createdAt "dddd, mmmm dS, yyyy, h:MM:ss TT"}}{{/formatDate}}
+                                    </small>
+                                </div>
+                                <h3><i>{{this.description}}</i></h3>
+                                <small class="text-muted">
+                                        id: {{this.id}}
+                                </small>
+                            </a>
+                            
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="card text-center" style="width: 100%;">
-                            <div class="card-body">
-                                <img  style="width:15%;" src="/img/icons/privacy-center.png" rel="nofollow" alt="Card image cap">
-                                <h2 >Create privacy center</h2>
-                                <p class="card-text">
-                                    <h4>Engage your users with trust and make privacy your application differentiator. Give your users the ability to activate and revoke consents in a user-friendly way.</h4>
-                                    <a href="/auth/consents/privacyCenter" class="btn btn-primary"><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Create privacy center</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
                 </div>
             </div>
+            {{/each}}
+            <div class="row justify-content-center">
+                <a href="/auth/consents/form" class="btn btn-primary"><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Create new consent receipt</a>
+            </div>
+            {{else}}
+            <div class="card text-center" style="width: 100%;">
+                <div class="card-body">
+                    <img  style="width:15%;" src="/img/icons/consent.png" rel="nofollow" alt="Card image cap">
+                    <h2 >Create your first consent receipt</h2>
+                    <p class="card-text">
+                        <h4>Create your first consent receipt and link the personal data that will be used. Describe the purpose of data processing and frequency.<br/><br/></h4>
+                        <a href="/auth/consents/form" class="btn btn-primary"><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Create consent receipt</a>
+                    </p>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>

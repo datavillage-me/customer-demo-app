@@ -10,24 +10,24 @@
                 <i class="material-icons-outlined">apps</i> Apps
               </a>
             </li>
-           <li class="nav-item {{pods}}">
-            <a class="nav-link" href="/auth/pods" onclick="">
-              <i class="material-icons-outlined">storage</i> Pods
-            </a>
-          </li>
           <li class="nav-item {{consents}}">
             <a class="nav-link" href="/auth/consents">
               <i class="material-icons-outlined">assignment_turned_in</i> Consents
             </a>
           </li>
-          <li class="nav-item {{cages}}">
-            <a class="nav-link" href="/auth/cages">
-              <i class="material-icons-outlined">policy</i> Cages
+          <li class="nav-item {{workbench}}">
+            <a class="nav-link" href="/auth/workbench">
+              <i class="material-icons-outlined">policy</i> Workbench
             </a>
           </li>
           <li class="nav-item {{docs}}">
             <a class="nav-link" href="https://documenter.getpostman.com/view/7257320/SzYT52Me" onclick="" target="_blank">
               <i class="material-icons-outlined">notes</i> API Docs
+            </a>
+          </li>
+          <li class="nav-item {{sdk}}">
+            <a class="nav-link" href="https://datavillage-sdk.readthedocs.io/en/latest/" onclick="" target="_blank">
+              <i class="material-icons-outlined">code</i> Dev SDK
             </a>
           </li>
         </ul>
@@ -53,4 +53,16 @@
       </div>
     </div>
   </nav>
-      <!-- End Navbar -->
+  <!-- End Navbar -->
+   {{#if user}}
+  <!--  Help  -->
+		<div class="made-with-mk">
+			<div class="brand">?</div>
+			<div class="made-with">
+        <h3><strong>Quickstart Guide</strong></h3>
+        <br/><a class="made-with-mk" href="/auth/applications"><strong><i class="material-icons">looks_one</i>Create your app</strong></a>
+
+        <a class="made-with-mk" href="/auth/applications"><strong><i class="material-icons">looks_one</i>Create your app</a></strong>
+      </div>
+		</div>
+  {{/if}}

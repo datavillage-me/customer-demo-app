@@ -9,87 +9,48 @@ import express from 'express';
 import User from '../server/lib/utils/user';
 var router = express.Router();
 import config from '../config/index';
-import request from 'request';
+import Consent from '../server/lib/utils/consent';
 
 /***********************************
  * Private functions
  ************************************/
 
-function getConsentReceiptsList(applicationAccessToken,cb){
-  if(applicationAccessToken!=null){
-    var options = {
-      'method': 'GET',
-      'url': 'https://api.datavillage.me/consentReceipts/',
-      'headers': {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+applicationAccessToken
+function routePrivacyCenterWidget(req,res,consentReceiptSelected){
+  Consent.getConsentReceiptChain(req.session.applicationAccessToken,consentReceiptSelected,null,function(consentReceipt){
+    if(consentReceipt !=null){
+      if(req.session.applicationUserAccessToken){
+        Consent.getConsentsChain(req.session.applicationAccessToken,consentReceiptSelected,req.session.applicationUserId,null,function(consents){
+          renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents);
+        });
       }
-    };
-    request(options, function (error, response) { 
-      if(response !=null){
-        try{
-          var jsonBody=JSON.parse(response.body);
-          cb(jsonBody);
-        }
-        catch(error){
-          cb(null);
-        }
-      }
-    });
-  }
-  else
-    cb(null);
-
+      else
+        renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt);
+    }
+    else
+      renderPrivacyCenterWidget(req,res,consentReceiptSelected);
+  });
 }
 
 /***********************************
  * routes functions
  ************************************/
+
 /* GET dashboard home */
 router.get('/auth/workbench', function (req, res, next) {
-  getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    renderWorkbench(req,res,"import",consentReceiptsList);
+  Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
+    renderWorkbench(req,res,consentReceiptsList);
   });
 });
 
-/* GET import */
-router.get('/auth/workbench/import', function (req, res, next) {
-  getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    renderWorkbench(req,res,"import",consentReceiptsList);
-  });
-  
+/* POST generate privacy center widget */
+router.post('/auth/consents/privacyCenter/createWidget', function (req, res, next) {
+  routePrivacyCenterWidget(req,res,req.body.consentReceiptSelected);
 });
 
-/* POST try application access token end point */
-router.post('/auth/workbench/import', function (req, res, next) {
-  var consentReceiptSelected=req.body.consentReceiptSelected;
-  var importStartDate=req.body.importStartDate;
-  var importEndDate=req.body.importEndDate;
-
-  //get application access token
-  var options = {
-    'method': 'Get',
-    'url': 'https://api.datavillage.me/cages/'+consentReceiptSelected+'/importData?startDate='+importStartDate+'&endDate='+importEndDate,
-    'headers': {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+req.session.applicationUserAccessToken
-    }
-    };
-    request(options, function (error, response) { 
-      console.log(response);
-      if(response !=null){
-        renderHttpResponse(req,res,response.body,"importDataResponseiFrame","250");
-      }
-      else
-        renderHttpResponse(req,res,"importDataResponseiFrame","10");
-    });
+/* GET generate privacy center widget */
+router.get('/auth/consents/privacyCenter/createWidgetCallback', function (req, res, next) {
+  routePrivacyCenterWidget(req,res,req.query.consentReceiptSelected);
 });
-
-/* GET graphql */
-router.get('/auth/workbench/graphql', function (req, res, next) {
-    renderWorkbench(req,res,"graphql");
-});
-
 
 /***********************************
  * rendering functions
@@ -100,49 +61,82 @@ router.get('/auth/workbench/graphql', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderWorkbench(req,res,tab,consentReceiptsList){
-  var importTab;
-  var graphqlTab;
-  switch(tab){
-    case "graphql":
-      graphqlTab='active';
-    break;
-    case "import":
-      importTab='active';
-    break;
-    default:
-      importTab='active';
-    break;
-  }
+function renderWorkbench(req,res,consentReceiptsList){
+  var hasConsentReceipts=false;
+  if(consentReceiptsList!=null && consentReceiptsList.consentReceipts.length>0)
+  hasConsentReceipts=true;  
   res.render('workbench', {
     layout: 'master',
-    cages:'active',
-    graphql:graphqlTab,
-    import:importTab,
-    consentReceiptsList:consentReceiptsList
+    workbench:'active',
+    consentReceiptsList:consentReceiptsList,
+    hasConsentReceipts:hasConsentReceipts,
+    user:{id:User.getUserId(req.user)},
   });
 }
 
 /**
- * render http response home
+ * render dashboard home
  * @param {req} request
  * @param {res} response
  */
-function renderHttpResponse(req,res,responseBody,iFrameId,iFrameHeight,widget){
-  var responseToShow=responseBody;
-  try{
-    responseToShow=JSON.stringify(JSON.parse(responseBody),null,'\t');
+function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain){
+  console.log(consentReceipt);
+  var dataSources="{\"sources\":[";
+  for(var i=0;i<consentReceipt.sources.length;i++){
+    dataSources+="{\"name\":\""+consentReceipt.sources[i]["gl:name"]+"\",";
+    dataSources+="\"description\":\""+consentReceipt.sources[i]["gl:description"]+"\",";
+    var arrayId=consentReceipt.sources[i]["@id"].split("/");
+    dataSources+="\"id\":\""+arrayId[arrayId.length-1]+"\"}";
+    if(i!=consentReceipt.sources.length-1)
+      dataSources+=",";
   }
-  catch(err){
-    responseToShow=responseBody;
+  dataSources+="]}";
+  
+
+  var consents="{";
+
+  if(consentsChain){
+    var consentsJson=JSON.parse(consentsChain);
+    if(consentsJson.main){
+      //main consent
+      arrayId=consentsJson.main["@id"].split("/");
+      var consentStatus=consentsJson.main["gl:hasStatus"]["@id"];
+      var consentStatusBoolean=false;
+      if(consentStatus=="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven")
+        consentStatusBoolean=true;
+      var consentDuration=consentsChain.main["gl:hasDuration"]["time:numericDuration"];
+      consents+="\""+arrayId[arrayId.length-1]+"\":{\"status\":\""+consentStatusBoolean+"\",\"duration\":\""+consentDuration+"\"},";
+    }
+    if(consentsChain.sources){
+      //data sources consent
+      for(i=0;i<consentsChain.sources.length;i++){
+        arrayId=consentsChain.sources[i]["@id"].split("/");
+        consentStatus=consentsChain.sources[i]["gl:hasStatus"]["@id"];
+        consentStatusBoolean=false;
+        if(consentStatus=="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven")
+          consentStatusBoolean=true;
+        
+        var consentDuration=consentsChain.sources[i]["gl:hasDuration"]["time:numericDuration"];
+        consents+="\""+arrayId[arrayId.length-1]+"\":{\"status\":\""+consentStatusBoolean+"\",\"duration\":\""+consentDuration+"\"},";
+      }
+    }
   }
-  res.render('http-response', {
-    layout: 'httpResponse',
-    httpResponse:responseToShow,
-    iFrameId:iFrameId,
-    iFrameHeight:iFrameHeight,
-    widget:widget
+  if(consentsChain)
+    consents=consents.substr(0,consents.length-1);
+  consents+="}";
+  var rootDomainDemoApp=config.rootDomainDemoApp;
+  var rootDomainPassportApp=config.rootDomainPassportApp;
+  var callback=rootDomainDemoApp+'/auth/consents/privacyCenter/createWidgetCallback?consentReceiptSelected='+consentReceiptSelected;
+  var consentReceiptUri="https://api.datavillage.me/consentReceipts/"+consentReceiptSelected;
+  res.render('privacy-center-widget', {
+    layout: 'singlePage',
+    user:{id:User.getUserId(req.user)},
+    consentReceipt:{id:consentReceiptSelected,name:consentReceipt.main["gl:name"],description:consentReceipt.main["gl:description"],purpose:consentReceipt.main["gl:forPurpose"]["gl:description"]},
+    dataSources:JSON.parse(dataSources),
+    consents:JSON.parse(consents),
+    actionActivateConsent:rootDomainPassportApp+'/oauth/authorize?client_id='+req.session.clientId+'&redirect_uri='+callback+'&response_type=code&scope='+consentReceiptUri+'&state=empty',
+    actionDesactivateConsent:rootDomainPassportApp+'/oauth/token/revoke'
   });
-}
+} 
 
 module.exports = router;

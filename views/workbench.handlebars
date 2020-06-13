@@ -1,32 +1,86 @@
-<div>
-    <h2><b>Cages - Data workbench</b></h2>
-    </div>
+          <div>
+        <h2><b>Workbench</b>
+        </h2>
+</div>
 <hr/>
 <div class="container">
     <div class="row">
-            <div class="card text-left" style="width: 100%;">
-                <div class="card-body ">
-                    <h2 class="card-subtitle mb-2 "><b>Quickstart</b></h2>
-                    <p class="card-text">
-                        <h4>Data workbench lets you import test user data and query these data through our graphQL editor. Before using the Data workbench, you need first <a href="/auth/consents/form">create consent receipt</a> with linked data sources and activate consents for your test user through <a href="/auth/consents/privacyCenter">the privacy center</a>.</h4>
-                        <br/>
-                        
-                         <ul class="nav nav-pills nav-pills-icons" role="tablist">
-                            <li class="nav-item"><a class="nav-link {{#if import}}active{{/if}}" href="/auth/workbench/import"><i class="material-icons">looks_one</i>Import test data</a></li>
-                            <li class="nav-item"><a class="nav-link {{#if graphql}}active{{/if}}" href="/auth/workbench/graphql"><i class="material-icons">looks_two</i>Query test data</a></li>
-                        </ul>
-                        <hr/>
-                        {{#if import}}
-{{> workbench-import-data}}
-                        {{/if}}
-                        {{#if graphql}}
-{{> workbench-graphql-explorer}}
-                        {{/if}}
+        <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
+            {{#if hasConsentReceipts}}
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="card text-center" style="width: 100%;">
+                            <div class="card-body">
+                                <img  style="width:35%;" src="/img/icons/privacy-center.png" rel="nofollow" alt="Card image cap">
+                                <form id="privacyCenterCreateForm" method="POST" target="_blank" action="/auth/consents/privacyCenter/createWidget">
+                                <h2>Select User &amp; get consent</h2>
+                                <p class="card-text">
+                                    <h4>Engage your users with trust and make privacy your application differentiator. Give your users the ability to manage consents in a user-friendly way.</h4>
+                                    <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="modifyRequestPayload(this.id,this.value)">
+                                        <option>Select consent receipt</option>
+                                        {{#each consentReceiptsList.consentReceipts}}
+                                            <option value="{{this.id}}">{{this.name}}</option>
+                                        {{/each}}
+                                    </select>
+                                    <br/>
+                                    <button type="submit" class="btn btn-primary"><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Create privacy center</button>
+                                </p>
+                                </form>
+                            </div>
                         </div>
-                                    </div>
-                                    </p>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="card text-center" style="width: 100%;">
+                            <div class="card-body">
+                                <img  style="width:35%;" src="/img/icons/cage.png" rel="nofollow" alt="Card image cap">
+                                <h2 >Set-up cage &amp; import data</h2>
+                                <p class="card-text">
+                                    <h4>Easily configure your enclave to deploy and protect the integrity of your code. Ensure full control of data throughout its lifetime.<br/><br/></h4>
+                                    {{#if session.applicationUserAccessToken}}
+                                    <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="modifyRequestPayload(this.id,this.value)">
+                                        <option>Select consent receipt</option>
+                                        {{#each consentReceiptsList.consentReceipts}}
+                                            <option value="{{this.id}}">{{this.name}}</option>
+                                        {{/each}}
+                                    </select>
+                                    <br/>
+                                    <a href="/auth/consents/privacyCenter" class="btn btn-primary"><i class="material-icons" style="font-size:28px">policy</i>&nbsp;&nbsp;&nbsp;Create data cage</a>
+                                    {{else}}
+                                    <h3>First select user</h3>
+                                    <br/>
+                                    <span class="btn btn-light" style><i class="material-icons" style="font-size:28px">policy</i>&nbsp;&nbsp;&nbsp;Create data cage</span>
+                                    {{/if}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="card text-center" style="width: 100%;">
+                            <div class="card-body">
+                                <img  style="width:35%;" src="/img/icons/workbench.png" rel="nofollow" alt="Card image cap">
+                                <h2 >Explore data &amp; create algo.</h2>
+                                <p class="card-text">
+                                    <h4>Unlock the value of your user's personal data with our interactive IDE. Quickly build and test your algorithm through graphQL API's and integrated SDK.</h4>
+                                    <a href="/auth/workbench" class="btn btn-primary"><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Create algorithm</a>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {{else}}
+            <div class="card text-center" style="width: 100%;">
+                <div class="card-body">
+                    <img  style="width:15%;" src="/img/icons/workbench.png" rel="nofollow" alt="Card image cap">
+                    <h2 >Data workbench</h2>
+                    <p class="card-text">
+                        <h4>First you need to create a consent receipt. Do it via the <a href="/auth/consents">Consent menu item</a> or select button here below.<br/><br/></h4>
+                        <a href="/auth/consents/form" class="btn btn-primary"><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Create consent receipt</a>
+                    </p>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
