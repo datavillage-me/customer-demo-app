@@ -82,6 +82,34 @@ function _getClient(clientId,clientSecret,done){
       });
   }
 
+  function _getUserTokenFromCode(clientId,clientSecret,code,done){
+    //get application access token
+    var options = {
+      'method': 'POST',
+      'url': config.ROOT_DOMAIN_PASSPORT_APP+'/oauth/token',
+      'headers': {
+          'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded']
+      },
+      form: {
+          'client_id': clientId,
+          'client_secret': clientSecret,
+          'code': code,
+      }
+      };
+      request(options, function (error, response) { 
+        if (error) { 
+            console.log(error); 
+            return done(null);
+        }
+        console.log(response);
+        if(response !=null){
+            done(JSON.parse(response.body));
+        }
+        else
+          done(null);
+      });
+  }
+
 
 /***********************************
  * Module exports.
@@ -94,8 +122,13 @@ var self=module.exports={
     getDatavillageApplicationToken: function(done){
         _getApplicationToken(config.auth0ManagementClientID,config.auth0ManagementClientSecret,done);
     },
-
     getApplicationToken: function(clientId,clientSecret,done){
         _getApplicationToken(clientId,clientSecret,done);
+    },
+    getUserTokenFromCode: function(clientId,clientSecret,code,done){
+        _getUserTokenFromCode(clientId,clientSecret,done);
+    },
+    getUserTokenFromRefreshToken: function(clientId,clientSecret,code,done){
+        _getUserTokenFromRefreshToken(clientId,clientSecret,done);
     }
 };

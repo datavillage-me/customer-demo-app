@@ -8,26 +8,24 @@
             </center>
             <div class="card" >
                 <div class="card-body">
-                    <h3>{{consentReceipt.name}} - {{consentReceipt.description}}</h3>
+                    <h3>{{consentReceipt.name}}</h3>
                     <h5>{{consentReceipt.purpose}}</h5>
                     <hr/>
-                    <center><img  style="width:15%;" src="/img/icons/consent.png" rel="nofollow" alt="Card image cap"></center>
+                    <center>
+                        <div id="graph"></div>
+                    </center>
                     <br/>
+                    <h5>To be able to {{consentReceipt.description}}, we will use your </h5>
+                    <ul>
                     {{#each dataSources.sources}}
-                    <h4><b>{{this.name}}</b></h4> 
-                    <div class="row">
-                        <div class="col-lg-1"></div>
-                        <div class="col-lg-2 align-self-center"><label class="switch"><input type="checkbox" onclick="activateDataSource(this,'{{this.id}}')" {{#ifConsentActif ../consents this.id}}checked{{/ifConsentActif}}><span class="slider round"></span></label>      
-                        </div>
-                        <div class="col-lg-8 align-self-center"><h5>{{this.description}}</h5></div>
-                        <form method="POST" id="{{this.id}}" action="{{../action}}">
-                            <input type="hidden" name="callback" value="{{../callback}}"/>
-                            <input type="hidden" name="callbackError" value="{{../callbackError}}"/>
-                            <input type="hidden" name="consentReceiptId" value="{{this.id}}"/>
-                            <input type="hidden" name="accessToken" value="{{{../session.applicationUserAccessToken}}}"/>
-                        </form>
-                    </div>
+                    <li><h5><b>{{this.name}}</b></h5></li>
                     {{/each}}
+                    </ul>
+                    <div class="row">
+                        <div class="col-lg-1 align-self-center"><i class="material-icons-outlined" style="font-size:32px">verified_user</i></div>
+                        <div class="col-lg-11 align-self-center"><i>All your personal data is under your control. {{session.companyName}} can only process your data with your explicit consent. We never obtain and store this data on our systems and it will never be used for purposes other than those agreed here. </i></div>
+                    </div>
+                    <hr/>
                     <center>
                     {{#ifConsentActif consents consentReceipt.id}}
                         <a href="{{actionActivateConsent}}" class="btn btn-primary">I want to revoke "{{consentReceipt.name}}"</a>
@@ -35,11 +33,7 @@
                         <img style="width:48px" src="/img/logo.png"/><a href="{{actionActivateConsent}}" class="btn btn-primary">Authorize with Datavillage</a>
                     {{/ifConsentActif}}
                     </center>
-                    <hr/>
-                    <div class="row">
-                        <div class="col-lg-1 align-self-center"><i class="material-icons-outlined" style="font-size:32px">verified_user</i></div>
-                        <div class="col-lg-11 align-self-center"><i>All your personal data is under your control. {{session.companyName}} can only process your data with your explicit consent. We never obtain and store this data on our systems and it will never be used for purposes other than those agreed here. </i></div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -51,4 +45,40 @@
             document.getElementById(consentReceiptId).submit();
         }
     }
+
+    function init() {
+                var neo4jd3 = new Neo4jd3('#graph', {
+                    highlight: [
+                        {
+                            class: 'Project',
+                            property: 'name',
+                            value: 'neo4jd3'
+                        }, {
+                            class: 'User',
+                            property: 'userId',
+                            value: 'person'
+                        }
+                    ],
+                    icons: {
+                        'User': 'user',
+                    },
+                    images: {
+                        {{#each dataSources.sources}}
+                        '{{this.id}}': 'https://passport.datavillage.me/img/logo/{{this.id}}.png',
+                        {{/each}}
+                    },
+                    colors:[
+                        '#79d0dc', // datavillage
+                        {{#each dataSources.sources}}
+                        '#FFFFFF',
+                        {{/each}}
+                    ],
+                    minCollision: 60,
+                    neo4jDataUrl: '/auth/consents/privacyCenter/graph',
+                    nodeRadius: 30,
+                    zoomFit: false
+                });
+            }
+
+            window.onload = init;
 </script>

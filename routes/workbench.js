@@ -18,6 +18,8 @@ import Consent from '../server/lib/utils/consent';
 function routePrivacyCenterWidget(req,res,consentReceiptSelected){
   Consent.getConsentReceiptChain(req.session.applicationAccessToken,consentReceiptSelected,null,function(consentReceipt){
     if(consentReceipt !=null){
+      //store in session for second call to show the graph
+      req.session.privacyCenterConsentReceipt=consentReceipt;
       if(req.session.applicationUserAccessToken){
         Consent.getConsentsChain(req.session.applicationAccessToken,consentReceiptSelected,req.session.applicationUserId,null,function(consents){
           renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents);
@@ -49,7 +51,26 @@ router.post('/auth/consents/privacyCenter/createWidget', function (req, res, nex
 
 /* GET generate privacy center widget */
 router.get('/auth/consents/privacyCenter/createWidgetCallback', function (req, res, next) {
-  routePrivacyCenterWidget(req,res,req.query.consentReceiptSelected);
+  var consentReceiptSelected=req.query.consentReceiptSelected;
+  //get authorization code
+  var code=req.query.code;
+  console.log("****"+code);
+  if(code!=null){
+    //get token
+    console.log("****");
+    console.log(req.session.client.id);
+    console.log(req.session.client.secret);
+    User.getUserTokenFromCode(req.session.client.id,req.session.client.secret,code,function(reponse){
+      console.log(reponse);
+    });
+  }
+  else
+    routePrivacyCenterWidget(req,res,req.query.consentReceiptSelected);
+});
+
+/* GET generate graph data sources for privacy center widget */
+router.get('/auth/consents/privacyCenter/graph', function (req, res, next) {
+  renderPrivacyCenterGraph(req,res,req.session.privacyCenterConsentReceipt);
 });
 
 /***********************************
@@ -80,7 +101,6 @@ function renderWorkbench(req,res,consentReceiptsList){
  * @param {res} response
  */
 function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain){
-  console.log(consentReceipt);
   var dataSources="{\"sources\":[";
   for(var i=0;i<consentReceipt.sources.length;i++){
     dataSources+="{\"name\":\""+consentReceipt.sources[i]["gl:name"]+"\",";
@@ -138,5 +158,36 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
     actionDesactivateConsent:rootDomainPassportApp+'/oauth/token/revoke'
   });
 } 
+
+
+/**
+ * render privacy center graph home
+ * @param {req} request
+ * @param {res} response
+ */
+function renderPrivacyCenterGraph(req,res,consentReceipt){
+  var graph="{\"results\": [{\"columns\": [\"user\", \"entity\"],\"data\": [{\"graph\": {";
+
+  var graphRelationship="[";
+  var graphNodes="[{\"id\": \"person\",\"labels\": [\"User\"],\"properties\": {\"userId\": \"person\"}},";
+  for(var i=0;i<consentReceipt.sources.length;i++){
+    var arrayId=consentReceipt.sources[i]["@id"].split("/");
+    graphNodes+="{\"id\": \""+arrayId[arrayId.length-1]+"\",\"labels\": [\""+arrayId[arrayId.length-1]+"\"],\"properties\": {}}";
+    graphRelationship+="{\"id\": \""+(i+1)+"\",\"type\": \""+consentReceipt.sources[i]["gl:name"]+"\",\"startNode\": \"person\",\"endNode\": \""+arrayId[arrayId.length-1]+"\"}";
+    if(i!=consentReceipt.sources.length-1){
+      graphNodes+=",";
+      graphRelationship+=",";
+    }
+      
+  }
+  graphNodes+="],";
+  graphRelationship+="]";
+
+  graph+="\"nodes\":"+graphNodes+"\"relationships\":"+graphRelationship;
+  graph+="}}]}],\"errors\": []}";
+
+  res.writeHead(200, {"Content-Type": "application/json"});
+  res.end(graph);
+}
 
 module.exports = router;

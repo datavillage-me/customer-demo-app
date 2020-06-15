@@ -17,14 +17,18 @@
                                 <h2>Select User &amp; get consent</h2>
                                 <p class="card-text">
                                     <h4>Engage your users with trust and make privacy your application differentiator. Give your users the ability to manage consents in a user-friendly way.</h4>
-                                    <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="modifyRequestPayload(this.id,this.value)">
-                                        <option>Select consent receipt</option>
-                                        {{#each consentReceiptsList.consentReceipts}}
-                                            <option value="{{this.id}}">{{this.name}}</option>
-                                        {{/each}}
-                                    </select>
+                                    <div class="form-group label-floating has-danger">
+                                        <label class="control-label" id="consentReceiptSelectedLabel"></label>
+                                        <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected">
+                                            <option>Select consent receipt</option>
+                                            {{#each consentReceiptsList.consentReceipts}}
+                                                <option value="{{this.id}}">{{this.name}}</option>
+                                            {{/each}}
+                                        </select>
+                                        <span class="material-icons form-control-feedback" id="consentReceiptSelectedIcon"></span>
+                                    </div>
                                     <br/>
-                                    <button type="submit" class="btn btn-primary"><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Create privacy center</button>
+                                    <button type="button" class="btn btn-primary" onclick="createPrivacyCenter();"><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Create privacy center</button>
                                 </p>
                                 </form>
                             </div>
@@ -62,7 +66,13 @@
                                 <h2 >Explore data &amp; create algo.</h2>
                                 <p class="card-text">
                                     <h4>Unlock the value of your user's personal data with our interactive IDE. Quickly build and test your algorithm through graphQL API's and integrated SDK.</h4>
+                                    {{#if session.applicationUserAccessToken}}
                                     <a href="/auth/workbench" class="btn btn-primary"><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Create algorithm</a>
+                                    {{else}}
+                                    <h3>First select user</h3>
+                                    <br/>
+                                    <span class="btn btn-light" style><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Create algorithm</span>
+                                    {{/if}}
                                 </p>
                             </div>
                         </div>
@@ -84,3 +94,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    function createPrivacyCenter(){
+        if(document.getElementById("consentReceiptSelected").value=="" || document.getElementById("consentReceiptSelected").value=="Select consent receipt"){
+            document.getElementById("consentReceiptSelectedLabel").innerHTML="Required";
+            document.getElementById("consentReceiptSelectedIcon").innerHTML="clear";
+            document.getElementById("consentReceiptSelected").focus();
+            
+        }
+        else{
+            document.getElementById("consentReceiptSelectedLabel").innerText="";
+            document.getElementById("consentReceiptSelectedIcon").innerText="";
+            document.getElementById("privacyCenterCreateForm").submit();
+        } 
+    }
+</script>
