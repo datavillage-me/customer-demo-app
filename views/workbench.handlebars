@@ -41,7 +41,7 @@
                                 <h2 >Set-up cage &amp; import data</h2>
                                 <p class="card-text">
                                     <h4>Easily configure your enclave to deploy and protect the integrity of your code. Ensure full control of data throughout its lifetime.<br/><br/></h4>
-                                    {{#if session.applicationUserAccessToken}}
+                                    {{#if session.applicationUser}}
                                     <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptSelected" name="consentReceiptSelected" onchange="modifyRequestPayload(this.id,this.value)">
                                         <option>Select consent receipt</option>
                                         {{#each consentReceiptsList.consentReceipts}}

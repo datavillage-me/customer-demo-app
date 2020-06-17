@@ -21,7 +21,7 @@ function routePrivacyCenterWidget(req,res,consentReceiptSelected){
     if(consentReceipt !=null){
       //store in session for second call to show the graph
       req.session.privacyCenterConsentReceipt=consentReceipt;
-      var applicationUser=Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
+      Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
         if(applicationUser){
           Consent.getConsentsChain(applicationUser[consentReceiptSelected].access_token,consentReceiptSelected,applicationUser[consentReceiptSelected].user_id,null,function(consents){
             renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents);
@@ -119,7 +119,6 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
   
   
   var consents="{";
-  console.log(consentsChain);
   if(consentsChain){
     if(consentsChain.main){
       //main consent

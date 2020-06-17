@@ -172,7 +172,7 @@ function _getClient(clientId,clientSecret,done){
         if(response !=null){
             //store refresh token in client_metadata
             if(response.statusCode!=200){
-                done(null);
+                return done(null);
             }
             try{
                 var responseJson=JSON.parse(response.body);
@@ -180,19 +180,19 @@ function _getClient(clientId,clientSecret,done){
                 _updateClientMetadata(clientId,arrayId[arrayId.length-1],responseJson.refresh_token,function(client){
                     if(client==null){
                         console.log("error updating refresh token");
-                        done(null);
+                        return done(null);
                     }
                     req.session.clientMetadata=client.metaData; //update client metadada in session
                     //return access token
-                    done(responseJson);
+                    return done(responseJson);
                 });
             }
             catch(error){
-                done(null);
+                return done(null);
             }
         }
         else
-          done(null);
+            return done(null);
       });
   }
 
@@ -228,12 +228,14 @@ function _getClient(clientId,clientSecret,done){
   }
 
   function _getApplicationUser(req,consentReceiptId,done){
-    if(consentReceiptId==null)
-        done(req.session.applicationUser);
+    if(consentReceiptId==null){
+        return done(req.session.applicationUser);
+    } 
     else{
         var user=req.session.applicationUser;
-        if(user!=null && user[consentReceiptId]!=null)
-            done(user[consentReceiptId]);
+        if(user!=null){
+            return done(user);
+        }
         else{
             //check if refresh token exist in client metadata and initiate user if yes
             var clientMetadata=req.session.clientMetadata;
@@ -241,11 +243,12 @@ function _getClient(clientId,clientSecret,done){
                 var refreshToken=clientMetadata[consentReceiptId];
                 //get access token from refresh token for user
                 _getUserTokenFromRefreshToken(req,req.session.clientId,req.session.clientSecret,refreshToken,"https://api.datavillage.me/consentReceipts/"+consentReceiptId,function (response){
-                    done(_setApplicationUser(req,response));
+                    return done(_setApplicationUser(req,response));
                 });
             }
-            else  
-                return null;
+            else{
+                return done(null);
+            }
         }
     }
 }
@@ -270,6 +273,6 @@ var self=module.exports={
         return _setApplicationUser(req,userTokens);
     },
     getApplicationUser: function(req,consentReceiptId,done){
-        return _getApplicationUser(req,consentReceiptId,done);
+         _getApplicationUser(req,consentReceiptId,done);
     }
 };
