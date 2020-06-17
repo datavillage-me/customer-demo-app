@@ -24,7 +24,7 @@ function routePrivacyCenterWidget(req,res,consentReceiptSelected){
       Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
         if(applicationUser){
           Consent.getConsentsChain(applicationUser[consentReceiptSelected].access_token,consentReceiptSelected,applicationUser[consentReceiptSelected].user_id,null,function(consents){
-            renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents);
+            renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents,true);
           });
         }
         else
@@ -47,14 +47,25 @@ router.get('/auth/workbench', function (req, res, next) {
   });
 });
 
+router.get('/auth/workbench/selectConsentReceipt', function (req, res, next) {
+  var consentReceiptSelected=req.query.consentReceiptSelected;
+  req.session.workbenchConsentReceiptSelected=consentReceiptSelected;
+  Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
+    //get default user if activated
+    Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
+      renderWorkbench(req,res,consentReceiptsList);
+    });
+  });
+});
+
 /* POST generate privacy center widget */
-router.post('/auth/consents/privacyCenter/createWidget', function (req, res, next) {
-  routePrivacyCenterWidget(req,res,req.body.consentReceiptSelected);
+router.get('/auth/workbench/privacyCenter/createWidget', function (req, res, next) {
+  routePrivacyCenterWidget(req,res,req.session.workbenchConsentReceiptSelected);
 });
 
 /* GET generate privacy center widget */
-router.get('/auth/consents/privacyCenter/createWidgetCallback', function (req, res, next) {
-  var consentReceiptSelected=req.query.consentReceiptSelected;
+router.get('/auth/workbench/privacyCenter/createWidgetCallback', function (req, res, next) {
+  var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
   //get authorization code
   var code=req.query.code;
   if(code!=null){
@@ -63,18 +74,18 @@ router.get('/auth/consents/privacyCenter/createWidgetCallback', function (req, r
       if(response!=null){
         //store access token in session
         var applicationUser=Authentication.setApplicationUser(req,response);
-        routePrivacyCenterWidget(req,res,req.query.consentReceiptSelected);
+        routePrivacyCenterWidget(req,res,consentReceiptSelected);
       }
       else 
         renderError(req, res,"Error occur during authorization flow");
     });
   }
   else
-    routePrivacyCenterWidget(req,res,req.query.consentReceiptSelected);
+    routePrivacyCenterWidget(req,res,consentReceiptSelected);
 });
 
 /* GET generate graph data sources for privacy center widget */
-router.get('/auth/consents/privacyCenter/graph', function (req, res, next) {
+router.get('/auth/workbench/privacyCenter/graph', function (req, res, next) {
   renderPrivacyCenterGraph(req,res,req.session.privacyCenterConsentReceipt);
 });
 
@@ -95,8 +106,7 @@ function renderWorkbench(req,res,consentReceiptsList){
     layout: 'master',
     workbench:'active',
     consentReceiptsList:consentReceiptsList,
-    hasConsentReceipts:hasConsentReceipts,
-    user:{id:User.getUserId(req.user)},
+    hasConsentReceipts:hasConsentReceipts
   });
 }
 
@@ -105,7 +115,7 @@ function renderWorkbench(req,res,consentReceiptsList){
  * @param {req} request
  * @param {res} response
  */
-function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain){
+function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain,refreshOpener){
   var dataSources="{\"sources\":[";
   for(var i=0;i<consentReceipt.sources.length;i++){
     dataSources+="{\"name\":\""+consentReceipt.sources[i]["gl:name"]+"\",";
@@ -149,11 +159,11 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
   consents+="}";
   var rootDomainDemoApp=config.rootDomainDemoApp;
   var rootDomainPassportApp=config.rootDomainPassportApp;
-  var callback=rootDomainDemoApp+'/auth/consents/privacyCenter/createWidgetCallback?consentReceiptSelected='+consentReceiptSelected;
+  var callback=rootDomainDemoApp+'/auth/workbench/privacyCenter/createWidgetCallback';
   var consentReceiptUri="https://api.datavillage.me/consentReceipts/"+consentReceiptSelected;
   res.render('privacy-center-widget', {
     layout: 'singlePage',
-    user:{id:User.getUserId(req.user)},
+    refreshOpener:refreshOpener,
     consentReceipt:{id:consentReceiptSelected,name:consentReceipt.main["gl:name"],description:consentReceipt.main["gl:description"],purpose:consentReceipt.main["gl:forPurpose"]["gl:description"]},
     dataSources:JSON.parse(dataSources),
     consents:JSON.parse(consents),

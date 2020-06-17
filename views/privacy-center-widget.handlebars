@@ -40,6 +40,9 @@
     </div>
 </div>
 <script>
+    {{#if refreshOpener}}
+    window.opener.location.reload();
+    {{/if}}
     function activateDataSource(element,consentReceiptId){
         if(element.checked){
             document.getElementById(consentReceiptId).submit();
@@ -74,7 +77,7 @@
                         {{/each}}
                     ],
                     minCollision: 60,
-                    neo4jDataUrl: '/auth/consents/privacyCenter/graph',
+                    neo4jDataUrl: '/auth/workbench/privacyCenter/graph',
                     nodeRadius: 30,
                     zoomFit: false
                 });

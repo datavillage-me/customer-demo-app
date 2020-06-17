@@ -76,6 +76,12 @@ var hbs = exphbs.create(
     partialsDir:'views/partials',
     helpers: {
       formatDate: function (datetime, format) { return dateFormat(datetime,format); },
+      ifEqual: function(v1, v2,options) {
+        if(v1==v2) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
       ifOr: function(v1, v2, v3,v4,options) {
         if(v1==null || v2==null || v3==null || v4==null ) {
           return options.fn(this);

@@ -127,7 +127,7 @@ function _getClient(clientId,clientSecret,done){
         if(response !=null){
             //store refresh token in client_metadata
             if(response.statusCode!=200){
-                done(null);
+                return done(null);
             }
             try{
                 var responseJson=JSON.parse(response.body);
@@ -136,15 +136,15 @@ function _getClient(clientId,clientSecret,done){
                     if(client==null)
                         console.log("error updating refresh token");
                     //return access token
-                    done(responseJson);
+                    return done(responseJson);
                 });
             }
             catch(error){
-                done(null);
+                return done(null);
             }
         }
         else
-          done(null);
+             return done(null);
       });
   }
 
