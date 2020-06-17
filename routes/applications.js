@@ -20,9 +20,10 @@ var ManagementClient = require('auth0').ManagementClient;
  ************************************/
 
 function initClientSession(req,client,done){
-  if(client!=null){
+  if(client!=null){ 
     req.session.clientId=client.id;
     req.session.clientSecret=client.secret;
+    req.session.clientMetadata=client.metaData;
     req.session.callbacks=client.callbacks;
     req.session.companyUri=client.description;
     req.session.companyName=client.name;

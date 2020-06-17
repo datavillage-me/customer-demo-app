@@ -42,6 +42,7 @@ function _getClient(clientId,clientSecret,done){
                         name:client.name,
                         description:client.description,
                         callbacks: client.callbacks,
+                        metaData:client.client_metadata,
                         grants: "authorization_code"
                     };
                   done(returnBody);
@@ -55,6 +56,27 @@ function _getClient(clientId,clientSecret,done){
                 done (null);
       });
   }
+
+  function _updateClientMetadata(clientId,key,value,done){
+    var management = new ManagementClient({
+        domain: config.auth0Domain,
+        clientId: config.auth0ManagementClientID,
+        clientSecret: config.auth0ManagementClientSecret,
+        scope: 'update:clients'
+        });
+        var param="{\""+key+"\":\""+value+"\"}";
+        management.updateClient(
+        { client_id: clientId},
+        {"client_metadata":JSON.parse(param)}, function (err, client) {
+            if(err){
+                console.log(err);
+                done(null);
+            }               
+            else{
+                done(client);
+            }   
+    });
+}
 
   function _getApplicationToken(clientId,clientSecret,done){
     //get application access token
@@ -82,11 +104,11 @@ function _getClient(clientId,clientSecret,done){
       });
   }
 
-  function _getUserTokenFromCode(clientId,clientSecret,code,done){
+  function _getUserTokensFromCode(clientId,clientSecret,code,done){
     //get application access token
     var options = {
       'method': 'POST',
-      'url': config.ROOT_DOMAIN_PASSPORT_APP+'/oauth/token',
+      'url': config.rootDomainPassportApp+'/oauth/token',
       'headers': {
           'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded']
       },
@@ -94,6 +116,7 @@ function _getClient(clientId,clientSecret,done){
           'client_id': clientId,
           'client_secret': clientSecret,
           'code': code,
+          'grant_type':'authorization_code'
       }
       };
       request(options, function (error, response) { 
@@ -101,15 +124,131 @@ function _getClient(clientId,clientSecret,done){
             console.log(error); 
             return done(null);
         }
-        console.log(response);
         if(response !=null){
-            done(JSON.parse(response.body));
+            //store refresh token in client_metadata
+            if(response.statusCode!=200){
+                done(null);
+            }
+            try{
+                var responseJson=JSON.parse(response.body);
+                var arrayId=responseJson.scope.split("/");//get scope id (=consentReceiptId)
+                _updateClientMetadata(clientId,arrayId[arrayId.length-1],responseJson.refresh_token,function(client){
+                    if(client==null)
+                        console.log("error updating refresh token");
+                    //return access token
+                    done(responseJson);
+                });
+            }
+            catch(error){
+                done(null);
+            }
         }
         else
           done(null);
       });
   }
 
+  function _getUserTokenFromRefreshToken(req,clientId,clientSecret,refreshToken,scope,done){
+    //get application access token
+    var options = {
+      'method': 'POST',
+      'url': config.rootDomainPassportApp+'/oauth/token',
+      'headers': {
+          'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded']
+      },
+      form: {
+          'client_id': clientId,
+          'client_secret': clientSecret,
+          'refresh_token': refreshToken,
+          'scope': scope,
+          'grant_type':'refresh_token'
+      }
+      };
+      request(options, function (error, response) { 
+        if (error) { 
+            console.log(error); 
+            return done(null);
+        }
+        if(response !=null){
+            //store refresh token in client_metadata
+            if(response.statusCode!=200){
+                done(null);
+            }
+            try{
+                var responseJson=JSON.parse(response.body);
+                var arrayId=responseJson.scope.split("/");//get scope id (=consentReceiptId)
+                _updateClientMetadata(clientId,arrayId[arrayId.length-1],responseJson.refresh_token,function(client){
+                    if(client==null){
+                        console.log("error updating refresh token");
+                        done(null);
+                    }
+                    req.session.clientMetadata=client.metaData; //update client metadada in session
+                    //return access token
+                    done(responseJson);
+                });
+            }
+            catch(error){
+                done(null);
+            }
+        }
+        else
+          done(null);
+      });
+  }
+
+  function _setApplicationUser(req,userTokens){
+      /* user tokens
+      {
+        "token_type": "Bearer",
+        "expires_at": 1568775134,
+        "expires_in": 21600,
+        "refresh_token": "e5n567567...",
+        "access_token": "a4b945687g...",
+        "scope": "https://api.datavillage.me/consentReceipts/{{consent_receipt}}",
+        "user_uri": "https://api.datavillage.me/users/{{user_id}}",
+        }
+        */
+       if(userTokens!=null && userTokens.user_uri!=null && userTokens.scope!=null){
+            var arrayId=userTokens.user_uri.split("/");
+            var userId=arrayId[arrayId.length-1];
+            userTokens.user_id=userId;
+
+            arrayId=userTokens.scope.split("/");
+            var consentReceiptId=arrayId[arrayId.length-1];
+            var user=req.session.applicationUser;
+            if(user==null){
+                user={};
+            }
+            user[consentReceiptId]=userTokens;
+            req.session.applicationUser=user;
+            return req.session.applicationUser;
+       }
+       else
+        return null;
+  }
+
+  function _getApplicationUser(req,consentReceiptId,done){
+    if(consentReceiptId==null)
+        done(req.session.applicationUser);
+    else{
+        var user=req.session.applicationUser;
+        if(user!=null && user[consentReceiptId]!=null)
+            done(user[consentReceiptId]);
+        else{
+            //check if refresh token exist in client metadata and initiate user if yes
+            var clientMetadata=req.session.clientMetadata;
+            if(clientMetadata!=null && clientMetadata[consentReceiptId]!=null){
+                var refreshToken=clientMetadata[consentReceiptId];
+                //get access token from refresh token for user
+                _getUserTokenFromRefreshToken(req,req.session.clientId,req.session.clientSecret,refreshToken,"https://api.datavillage.me/consentReceipts/"+consentReceiptId,function (response){
+                    done(_setApplicationUser(req,response));
+                });
+            }
+            else  
+                return null;
+        }
+    }
+}
 
 /***********************************
  * Module exports.
@@ -118,17 +257,19 @@ var self=module.exports={
     getClient: function(clientId,clientSecret,done){
         _getClient(clientId,clientSecret,done);
     },
-
     getDatavillageApplicationToken: function(done){
         _getApplicationToken(config.auth0ManagementClientID,config.auth0ManagementClientSecret,done);
     },
     getApplicationToken: function(clientId,clientSecret,done){
         _getApplicationToken(clientId,clientSecret,done);
     },
-    getUserTokenFromCode: function(clientId,clientSecret,code,done){
-        _getUserTokenFromCode(clientId,clientSecret,done);
+    getUserTokensFromCode: function(clientId,clientSecret,code,done){
+        _getUserTokensFromCode(clientId,clientSecret,code,done);
     },
-    getUserTokenFromRefreshToken: function(clientId,clientSecret,code,done){
-        _getUserTokenFromRefreshToken(clientId,clientSecret,done);
+    setApplicationUser: function(req,userTokens){
+        return _setApplicationUser(req,userTokens);
+    },
+    getApplicationUser: function(req,consentReceiptId,done){
+        return _getApplicationUser(req,consentReceiptId,done);
     }
 };

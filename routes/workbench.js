@@ -7,6 +7,7 @@
  ************************************/
 import express from 'express';
 import User from '../server/lib/utils/user';
+import Authentication from '../server/lib/utils/authentication';
 var router = express.Router();
 import config from '../config/index';
 import Consent from '../server/lib/utils/consent';
@@ -20,13 +21,15 @@ function routePrivacyCenterWidget(req,res,consentReceiptSelected){
     if(consentReceipt !=null){
       //store in session for second call to show the graph
       req.session.privacyCenterConsentReceipt=consentReceipt;
-      if(req.session.applicationUserAccessToken){
-        Consent.getConsentsChain(req.session.applicationAccessToken,consentReceiptSelected,req.session.applicationUserId,null,function(consents){
-          renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents);
-        });
-      }
-      else
-        renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt);
+      var applicationUser=Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
+        if(applicationUser){
+          Consent.getConsentsChain(applicationUser[consentReceiptSelected].access_token,consentReceiptSelected,applicationUser[consentReceiptSelected].user_id,null,function(consents){
+            renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents);
+          });
+        }
+        else
+          renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt);
+      });
     }
     else
       renderPrivacyCenterWidget(req,res,consentReceiptSelected);
@@ -54,14 +57,16 @@ router.get('/auth/consents/privacyCenter/createWidgetCallback', function (req, r
   var consentReceiptSelected=req.query.consentReceiptSelected;
   //get authorization code
   var code=req.query.code;
-  console.log("****"+code);
   if(code!=null){
     //get token
-    console.log("****");
-    console.log(req.session.client.id);
-    console.log(req.session.client.secret);
-    User.getUserTokenFromCode(req.session.client.id,req.session.client.secret,code,function(reponse){
-      console.log(reponse);
+    Authentication.getUserTokensFromCode(req.session.clientId,req.session.clientSecret,code,function(response){
+      if(response!=null){
+        //store access token in session
+        var applicationUser=Authentication.setApplicationUser(req,response);
+        routePrivacyCenterWidget(req,res,req.query.consentReceiptSelected);
+      }
+      else 
+        renderError(req, res,"Error occur during authorization flow");
     });
   }
   else
@@ -112,15 +117,14 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
   }
   dataSources+="]}";
   
-
+  
   var consents="{";
-
+  console.log(consentsChain);
   if(consentsChain){
-    var consentsJson=JSON.parse(consentsChain);
-    if(consentsJson.main){
+    if(consentsChain.main){
       //main consent
-      arrayId=consentsJson.main["@id"].split("/");
-      var consentStatus=consentsJson.main["gl:hasStatus"]["@id"];
+      arrayId=consentsChain.main["@id"].split("/");
+      var consentStatus=consentsChain.main["gl:hasStatus"]["@id"];
       var consentStatusBoolean=false;
       if(consentStatus=="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven")
         consentStatusBoolean=true;
@@ -188,6 +192,19 @@ function renderPrivacyCenterGraph(req,res,consentReceipt){
 
   res.writeHead(200, {"Content-Type": "application/json"});
   res.end(graph);
+}
+
+/**
+ * render error
+ * @param {req} request
+ * @param {res} response
+ */
+function renderError(req,res,error){
+  res.render('error', {
+    layout: 'singlePage',
+    title: "Error",
+    message:error
+  });
 }
 
 module.exports = router;

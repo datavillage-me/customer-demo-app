@@ -56,11 +56,12 @@ router.get('/auth/logout', (req, res) => {
     returnTo: returnTo
   });
   logoutURL.search = searchString;
-  req.session.applicationUserId=null;
+  req.session.applicationUser=null;
+  req.session.clientId=null;
+  req.session.clientSecret=null;
   req.session.callbacks=null;
   req.session.companyUri=null;
   req.session.companyName=null;
-  req.session.podTypeId=null;
   res.redirect(logoutURL);
 });
 
