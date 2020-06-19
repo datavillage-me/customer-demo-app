@@ -3,7 +3,7 @@
         <div class="col-lg-2 col-md-2 col-sm-2"></div>
         <div class="col-lg-8 col-md-8 col-sm-8" class="row justify-content-center">
             <center>
-                <h3><i class="material-icons-outlined" style="font-size:48px">verified_user</i><br/>Privacy center</h3>
+                <h3><i class="material-icons-outlined" style="font-size:48px;color:#ff4081">verified_user</i><br/>Privacy center</h3>
                 Review key settings &amp; the data <b>{{session.companyName}}</b> uses to personalize your experience.
             </center>
             <div class="card" >
@@ -22,15 +22,15 @@
                     {{/each}}
                     </ul>
                     <div class="row">
-                        <div class="col-lg-1 align-self-center"><i class="material-icons-outlined" style="font-size:32px">verified_user</i></div>
+                        <div class="col-lg-1 align-self-center"><i class="material-icons-outlined" style="font-size:32px;color:#ff4081">verified_user</i></div>
                         <div class="col-lg-11 align-self-center"><i>All your personal data is under your control. {{session.companyName}} can only process your data with your explicit consent. We never obtain and store this data on our systems and it will never be used for purposes other than those agreed here. </i></div>
                     </div>
                     <hr/>
                     <center>
                     {{#ifConsentActif consents consentReceipt.id}}
-                        <a href="{{actionActivateConsent}}" class="btn btn-primary">I want to revoke "{{consentReceipt.name}}"</a>
+                        <a href="{{actionActivateConsent}}" class="btn btn-success" style="background-color:#ff4081">I want to revoke "{{consentReceipt.name}}"</a> with <img style="width:48px" src="/img/logo.png"/>
                     {{else}}
-                        <img style="width:48px" src="/img/logo.png"/><a href="{{actionActivateConsent}}" class="btn btn-primary">Authorize with Datavillage</a>
+                        <a href="{{actionActivateConsent}}" class="btn btn-success">Authorize</a> with <img style="width:48px" src="/img/logo.png"/>
                     {{/ifConsentActif}}
                     </center>
                     
@@ -71,7 +71,7 @@
                         {{/each}}
                     },
                     colors:[
-                        '#79d0dc', // datavillage
+                        '#ff4081', // datavillage
                         {{#each dataSources.sources}}
                         '#FFFFFF',
                         {{/each}}

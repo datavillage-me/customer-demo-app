@@ -11311,6 +11311,12 @@ h2.title {
   background: -moz-linear-gradient(135deg, rgba(80, 221, 223, 0.88) 0%, rgba(80, 221, 223, 0.45) 100%);
   background: -webkit-linear-gradient(135deg, rgba(80, 221, 223, 0.88) 0%, rgba(80, 221, 223, 0.45) 100%); }
 
+.privacy-center-filter:after {
+  background: #fc236f;
+  background: linear-gradient(45deg, rgba(252, 35, 111, 0.45) 0%, rgba(252, 35, 111, 0.2) 100%);
+  background: -moz-linear-gradient(135deg, rgba(252, 35, 111, 0.45) 0%, rgba(252, 35, 111, 0.2) 100%);
+  background: -webkit-linear-gradient(135deg, rgba(252, 35, 111, 0.45) 0%, rgba(252, 35, 111, 0.2) 100%); }
+
 footer {
   padding: 0.9375rem 0;
   text-align: center;

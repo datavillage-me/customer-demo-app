@@ -116,6 +116,18 @@ function renderWorkbench(req,res,consentReceiptsList){
  * @param {res} response
  */
 function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain,refreshOpener){
+  
+  
+  var dataCategoriesList="";
+
+  if(consentReceipt.main["gl:dataCategories"]!=null){
+    for(i=0;i<consentReceipt.main["gl:dataCategories"].length;i++){
+      var dataCategory=consentReceipt.main["gl:dataCategories"][i]["gl:forPersonalDataCategory"]["@type"];
+      dataCategoriesList+=dataCategory.split(":")[1]+",";
+    }
+    dataCategoriesList=dataCategoriesList.substr(0,dataCategoriesList.length-1);
+  }
+  
   var dataSources="{\"sources\":[";
   for(var i=0;i<consentReceipt.sources.length;i++){
     dataSources+="{\"name\":\""+consentReceipt.sources[i]["gl:name"]+"\",";
@@ -162,11 +174,12 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
   var callback=rootDomainDemoApp+'/auth/workbench/privacyCenter/createWidgetCallback';
   var consentReceiptUri="https://api.datavillage.me/consentReceipts/"+consentReceiptSelected;
   res.render('privacy-center-widget', {
-    layout: 'singlePage',
+    layout: 'privacyCenter',
     refreshOpener:refreshOpener,
     consentReceipt:{id:consentReceiptSelected,name:consentReceipt.main["gl:name"],description:consentReceipt.main["gl:description"],purpose:consentReceipt.main["gl:forPurpose"]["gl:description"]},
     dataSources:JSON.parse(dataSources),
     consents:JSON.parse(consents),
+    dataCategoriesList:dataCategoriesList,
     actionActivateConsent:rootDomainPassportApp+'/oauth/authorize?client_id='+req.session.clientId+'&redirect_uri='+callback+'&response_type=code&scope='+consentReceiptUri+'&state=empty',
     actionDesactivateConsent:rootDomainPassportApp+'/oauth/token/revoke'
   });

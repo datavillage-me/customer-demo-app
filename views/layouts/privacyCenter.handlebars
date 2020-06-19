@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {{> html-head-privacy-center}}
+</head>
+
+<body class="profile-page sidebar-collapse">
+  <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+      <div class="navbar-translate">
+        <a class="navbar-brand" style="color:#000" href="{{session.companyUri}}">
+          <b>{{session.companyName}}</b> </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#" style="color:#000">
+              <i class="material-icons" style="color:#000">360</i> {{consentReceipt.name}}
+            </a>
+          </li>
+					<li class="nav-item">
+            <a class="nav-link" href="#" style="color:#000">
+              <i class="material-icons" style="color:#000">verified_user</i> Privacy center
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="#"  data-original-title="Follow us on Twitter" rel="nofollow">
+              <i class="fa fa-twitter" style="color:#000"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="#"  data-original-title="Like us on Facebook" rel="nofollow">
+              <i class="fa fa-facebook-square" style="color:#000"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="#"  data-original-title="Follow us on Instagram" rel="nofollow">
+              <i class="fa fa-instagram" style="color:#000"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="page-header header-filter clear-filter privacy-center-filter" data-parallax="true" style="background-image: url('https://source.unsplash.com/1600x900/?{{dataCategoriesList}}');"></div>
+  <div class="main main-raised">
+    <div class="profile-content">
+      <div>
+				{{{body}}}
+      </div>
+    </div>
+  </div>
+  <footer class="footer footer-default">
+    <div class="container">
+      <nav class="float-left">
+        <ul>
+          <li>
+            <a href="{{session.companyUri}}">
+              {{session.companyName}}
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              About Us
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              Blog
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              Licenses
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="copyright float-right">
+        &copy;
+        <script>
+          document.write(new Date().getFullYear())
+        </script>, made with <i class="material-icons" style="color:#ff4081">verified_user</i> by
+        <a href="{{session.companyUri}}" style="color:#ff4081">{{session.companyName}}</a> for a better web.
+      </div>
+    </div>
+  </footer>
+  <!--   Core JS Files   -->
+  {{> html-foot}}
+</body>
+
+</html>
