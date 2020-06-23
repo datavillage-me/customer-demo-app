@@ -21,19 +21,19 @@
                         <div class="col-md-2">
                             <ul class="nav nav-pills nav-pills-icons" role="tablist" flex-column>
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#consent" role="tab" data-toggle="tab">
+                                    <a class="nav-link {{consentTab}}" href="#consent" role="tab" data-toggle="tab">
                                         <i class="material-icons">verified_user</i>
                                         Consent
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#data" role="tab" data-toggle="tab">
+                                    <a class="nav-link {{dataTab}}" href="#data" role="tab" data-toggle="tab">
                                         <i class="material-icons">policy</i>
                                         Data
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#algorithm" role="tab" data-toggle="tab">
+                                    <a class="nav-link {{algorithmTab}}" href="#algorithm" role="tab" data-toggle="tab">
                                         <i class="material-icons">blur_on</i>
                                         Algorithm
                                     </a>
@@ -42,43 +42,53 @@
                         </div>
                         <div class="col-md-10">
                             <div class="tab-content">
-                                <div class="tab-pane active" id="consent">
+                                <div class="tab-pane {{consentTab}}" id="consent">
                                     <img  style="width:10%;" src="/img/icons/privacy-center.png" rel="nofollow" alt="Card image cap">
                                     <h2>Get user's consent</h2>
                                     <p class="card-text">
                                         <h4>Engage your users with trust and make privacy your application differentiator. Give your users the ability to manage consents in a user-friendly way.</h4>
                                         <br/>
                                         {{#if session.workbenchConsentReceiptSelected}}
-                                        <a href="/auth/workbench/privacyCenter/createWidget" target="_blank" class="btn btn-primary"><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Generate privacy center</a>
+                                        <a href="/auth/workbench/privacyCenter/createWidget" target="_blank" class="btn btn-primary ld-ext-right hovering" onmouseover="this.classList.add('running')"><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Generate privacy center</a>
                                         {{else}}
                                         <h4>First, select consent receipt!</h4>
                                         <span class="btn btn-light" style><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Generate privacy center</span>
                                         {{/if}}
                                     </p>
                                 </div>
-                                <div class="tab-pane" id="data">
-                                    <img  style="width:10%;" src="/img/icons/workbench.png" rel="nofollow" alt="Card image cap">
+                                <div class="tab-pane {{dataTab}}" id="data">
+                                    <img  style="width:10%;" src="/img/icons/cage.png" rel="nofollow" alt="Card image cap">
                                     <h2 >Import data into the cage</h2>
                                     <p class="card-text">
                                         <h4>Easily configure your enclave to deploy and protect the integrity of your code. Ensure full control of data throughout its lifetime.<br/><br/></h4>
                                         {{#if session.applicationUser}}
-                                        <a href="/auth/workbench/privacyCenter/createWidget" target="_blank" class="btn btn-primary"><i class="material-icons" style="font-size:28px">policy</i>&nbsp;&nbsp;&nbsp;Create data cage and import data</a>
+                                        <form method="POST" action="/auth/workbench/import" target="_blank">
+                                            <div class="request-parameters">
+                                                <div class="form-group">
+                                                    <label class="label-control">Date range</label>
+                                                    <input type="text" class="form-control" name="importRange" id="importRange" value="01/01/2018 - 01/15/2018" />
+                                                    <input type="hidden" name="importStartDate" id="importStartDate" value="" />
+                                                    <input type="hidden" name="importEndDate" id="importEndDate" value="" />
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary"><i class="material-icons" style="font-size:28px">policy</i>&nbsp;&nbsp;&nbsp;Import &amp; explore data</button>
+                                        </form>
                                         {{else}}
                                         <h4>First, select consent receipt and get user's consent !</h4>
-                                        <span class="btn btn-light" style><i class="material-icons" style="font-size:28px">policy</i>&nbsp;&nbsp;&nbsp;Create data cage and import data</span>
+                                        <span class="btn btn-light" style><i class="material-icons" style="font-size:28px">policy</i>&nbsp;&nbsp;&nbsp;Import &amp; explore data</span>
                                         {{/if}}
                                     </p>
                                 </div>
-                                <div class="tab-pane" id="algorithm">
-                                    <img  style="width:10%;" src="/img/icons/cage.png" rel="nofollow" alt="Card image cap">
-                                    <h2 >Explore data &amp; create algo.</h2>
+                                <div class="tab-pane {{algorithmTab}}" id="algorithm">
+                                    <img  style="width:10%;" src="/img/icons/workbench.png" rel="nofollow" alt="Card image cap">
+                                    <h2 >Explore data &amp; create algorithm</h2>
                                     <p class="card-text">
                                         <h4>Unlock the value of your user's personal data with our interactive IDE. Quickly build and test your algorithm through graphQL API's and integrated SDK.<br/><br/></h4>
                                         {{#if session.applicationUser}}
-                                        <a href="/auth/workbench/privacyCenter/createWidget" target="_blank" class="btn btn-primary"><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Explore data and create algorithm</a>
+                                        <a href="/auth/workbench/privacyCenter/createWidget" target="_blank" class="btn btn-primary"><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Create notebook &amp; write algorithm</a> with <img style="width:48px" src="/img/colab.png"/> <span style="color:#FEB60D">(Google Colab)</span>
                                         {{else}}
                                         <h4>First, select consent receipt and get user's consent !</h4>
-                                        <span class="btn btn-light" style><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Explore data and create algorithm</span>
+                                        <span class="btn btn-light" style><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Create notebook &amp; write algorithm</span> with <img style="width:48px" src="/img/colab.png"/> <span style="color:#FEB60D">(Google Colab)</span>
                                         {{/if}}
                                     </p>
                                 </div>
@@ -104,6 +114,30 @@
     </div>
 </div>
 <script>
+    $(function() {
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+
+        function cb(start, end) {
+            $('#importRange').val(start.format('DD MMMM YYYY') + ' - ' + end.format('DD MMMM YYYY'));
+        }
+
+        $('#importRange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);
+        cb(start, end);
+    });
+
     function selectConsentReceipt(element){
         if(element.value!="empty")
             window.location="/auth/workbench/selectConsentReceipt?consentReceiptSelected="+element.value;

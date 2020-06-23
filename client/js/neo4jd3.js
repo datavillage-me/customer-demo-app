@@ -157,7 +157,7 @@
                            if (typeof options.onNodeClick === 'function') {
                                options.onNodeClick(d);
                            }
-                       })/*
+                       })
                        .on('dblclick', function(d) {
                            stickNode(d);
     
@@ -182,7 +182,7 @@
                            if (typeof options.onNodeMouseLeave === 'function') {
                                options.onNodeMouseLeave(d);
                            }
-                       })*/
+                       })
                        .call(d3.drag()
                                .on('start', dragStarted)
                                .on('drag', dragged)
@@ -211,7 +211,10 @@
                        .attr('class', 'outline')
                        .attr('r', options.nodeRadius)
                        .style('fill', function(d) {
-                           return options.nodeOutlineFillColor ? options.nodeOutlineFillColor : class2color(d.labels[0]);
+                           var label=d.labels[0];
+                           if(d.labels.length>0)
+                             label=d.labels[d.labels.length-1];
+                           return options.nodeOutlineFillColor ? options.nodeOutlineFillColor : class2color(label);
                        })
                        .style('stroke', function(d) {
                            return options.nodeOutlineFillColor ? class2darkenColor(options.nodeOutlineFillColor) : class2darkenColor(d.labels[0]);
@@ -311,7 +314,6 @@
     
         function class2color(cls) {
             var color = classes2colors[cls];
-    
             if (!color) {
     //            color = options.colors[Math.min(numClasses, options.colors.length - 1)];
                 color = options.colors[numClasses % options.colors.length];
@@ -422,12 +424,16 @@
             var code;
     
             if (options.iconMap && options.showIcons && options.icons) {
-                if (options.icons[d.labels[0]] && options.iconMap[options.icons[d.labels[0]]]) {
-                    code = options.iconMap[options.icons[d.labels[0]]];
-                } else if (options.iconMap[d.labels[0]]) {
-                    code = options.iconMap[d.labels[0]];
-                } else if (options.icons[d.labels[0]]) {
-                    code = options.icons[d.labels[0]];
+                //CUSTOMISATION
+                var label=d.labels[0];
+                if(d.labels.length>=1)
+                    label=d.labels[d.labels.length-1];
+                if (options.icons[label] && options.iconMap[options.icons[label]]) {
+                    code = options.iconMap[options.icons[label]];
+                } else if (options.iconMap[label]) {
+                    code = options.iconMap[label];
+                } else if (options.icons[label]) {
+                    code = options.icons[label];
                 }
             }
     
@@ -890,7 +896,10 @@
             clearInfo();
     
             if (d.labels) {
-                appendInfoElementClass('class', d.labels[0]);
+                var label=d.labels[0];
+                if(d.labels.length>0)
+                    label=d.labels[d.labels.length-1];
+                appendInfoElementClass('class', label);
             } else {
                 appendInfoElementRelationship('class', d.type);
             }

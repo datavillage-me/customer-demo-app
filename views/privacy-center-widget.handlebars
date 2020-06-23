@@ -30,7 +30,7 @@
                     {{#ifConsentActif consents consentReceipt.id}}
                         <a href="{{actionActivateConsent}}" class="btn btn-success" style="background-color:#ff4081">I want to revoke "{{consentReceipt.name}}"</a> with <img style="width:48px" src="/img/logo.png"/>
                     {{else}}
-                        <a href="{{actionActivateConsent}}" class="btn btn-success">Authorize</a> with <img style="width:48px" src="/img/logo.png"/>
+                        <a href="{{actionActivateConsent}}" class="btn btn-success" style="background-color:#ff4081">Authorize</a> with <img style="width:48px" src="/img/logo.png"/>
                     {{/ifConsentActif}}
                     </center>
                     

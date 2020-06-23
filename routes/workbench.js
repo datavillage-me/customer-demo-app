@@ -11,6 +11,7 @@ import Authentication from '../server/lib/utils/authentication';
 var router = express.Router();
 import config from '../config/index';
 import Consent from '../server/lib/utils/consent';
+import request from 'request';
 
 /***********************************
  * Private functions
@@ -89,6 +90,79 @@ router.get('/auth/workbench/privacyCenter/graph', function (req, res, next) {
   renderPrivacyCenterGraph(req,res,req.session.privacyCenterConsentReceipt);
 });
 
+/*import data*/
+router.post('/auth/workbench/import', function (req, res, next) {
+  var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
+  var importStartDate=req.body.importStartDate;
+  var importEndDate=req.body.importEndDate;
+
+  Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
+  if(applicationUser){
+    var options = {
+      'method': 'Get',
+      'url': 'https://api.datavillage.me/cages/'+consentReceiptSelected+'/importData?startDate='+importStartDate+'&endDate='+importEndDate,
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+applicationUser[consentReceiptSelected].access_token
+      }
+      };
+      request(options, function (error, response) { 
+        Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
+        if(response !=null && response.statusCode=="200"){
+            //redirect to another url to avoid refresh page reimport
+            res.redirect("/auth/workbench/query");
+        }
+        else
+          renderError(req,res,response.body);
+        });
+      });
+  }
+  else
+    renderError(req,res,"User not existing");
+  });
+});
+
+/*query data*/
+router.get('/auth/workbench/query', function (req, res, next) {
+  var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
+  Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
+    if(applicationUser){
+      renderDataExplorationWidget(req,res,consentReceiptSelected,applicationUser[consentReceiptSelected].access_token);
+    }
+    else
+    renderError(req,res,"User not existing");
+  });
+});
+
+/*load data*/
+router.get('/auth/workbench/load', function (req, res, next) {
+  var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
+  Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
+    if(applicationUser){
+      var options = {
+        'method': 'Post',
+        'url': 'https://api.datavillage.me/cages/'+consentReceiptSelected+'/queryData',
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+applicationUser[consentReceiptSelected].access_token
+        }
+        };
+        request(options, function (error, response) { 
+       
+          if(response !=null && response.statusCode=="200"){
+            res.writeHead(200, {"Content-Type": "application/json"});
+            res.end(response.body);
+          }
+          else
+            res.writeHead(401, {"Content-Type": "application/json"});
+            res.end('Error during query');
+          });
+    }
+    else
+    renderError(req,res,"User not existing");
+  });
+});
+
 /***********************************
  * rendering functions
  ************************************/
@@ -98,13 +172,30 @@ router.get('/auth/workbench/privacyCenter/graph', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderWorkbench(req,res,consentReceiptsList){
+function renderWorkbench(req,res,consentReceiptsList,tab,error){
   var hasConsentReceipts=false;
   if(consentReceiptsList!=null && consentReceiptsList.consentReceipts.length>0)
-  hasConsentReceipts=true;  
+    hasConsentReceipts=true;
+  var consentTab;  
+  var dataTab;
+  var algorithmTab;
+  switch(tab){
+    case "dataTab":
+      dataTab='active';
+    break;
+    case "algorithmTab":
+      algorithmTab='active';
+    break;
+    default:
+      consentTab='active';
+    break;
+  }
   res.render('workbench', {
     layout: 'master',
     workbench:'active',
+    consentTab:consentTab,
+    dataTab:dataTab,
+    algorithmTab:algorithmTab,
     consentReceiptsList:consentReceiptsList,
     hasConsentReceipts:hasConsentReceipts
   });
@@ -214,6 +305,21 @@ function renderPrivacyCenterGraph(req,res,consentReceipt){
 
   res.writeHead(200, {"Content-Type": "application/json"});
   res.end(graph);
+}
+
+
+/**
+ * render dashboard home
+ * @param {req} request
+ * @param {res} response
+ */
+function renderDataExplorationWidget(req,res,consentReceiptSelected,userJwtToken,error){
+  res.render('data-exploration-widget', {
+    layout: 'master',
+    workbench:'active',
+    consentReceipt:{id:consentReceiptSelected},
+    userJwtToken:userJwtToken
+  });
 }
 
 /**

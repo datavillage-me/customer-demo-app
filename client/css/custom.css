@@ -86,7 +86,6 @@
     background-color: #50dddf;
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: #FFFFFF;
-    cursor: pointer;
     padding: 10px 12px;
     white-space: nowrap;
     overflow: hidden;
@@ -129,3 +128,12 @@
       .made-with-mk .made-with strong {
         font-weight: 400;
         color: rgba(255, 255, 255, 0.9); }
+
+
+
+        #viz {
+          width: 900px;
+          height: 700px;
+          border: 1px solid lightgray;
+          font: 22pt arial;
+      }
