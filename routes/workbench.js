@@ -25,7 +25,7 @@ function routePrivacyCenterWidget(req,res,consentReceiptSelected){
       Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
         if(applicationUser){
           Consent.getConsentsChain(applicationUser[consentReceiptSelected].access_token,consentReceiptSelected,applicationUser[consentReceiptSelected].user_id,null,function(consents){
-            renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents,true);
+            renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents,true,applicationUser[consentReceiptSelected].access_token);
           });
         }
         else
@@ -206,7 +206,7 @@ function renderWorkbench(req,res,consentReceiptsList,tab,error){
  * @param {req} request
  * @param {res} response
  */
-function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain,refreshOpener){
+function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain,refreshOpener,userAccessToken){
   
   
   var dataCategoriesList="";
@@ -272,7 +272,10 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
     consents:JSON.parse(consents),
     dataCategoriesList:dataCategoriesList,
     actionActivateConsent:rootDomainPassportApp+'/oauth/authorize?client_id='+req.session.clientId+'&redirect_uri='+callback+'&response_type=code&scope='+consentReceiptUri+'&state=empty',
-    actionDesactivateConsent:rootDomainPassportApp+'/oauth/token/revoke'
+    actionRevokeConsent:rootDomainPassportApp+'/oauth/deauthorize',
+    callback:callback,
+    consentReceiptUri:consentReceiptUri,
+    userAccessToken:userAccessToken
   });
 } 
 
