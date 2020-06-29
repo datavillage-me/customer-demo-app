@@ -28,6 +28,7 @@ router.get('/login', passport.authenticate('datavillage', {
   res.redirect('/');
 });
 
+
 // Perform the final stage of authentication and redirect to previously requested URL or '/auth/dashboard'
 router.get('/callback', function (req, res, next) {
   passport.authenticate('datavillage', function (err, user, info) {
