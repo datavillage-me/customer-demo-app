@@ -163,8 +163,8 @@ function _getClient(clientId,clientSecret,done){
           'scope': scope,
           'grant_type':'refresh_token'
       }
-      };
-      request(options, function (error, response) { 
+      }; 
+      request(options, function (error, response) {
         if (error) { 
             console.log(error); 
             return done(null);

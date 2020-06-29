@@ -28,12 +28,12 @@
                     <hr/>
                     <center>
                     {{#ifConsentActif consents consentReceipt.id}}
-                        <form name="revokeConsent" action="{{actionRevokeConsent}}">
+                        <form name="revokeConsent" action="{{actionRevokeConsent}}" method="Post">
                             <input type="hidden" name="client_id" value="{{session.clientId}}"/>
                             <input type="hidden" name="redirect_uri" value="{{callback}}"/>
                             <input type="hidden" name="scope" value="{{consentReceiptUri}}"/>
                             <input type="hidden" name="access_token" value="{{userAccessToken}}"/>
-                            <input type="submit" class="btn btn-success" style="background-color:#ff4081" value="I want to revoke \"{{consentReceipt.name}}\""/> with <img style="width:48px" src="/img/logo.png"/>
+                            <input type="submit" class="btn btn-success" style="background-color:#ff4081" value="I want to revoke {{consentReceipt.name}}"/> with <img style="width:48px" src="/img/logo.png"/>
                         </form>
                     {{else}}
                         <a href="{{actionActivateConsent}}" class="btn btn-success" style="background-color:#ff4081">Authorize</a> with <img style="width:48px" src="/img/logo.png"/>
@@ -49,11 +49,7 @@
     {{#if refreshOpener}}
     window.opener.location.reload();
     {{/if}}
-    function activateDataSource(element,consentReceiptId){
-        if(element.checked){
-            document.getElementById(consentReceiptId).submit();
-        }
-    }
+   
 
     function init() {
                 var neo4jd3 = new Neo4jd3('#graph', {

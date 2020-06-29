@@ -54,7 +54,7 @@ router.get('/auth/workbench/selectConsentReceipt', function (req, res, next) {
   Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
     //get default user if activated
     Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
-      renderWorkbench(req,res,consentReceiptsList);
+      renderWorkbench(req,res,consentReceiptsList,null,applicationUser[consentReceiptSelected].access_token);
     });
   });
 });
@@ -172,7 +172,7 @@ router.get('/auth/workbench/load', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderWorkbench(req,res,consentReceiptsList,tab,error){
+function renderWorkbench(req,res,consentReceiptsList,tab,userAccessToken){
   var hasConsentReceipts=false;
   if(consentReceiptsList!=null && consentReceiptsList.consentReceipts.length>0)
     hasConsentReceipts=true;
@@ -197,7 +197,8 @@ function renderWorkbench(req,res,consentReceiptsList,tab,error){
     dataTab:dataTab,
     algorithmTab:algorithmTab,
     consentReceiptsList:consentReceiptsList,
-    hasConsentReceipts:hasConsentReceipts
+    hasConsentReceipts:hasConsentReceipts,
+    applicationUserAccessToken:userAccessToken
   });
 }
 
@@ -207,7 +208,6 @@ function renderWorkbench(req,res,consentReceiptsList,tab,error){
  * @param {res} response
  */
 function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain,refreshOpener,userAccessToken){
-  
   
   var dataCategoriesList="";
 
