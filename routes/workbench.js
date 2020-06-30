@@ -24,7 +24,7 @@ function routePrivacyCenterWidget(req,res,consentReceiptSelected){
       req.session.privacyCenterConsentReceipt=consentReceipt;
       Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
         if(applicationUser){
-          Consent.getConsentsChain(applicationUser[consentReceiptSelected].access_token,consentReceiptSelected,applicationUser[consentReceiptSelected].user_id,null,function(consents){
+          Consent.getConsentsChain(req.session.applicationAccessToken,consentReceiptSelected,applicationUser[consentReceiptSelected].user_id,req.session.clientId,function(consents){
             renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents,true,applicationUser[consentReceiptSelected].access_token);
           });
         }
