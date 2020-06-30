@@ -30,6 +30,7 @@
                     {{#ifConsentActif consents consentReceipt.id}}
                         <form name="revokeConsent" action="{{actionRevokeConsent}}" method="Post">
                             <input type="hidden" name="client_id" value="{{session.clientId}}"/>
+                            <input type="hidden" name="client_secret" value="{{session.clientSecret}}"/>
                             <input type="hidden" name="redirect_uri" value="{{callback}}"/>
                             <input type="hidden" name="scope" value="{{consentReceiptUri}}"/>
                             <input type="hidden" name="access_token" value="{{userAccessToken}}"/>
