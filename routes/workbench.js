@@ -54,7 +54,10 @@ router.get('/auth/workbench/selectConsentReceipt', function (req, res, next) {
   Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
     //get default user if activated
     Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
-      renderWorkbench(req,res,consentReceiptsList,null,applicationUser[consentReceiptSelected].access_token);
+      if(applicationUser!=null)
+        renderWorkbench(req,res,consentReceiptsList,null,applicationUser[consentReceiptSelected].access_token);
+      else
+        renderWorkbench(req,res,consentReceiptsList,null);
     });
   });
 });
