@@ -33,7 +33,7 @@
                             <input type="hidden" name="client_secret" value="{{session.clientSecret}}"/>
                             <input type="hidden" name="redirect_uri" value="{{callback}}"/>
                             <input type="hidden" name="scope" value="{{consentReceiptUri}}"/>
-                            <input type="hidden" name="access_token" value="{{userAccessToken}}"/>
+                            <input type="hidden" name="user_id" value="{{userId}}"/>
                             <input type="submit" class="btn btn-success" style="background-color:#ff4081" value="I want to revoke {{consentReceipt.name}}"/> with <img style="width:48px" src="/img/logo.png"/>
                         </form>
                     {{else}}
