@@ -114,7 +114,12 @@
                     <h2 >Data workbench</h2>
                     <p class="card-text">
                         <h4>First you need to create a consent receipt. Do it via the <a href="/auth/consents">Consent menu item</a> or select button here below.<br/><br/></h4>
+                        {{#if session.clientId}}
                         <a href="/auth/consents/form" class="btn btn-primary"><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Create consent receipt</a>
+                        {{else}}
+                        <h4>First you need to <b>create an app</b>. Do it via the <a href="/auth/applications">App menu item</a>.<br/><br/></h4>
+                        <span class="btn btn-light" style><i class="material-icons" style="font-size:28px">assignment_turned_in</i>&nbsp;&nbsp;&nbsp;Create new consent receipt</span>                
+                        {{/if}}
                     </p>
                 </div>
             </div>
