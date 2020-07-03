@@ -111,7 +111,7 @@ app.engine('handlebars', hbs.engine);
   saveUninitialized: true
 };
 
-if (config.env === 'production') {
+if (config.env === 'production' || config.env === 'staging') {
   //sess.cookie.secure = true; // serve secure cookies, requires https
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }

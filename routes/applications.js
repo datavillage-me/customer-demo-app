@@ -27,11 +27,12 @@ function initClientSession(req,client,done){
     req.session.callbacks=client.callbacks;
     req.session.companyUri=client.description;
     req.session.companyName=client.name;
+    Authentication.getApplicationToken(client.id,client.secret,function (accessToken){
+      req.session.applicationAccessToken=accessToken;
+      done();
+    });
   }
-  Authentication.getApplicationToken(client.id,client.secret,function (accessToken){
-    req.session.applicationAccessToken=accessToken;
-    done();
-  });
+  done();
 }
 
 /***********************************

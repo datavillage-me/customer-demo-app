@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.load();
 
 module.exports = {
-  env: 'development',
+  env: process.env.ENV,
   port: process.env.PORT || 3001,
   secret: process.env.SESSION_SECRET,
   auth0Domain: process.env.AUTH0_DOMAIN,
