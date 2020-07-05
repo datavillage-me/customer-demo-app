@@ -103,7 +103,7 @@ router.post('/auth/workbench/import', function (req, res, next) {
   if(applicationUser){
     var options = {
       'method': 'Get',
-      'url': 'https://api.datavillage.me/cages/'+consentReceiptSelected+'/importData?startDate='+importStartDate+'&endDate='+importEndDate,
+      'url': 'https://'+config.getApiDomain()+'/cages/'+consentReceiptSelected+'/importData?startDate='+importStartDate+'&endDate='+importEndDate,
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer '+applicationUser[consentReceiptSelected].access_token
@@ -144,7 +144,7 @@ router.get('/auth/workbench/load', function (req, res, next) {
     if(applicationUser){
       var options = {
         'method': 'Post',
-        'url': 'https://api.datavillage.me/cages/'+consentReceiptSelected+'/queryData',
+        'url': 'https://'+config.getApiDomain()+'/cages/'+consentReceiptSelected+'/queryData',
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer '+applicationUser[consentReceiptSelected].access_token

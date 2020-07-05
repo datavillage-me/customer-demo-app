@@ -29,10 +29,11 @@ function initClientSession(req,client,done){
     req.session.companyName=client.name;
     Authentication.getApplicationToken(client.id,client.secret,function (accessToken){
       req.session.applicationAccessToken=accessToken;
-      done();
+      return done();
     });
   }
-  done();
+  else
+    return done();
 }
 
 /***********************************
@@ -115,7 +116,7 @@ router.post('/auth/applications/test/oauth/token', function (req, res, next) {
   //get application access token
   var options = {
     'method': 'POST',
-    'url': 'https://api.datavillage.me/oauth/token',
+    'url': 'https://'+config.getApiDomain()+'/oauth/token',
     'headers': {
         'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded']
     },

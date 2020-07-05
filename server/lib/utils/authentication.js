@@ -45,15 +45,15 @@ function _getClient(clientId,clientSecret,done){
                         metaData:client.client_metadata,
                         grants: "authorization_code"
                     };
-                  done(returnBody);
+                  return done(returnBody);
                 }
                 else{
                     console.log("Client secret not valid");
-                    done (null);
+                    return done (null);
                 }
             }
             else
-                done (null);
+                return done (null);
       });
   }
 
@@ -82,7 +82,7 @@ function _getClient(clientId,clientSecret,done){
     //get application access token
     var options = {
       'method': 'POST',
-      'url': 'https://api.datavillage.me/oauth/token',
+      'url': 'https://'+config.getApiDomain()+'/oauth/token',
       'headers': {
           'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded']
       },
@@ -97,10 +97,10 @@ function _getClient(clientId,clientSecret,done){
             return done(null);
         }
         if(response !=null){
-            done(JSON.parse(response.body).access_token);
+            return done(JSON.parse(response.body).access_token);
         }
         else
-          done(null);
+            return done(null);
       });
   }
 

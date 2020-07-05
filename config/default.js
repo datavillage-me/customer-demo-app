@@ -3,8 +3,19 @@
 import dotenv from 'dotenv';
 dotenv.load();
 
+function _getApiDomain() {
+  if(process.env.ENV=="staging" || process.env.ENV=="production")
+    return "api.datavillage.me";
+  else
+    return "api-dev.datavillage.me";
+ } 
+
+
 module.exports = {
   env: process.env.ENV,
+  getApiDomain: function(){
+    return _getApiDomain();
+  },
   port: process.env.PORT || 3001,
   secret: process.env.SESSION_SECRET,
   auth0Domain: process.env.AUTH0_DOMAIN,

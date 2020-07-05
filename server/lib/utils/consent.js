@@ -7,6 +7,7 @@
  * @private
  ************************************/
 import request from 'request';
+import config from '../../../config/index';
 
 /***********************************
  * Private constants.
@@ -41,7 +42,7 @@ function _getConsentReceiptId (consentReceiptUri) {
 function _createUserConsent (userAccessToken,consentReceiptId,token,duration,cb) {
     var options = {
         'method': 'POST',
-        'url': 'https://api.datavillage.me/consents/'+consentReceiptId,
+        'url': 'https://'+config.getApiDomain()+'/consents/'+consentReceiptId,
         'headers': {
           'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded'],
           'Authorization': 'bearer ' + userAccessToken
@@ -80,7 +81,7 @@ function _getUserConsents (applicationAccessToken,userId,done) {
  * @param {function} done 
  */
 function _getConsentsChain(applicationAccessToken,consentReceiptId,userId,clientId,done){
-  var url='https://api.datavillage.me/consents/'+consentReceiptId+'/'+userId+'?consentChain=true';
+  var url='https://'+config.getApiDomain()+'/consents/'+consentReceiptId+'/'+userId+'?consentChain=true';
   if(clientId!=null)
     url+='&clientId='+clientId;
   var options = {
@@ -113,7 +114,7 @@ function _getConsentsChain(applicationAccessToken,consentReceiptId,userId,client
  * @param {function} done 
  */
 function _getConsentReceipt (applicationAccessToken,consentReceiptId,consentReceiptChain,clientId,done) {
-    var url='https://api.datavillage.me/consentReceipts/'+consentReceiptId;
+    var url='https://'+config.getApiDomain()+'/consentReceipts/'+consentReceiptId;
     url+='?consentReceiptChain='+consentReceiptChain;
     if(clientId!=null)
       url+='&clientId='+clientId;
@@ -154,7 +155,7 @@ function _getConsentReceiptsList(applicationAccessToken,done){
   if(applicationAccessToken!=null){
     var options = {
       'method': 'GET',
-      'url': 'https://api.datavillage.me/consentReceipts/',
+      'url': 'https://'+config.getApiDomain()+'/consentReceipts/',
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer '+applicationAccessToken
@@ -186,7 +187,7 @@ function _getConsentReceiptsList(applicationAccessToken,done){
 function _createConsentReceipt(applicationAccessToken,consentReceipt,done){
   var options = {
       'method': 'POST',
-      'url': 'https://api.datavillage.me/consentReceipts/',
+      'url': 'https://'+config.getApiDomain()+'/consentReceipts/',
       'headers': {
         'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded'],
         'Authorization': 'Bearer '+applicationAccessToken
