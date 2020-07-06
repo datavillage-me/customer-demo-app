@@ -195,13 +195,14 @@ function _createConsentReceipt(applicationAccessToken,consentReceipt,done){
       form: {
         'name': consentReceipt.name,
         'description': consentReceipt.description,
-        'purpose': consentReceipt.purpose,
-        'data-categories': consentReceipt.dataCategoriesValue,
-        'data-sources': consentReceipt.dataSourcesValue,
+        'forPurpose': consentReceipt.forPurpose,
+        'forProcessing': consentReceipt.forProcessing,
+        'forPersonalData': consentReceipt.forPersonalDataSensitivity,
+        'forPersonalDataCategory': consentReceipt.forPersonalDataCategory,
+        'dataSources': consentReceipt.dataSources,
         'creator-name': consentReceipt.creatorName,
         'creator-uri': consentReceipt.creatorUri,
-        'creator-logo': consentReceipt.creatorLogo,
-        'behavior-extracted-frequency': consentReceipt.behaviorExtractedFrequency
+        'creator-logo': consentReceipt.creatorLogo
       }
     };
     request(options, function (error, response) { 

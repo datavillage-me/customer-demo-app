@@ -6762,27 +6762,27 @@ button:focus {
         background-color: transparent;
         color: #e91e63; }
   .btn, .btn.btn-default {
-    color: #fff;
-    background-color: #999999;
-    border-color: #999999;
-    box-shadow: 0 2px 2px 0 rgba(153, 153, 153, 0.14), 0 3px 1px -2px rgba(153, 153, 153, 0.2), 0 1px 5px 0 rgba(153, 153, 153, 0.12); }
+    color: #000;
+    background-color: #fff;
+    border-color: #fff;
+    box-shadow: 0 2px 2px 0 rgba(255, 255, 255, 0.14), 0 3px 1px -2px rgba(255, 255, 255, 0.2), 0 1px 5px 0 rgba(255, 255, 255, 0.12); }
     .btn:hover, .btn.btn-default:hover {
-      color: #fff;
-      background-color: #919191;
-      border-color: #7a7a7a; }
+      color: #000;
+      background-color: #f7f7f7;
+      border-color: #e0e0e0; }
     .btn:focus, .btn.focus, .btn:hover, .btn.btn-default:focus, .btn.btn-default.focus, .btn.btn-default:hover {
-      color: #fff;
-      background-color: #919191;
-      border-color: #7a7a7a; }
+      color: #000;
+      background-color: #f7f7f7;
+      border-color: #e0e0e0; }
     .btn:active, .btn.active,
     .open > .btn.dropdown-toggle,
     .show > .btn.dropdown-toggle, .btn.btn-default:active, .btn.btn-default.active,
     .open > .btn.btn-default.dropdown-toggle,
     .show > .btn.btn-default.dropdown-toggle {
-      color: #fff;
-      background-color: #919191;
-      border-color: #7a7a7a;
-      box-shadow: 0 2px 2px 0 rgba(153, 153, 153, 0.14), 0 3px 1px -2px rgba(153, 153, 153, 0.2), 0 1px 5px 0 rgba(153, 153, 153, 0.12); }
+      color: #000;
+      background-color: #f7f7f7;
+      border-color: #e0e0e0;
+      box-shadow: 0 2px 2px 0 rgba(255, 255, 255, 0.14), 0 3px 1px -2px rgba(255, 255, 255, 0.2), 0 1px 5px 0 rgba(255, 255, 255, 0.12); }
       .btn:active:hover, .btn:active:focus, .btn:active.focus, .btn.active:hover, .btn.active:focus, .btn.active.focus,
       .open > .btn.dropdown-toggle:hover,
       .open > .btn.dropdown-toggle:focus,
@@ -6796,29 +6796,29 @@ button:focus {
       .show > .btn.btn-default.dropdown-toggle:hover,
       .show > .btn.btn-default.dropdown-toggle:focus,
       .show > .btn.btn-default.dropdown-toggle.focus {
-        color: #fff;
-        background-color: #919191;
-        border-color: #595959; }
+        color: #000;
+        background-color: #f7f7f7;
+        border-color: #bfbfbf; }
     .open > .btn.dropdown-toggle.bmd-btn-icon, .open > .btn.btn-default.dropdown-toggle.bmd-btn-icon {
       color: inherit;
-      background-color: #999999; }
+      background-color: #fff; }
       .open > .btn.dropdown-toggle.bmd-btn-icon:hover, .open > .btn.btn-default.dropdown-toggle.bmd-btn-icon:hover {
-        background-color: #919191; }
+        background-color: #f7f7f7; }
     .btn.disabled:focus, .btn.disabled.focus, .btn:disabled:focus, .btn:disabled.focus, .btn.btn-default.disabled:focus, .btn.btn-default.disabled.focus, .btn.btn-default:disabled:focus, .btn.btn-default:disabled.focus {
-      background-color: #999999;
-      border-color: #999999; }
+      background-color: #fff;
+      border-color: #fff; }
     .btn.disabled:hover, .btn:disabled:hover, .btn.btn-default.disabled:hover, .btn.btn-default:disabled:hover {
-      background-color: #999999;
-      border-color: #999999; }
+      background-color: #fff;
+      border-color: #fff; }
     .btn:focus, .btn:active, .btn:hover, .btn.btn-default:focus, .btn.btn-default:active, .btn.btn-default:hover {
-      box-shadow: 0 14px 26px -12px rgba(153, 153, 153, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(153, 153, 153, 0.2); }
+      box-shadow: 0 14px 26px -12px rgba(255, 255, 255, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(255, 255, 255, 0.2); }
     .btn.btn-link, .btn.btn-default.btn-link {
       background-color: transparent;
-      color: #999999;
+      color: #fff;
       box-shadow: none; }
       .btn.btn-link:hover, .btn.btn-link:focus, .btn.btn-link:active, .btn.btn-default.btn-link:hover, .btn.btn-default.btn-link:focus, .btn.btn-default.btn-link:active {
         background-color: transparent;
-        color: #999999; }
+        color: #fff; }
   .btn.btn-white, .btn.btn-white:focus, .btn.btn-white:hover {
     background-color: #fff;
     color: #999999; }

@@ -9,20 +9,20 @@
                 <div class="card-body">
                     <h2 >Create consent receipt</h2>
                     <p class="card-text ">
-                        <label class="form-control-danger control-label">{{errors}}</label>
-                        <form method="POST" action="/auth/consents/create">
+                        <div id="errorMessage">{{errors}}</div>
+                        <form method="POST" id="consentReceiptForm" action="/auth/consents/create">
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="consentReceiptName">Name</label>
-                                        <input type="text" class="form-control" id="consentReceiptName" name="consentReceiptName" onchange="modifyRequestPayload(this.id,this.value)">
+                                        <input type="text" class="form-control" id="consentReceiptName" name="consentReceiptName" >
                                         <span class="badge badge-default">String</span> <small>Name of the consent receipt to create.</small>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="consentReceiptDescription">Description</label>
-                                        <input type="text" class="form-control" id="consentReceiptDescription" name="consentReceiptDescription" onchange="modifyRequestPayload(this.id,this.value)">
+                                        <input type="text" class="form-control" id="consentReceiptDescription" name="consentReceiptDescription" >
                                         <span class="badge badge-default">String</span> <small>Description of the consent receipt to create.</small>
                                     </div>
                                 </div>
@@ -30,8 +30,8 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="consentReceiptPurpose">Purpose</label>
-                                        <textarea class="form-control" id="consentReceiptPurpose"  name="consentReceiptPurpose" rows="2" onchange="modifyRequestPayload(this.id,this.value)"></textarea>
+                                        <label for="consentReceiptForPurpose">Purpose</label>
+                                        <textarea class="form-control" id="consentReceiptForPurpose"  name="consentReceiptForPurpose" rows="2"></textarea>
                                         <span class="badge badge-default">String</span> <small>Purpose of the personal data processing.</small>
                                     </div>
                                 </div>
@@ -39,59 +39,92 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="consentReceiptDataCategories">Data categories</label>
+                                        <label for="consentReceiptForProcessing">For processing</label>
                                             <div>
-                                            <select id="consentReceiptDataCategories"  class="form-control selectpicker" multiple="multiple">
-                                                <option value="Consumption">Consumption</option>
-                                                <option value="Geospatial">Geospatial</option>
-                                                <option value="Health">Health</option>
-                                                <option value="KnowledgeAndInterest">Knowledge&amp;Interest</option>
-                                                <option value="Social">Social</option>
+                                            <select id="consentReceiptForProcessing" name="consentReceiptForProcessing"  class="form-control" data-live-search="true">
+                                                <option value="https://w3id.org/GConsent#DataAdaptation">DataAdaptation</option>
+                                                <option value="https://w3id.org/GConsent#DataAlignment">DataAlignment</option>
+                                                <option value="https://w3id.org/GConsent#DataAlteration">DataAlteration</option>
+                                                <option value="https://w3id.org/GConsent#DataCollection">DataCollection</option>
+                                                <option value="https://w3id.org/GConsent#DataCombination">DataCombination</option>
+                                                <option value="https://w3id.org/GConsent#DataConsultation" selected="true">DataConsultation (Default)</option>
+                                                <option value="https://w3id.org/GConsent#DataDestruction">DataDestruction</option>
+                                                <option value="https://w3id.org/GConsent#DataDisclosureByTransmission">DataDisclosureByTransmission</option>
+                                                <option value="https://w3id.org/GConsent#DataDissemination">DataDissemination</option>
+                                                <option value="https://w3id.org/GConsent#DataErasure">DataErasure</option>
+                                                <option value="https://w3id.org/GConsent#DataOrganisation">DataOrganisation</option>
+                                                <option value="https://w3id.org/GConsent#DataRecording">DataRecording</option>
+                                                <option value="https://w3id.org/GConsent#DataRestriction">DataRestriction</option>
+                                                <option value="https://w3id.org/GConsent#DataRetrieval">DataRetrieval</option>
+                                                <option value="https://w3id.org/GConsent#DataSharing">DataSharing</option>
+                                                <option value="https://w3id.org/GConsent#DataStorage">DataStorage</option>
+                                                <option value="https://w3id.org/GConsent#DataStructuring">DataStructuring</option>
                                             </select>
-                                            <input type="hidden" id="consentReceiptDataCategoriesValue" name="consentReceiptDataCategoriesValue" value=""/>
-
-                                        </div>
-                                        <span class="badge badge-default">Array</span> <small>List of data categories used by processing.</small>
+                                         </div>
+                                        <span class="badge badge-default">Array</span> <small>Set of processing (actions or activities) performed on personal data</small>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="consentReceiptDataSources">Data sources</label>
-                                            <div>
-                                            <select id="consentReceiptDataSources"  class="form-control selectpicker" multiple="multiple">
-                                                <optgroup label="Health">
-                                                        <option value="20f2fc315a06ed54663bdfd5efa4a51234b27fd4d4690bd58d0944120bcd31d08d28ae5891ba9243c91f5eab608d5d364c1681e2bf0d9e30c25822d8350c5a5d">Strava</option>
-                                                        <option value="bca154aab2acb04a332df47c7cfc90f30914678b66824924a67ef6f164f53431144ffba71840e240ee553137ad6d2bf56d10caf8e55c2bf56fdaca3f476b7626">Fitbit</option>
-                                                </optgroup>
-                                                <optgroup label="Consumption">
-                                                        <option value="3c3305760fce447f9a489d7c28dbe84e46c918dcffb2c2838843ef4be3d121bef011d89fd9c4ea543a65134bfbddb0a57a5bec6ebff007724ec74a73eef7c2e3">Colruyt</option>
-                                                </optgroup>
-                                                <optgroup label="Knowledge&Interest">
-                                                        <option value="9d84b14f152b965ddd34cb79fdc1ed88e589f6e01085702af77d0837c84c8b85f0ad1ad25122c110a04761a5edc3831de0bdb3edd9a2db959b45a3625db4e98c">RTBF Auvio</option>
-                                                        <option value="949567849e30bc3caf7cb8144f35308a9083c1a66031ee8994df3cb0af7d048fc04ae599b050d45640843d4617e5bd0368df98d4d8e0f6d83cfc4982f1c5eed8">Netflix</option>
-                                                        <option value="d3773e830e1dff35ef357a313cb3112e37b8bcb37414cd741054f135e77712baeaeaee542f7b6268054605ed44191233e0093f7b56fd3b88b3893a1e658798a9">YouTube</option>
-                                                        <option value="72e24d9b4034ac6ab7a6fe8ac71db0738b640b103e1bee26607c6cc596ff693d8d74a41430c9f70a5ebfcd8f8f62d8bd5713e322903af06ddcc29cadbe293418">Vimeo</option>
-                                                        <option value="9c7eabb50816242175562fa9ae5ad4dd66c0b7b03a813a7ef021ec9c07c80f8e45a6383b82d5164342cb82d585d20ecb33d7ed7fe020c12b18d44ec5d238ede1">Spotify</option>
-                                                </optgroup>
-                                            </select>
-                                            <input type="hidden" id="consentReceiptDataSourcesValue" name="consentReceiptDataSourcesValue" value=""/>
+                                        <label for="consentReceiptData">For personal data</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div>
+                                                    <select id="consentReceiptDataSensitivity"  name="consentReceiptDataSensitivity" class="form-control">
+                                                        <option value="https://w3id.org/GDPRtEXT#PersonalData" selected="true">Personal Data (Default)</option>
+                                                        <option value="https://w3id.org/GDPRtEXT#HealthData">Sensitive Personal Data - Health Data</option>
+                                                        <option value="https://w3id.org/GDPRtEXT#GeneticData">Sensitive Personal Data - Genetic Data</option>
+                                                        <option value="https://w3id.org/GDPRtEXT#CriminalData">Sensitive Personal Data - Criminal Data</option>
+                                                        <option value="https://w3id.org/GDPRtEXT#RacialData">Sensitive Personal Data - Racial Data</option>
+                                                    </select>
+                                                </div>
+                                                <span class="badge badge-default">Array</span> <small>Set of personal data sensitivity</small>
+                                            </div>
+                                            <div class="col">
+                                                <div>
+                                                    <select id="consentReceiptDataCategories"  name="consentReceiptDataCategories" class="form-control selectpicker" multiple="multiple">
+                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataActivity">PersonalDataActivity - What?</option>
+                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataLocation">PersonalDataLocation - Where?</option>
+                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataTime">PersonalDataTime - When?</option>
+                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataPerson">PersonalDataPerson - With Whom?</option>
+                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataCharacteristic">PersonalDataCharacteristic - How?</option>
+                                                    </select>
+                                                </div>
+                                                <span class="badge badge-default">Array</span> <small>Set of personal data categories</small>
+                                            </div>
                                         </div>
-                                        <span class="badge badge-default">Array</span> <small>List of data sources used by processing.</small>
                                     </div>
                                 </div>
                             </div>  
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="consentReceiptBehaviorExtractedFrequency">Behavior extracted frequency</label>
-                                        <select class="form-control selectpicker" data-style="btn btn-link" id="consentReceiptBehaviorExtractedFrequency" name="consentReceiptBehaviorExtractedFrequency" onchange="modifyRequestPayload(this.id,this.value)">
-                                            <option>None Selected</option>
-                                            <option value="unitHour">Hourly</option>
-                                            <option value="unitDay">Daily</option>
-                                            <option value="unitWeek">Weekly</option>
-                                            <option value="unitMonth">Monthly</option>
-                                        </select>
-                                        <span class="badge badge-default">String</span> <small>Frequency of processing to create the behavior.</small>
+                                        <label for="consentReceiptDataSources">Data sources</label>
+                                            <div>
+                                            <select id="consentReceiptDataSources"  class="form-control selectpicker" multiple="multiple">
+                                                <optgroup label="Sports & health">
+                                                        <option value="20f2fc315a06ed54663bdfd5efa4a51234b27fd4d4690bd58d0944120bcd31d08d28ae5891ba9243c91f5eab608d5d364c1681e2bf0d9e30c25822d8350c5a5d">Strava (Available for sensitivity: "PersonalData" - category: "What | When")</option>
+                                                        <option value="">Fitbit (Soon)</option>
+                                                </optgroup>
+                                                <optgroup label="Consumption">
+                                                        <option value="">Colruyt (Soon)</option>
+                                                        <option value="">N26 (Soon)</option>
+                                                </optgroup>
+                                                <optgroup label="Social">
+                                                        <option value="">Instagram (Soon)</option>
+                                                        <option value="">Facebook (Soon)</option>
+                                                </optgroup>
+                                                <optgroup label="Knowledge&Interest">
+                                                        <option value="">Vimeo (Soon)</option>
+                                                        <option value="">Spotify (Soon)</option>
+                                                        <option value="">GetPocket (Soon)</option>
+                                                        <option value="">Twitter (Soon)</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <span class="badge badge-default">Array</span> <small>List of data sources used by processing.</small>
                                     </div>
                                 </div>
                             </div>
@@ -101,15 +134,15 @@
                                         <label for="createdByName">Created by</label>
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" id="consentReceiptCreatorName" name="consentReceiptCreatorName" value="{{#if session.companyName}}{{session.companyName}}{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
+                                                <input type="text" class="form-control" id="consentReceiptCreatorName" name="consentReceiptCreatorName" value="{{#if session.companyName}}{{session.companyName}}{{/if}}" >
                                                 <span class="badge badge-default">String</span> <small>Name of the organisation</small>
                                             </div>
                                             <div class="col">
-                                                <input type="text" class="form-control" id="consentReceiptCreatorUrl" name="consentReceiptCreatorUrl" value="{{#if session.companyUri}}{{session.companyUri}}{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
+                                                <input type="text" class="form-control" id="consentReceiptCreatorUrl" name="consentReceiptCreatorUrl" value="{{#if session.companyUri}}{{session.companyUri}}{{/if}}" >
                                                 <span class="badge badge-default">String</span> <small>URI of the organisation</small>
                                             </div>
                                             <div class="col">
-                                                <input type="text" class="form-control" id="consentReceiptCreatorLogo" name="consentReceiptCreatorLogo" value="{{#if session.companyUri}}{{session.companyUri}}/logo.png{{/if}}" onchange="modifyRequestPayload(this.id,this.value)">
+                                                <input type="text" class="form-control" id="consentReceiptCreatorLogo" name="consentReceiptCreatorLogo" value="{{#if session.companyUri}}{{session.companyUri}}/logo.png{{/if}}" >
                                                 <span class="badge badge-default">String</span> <small>URL to the Logo of the organisation</small>
                                             </div>
                                         </div>
@@ -117,7 +150,7 @@
                                 </div>
                             </div>
                             <br/><br/>
-                            <center><button type="submit" class="btn btn-primary">Create consent receipt</button></center>
+                            <center><button type="button" class="btn btn-primary" onclick="submitForm('consentReceiptForm');">Create consent receipt</button></center>
                         </form>
                     </p>
                 </div>
@@ -126,44 +159,39 @@
     </div>
 </div>
 <script>
-    var consentReceiptDataSourcesValue=[];
-    var consentReceiptDataCategoriesValue=[];    
+    function showError(errorMessage){
+        var htmlErrorMessage="<div class='alert alert-warning'><div class='container-fluid'><i class='material-icons'>warning</i> "+errorMessage+"</div></div>";
+        document.getElementById("errorMessage").innerHTML=htmlErrorMessage;
+    }
+    function submitForm(form){
+        if(document.getElementById("consentReceiptName").value=="")
+            showError("Name is required");
+        else if(document.getElementById("consentReceiptDescription").value=="")
+            showError("Description is required");
+        else if(document.getElementById("consentReceiptDescription").value=="")
+            showError("Description is required");
+        else if(document.getElementById("consentReceiptForPurpose").value=="")
+            showError("Purpose is required");
+        else if(document.getElementById("consentReceiptForProcessing").value=="")
+            showError("Processing is required");
+        else if(document.getElementById("consentReceiptDataSensitivity").value=="")
+            showError("Data sensitivity is required");
+        else if(document.getElementById("consentReceiptDataCategories").value=="")
+            showError("Data categories is required");
+        else if(document.getElementById("consentReceiptDataSources").value=="")
+            showError("Data sources is required");
+        else if(document.getElementById("consentReceiptCreatorName").value=="")
+            showError("Creator name is required");
+        else if(document.getElementById("consentReceiptCreatorUrl").value=="")
+            showError("Creator url is required");
+        else if(document.getElementById("consentReceiptCreatorLogo").value=="")
+            showError("Creator logo is required");
+        else
+            document.getElementById(form).submit();
+    }
     $(document).ready(function() {  
-        $('#consentReceiptDataSources').multiselect({
-            buttonClass: 'btn-light btn-sm form-control',
-            onChange: function(element, checked) {
-                if(consentReceiptDataSourcesValue[element.val()]==null)
-                    consentReceiptDataSourcesValue[element.val()]=element.val();
-                else
-                    consentReceiptDataSourcesValue[element.val()]=null;
-                consentReceiptDataSourcesValueString="";
-                for (var key in consentReceiptDataSourcesValue) {
-                    if(consentReceiptDataSourcesValue[key]!=null)
-                        consentReceiptDataSourcesValueString+=consentReceiptDataSourcesValue[key]+",";
-                }
-                consentReceiptDataSourcesValueString=consentReceiptDataSourcesValueString.substr(0,consentReceiptDataSourcesValueString.length-1)
-                document.getElementById("consentReceiptDataSourcesValue").value=consentReceiptDataSourcesValueString;
-                
-            }
-        });
-        
-        $('#consentReceiptDataCategories').multiselect({
-            buttonClass: 'btn-light btn-sm form-control',
-            onChange: function(element, checked) {
-                if(consentReceiptDataCategoriesValue[element.val()]==null)
-                    consentReceiptDataCategoriesValue[element.val()]=element.val();
-                else
-                    consentReceiptDataCategoriesValue[element.val()]=null;
-                consentReceiptDataCategoriesValueString="";
-                for (var key in consentReceiptDataCategoriesValue) {
-                    if(consentReceiptDataCategoriesValue[key]!=null)
-                        consentReceiptDataCategoriesValueString+=consentReceiptDataCategoriesValue[key]+",";
-                }
-                consentReceiptDataCategoriesValueString=consentReceiptDataCategoriesValueString.substr(0,consentReceiptDataCategoriesValueString.length-1)
-                document.getElementById("consentReceiptDataCategoriesValue").value=consentReceiptDataCategoriesValueString;
-                
-            }
-        });
+        //$('select[consentReceiptForPurpose]').val('https://w3id.org/GConsent#DataConsultation');
+        //$('select[consentReceiptForPurpose]').selectpicker('refresh');
     });
     
 </script>

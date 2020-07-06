@@ -39,16 +39,16 @@ router.get('/auth/consents/form', function (req, res, next) {
 router.post('/auth/consents/create', function (req, res, next) {
   const errors = validationResult(req);
   var consentReceipt={};
-  
   consentReceipt.name=req.body.consentReceiptName;
   consentReceipt.description=req.body.consentReceiptDescription;
-  consentReceipt.purpose=req.body.consentReceiptPurpose;
-  consentReceipt.behaviorExtractedFrequency=req.body.consentReceiptBehaviorExtractedFrequency;
+  consentReceipt.forPurpose=req.body.consentReceiptForPurpose;
+  consentReceipt.forProcessing=req.body.consentReceiptForProcessing.toString();
+  consentReceipt.forPersonalDataSensitivity=req.body.consentReceiptDataSensitivity.toString();
+  consentReceipt.forPersonalDataCategory=req.body.consentReceiptDataCategories.toString();
+  consentReceipt.dataSources=req.body.consentReceiptDataSources.toString();
   consentReceipt.creatorName=req.body.consentReceiptCreatorName;
   consentReceipt.creatorUri=req.body.consentReceiptCreatorUrl;
   consentReceipt.creatorLogo=req.body.consentReceiptCreatorLogo;
-  consentReceipt.dataSourcesValue=req.body.consentReceiptDataSourcesValue;
-  consentReceipt.dataCategoriesValue=req.body.consentReceiptDataCategoriesValue;
 
   Consent.createConsentReceipt(req.session.applicationAccessToken,consentReceipt,function (){
     Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
