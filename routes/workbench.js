@@ -110,6 +110,7 @@ router.post('/auth/workbench/import', function (req, res, next) {
       }
       };
       request(options, function (error, response) { 
+        console.log(response);
         Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
         if(response !=null && response.statusCode=="200"){
             //redirect to another url to avoid refresh page reimport
@@ -211,7 +212,6 @@ function renderWorkbench(req,res,consentReceiptsList,tab,userAccessToken){
  * @param {res} response
  */
 function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain,refreshOpener,userId){
-  
   var dataCategoriesList="";
 
   if(consentReceipt.main["gl:dataCategories"]!=null){

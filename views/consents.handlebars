@@ -9,12 +9,12 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
             {{#if hasConsentReceipts}}
-{{#each consentReceiptsList.consentReceipts}}
+            {{#each consentReceiptsList.consentReceipts}}
             <div class="card text-left" style="width: 100%;">
                 <div class="card-body">
                     <div class="row justify-content-center">
                         <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <a href="javascript:copyToClipboard('consentReceiptId')" class="list-group-item list-group-item-action flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h3 class="mb-1"><b>{{this.name}}</b></h3>
                                     <small class="text-muted">
@@ -23,8 +23,9 @@
                                 </div>
                                 <h3><i>{{this.description}}</i></h3>
                                 <small class="text-muted">
-                                        id: {{this.id}}
+                                        id:  <input type="text" size="100" value="{{this.id}}" id="consentReceiptId"/><i class="material-icons-outlined text-primary" aria-hidden="true">file_copy</i>
                                 </small>
+                                
                             </a>
                             
                         </div>

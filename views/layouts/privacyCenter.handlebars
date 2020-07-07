@@ -49,7 +49,26 @@
       </div>
     </div>
   </nav>
-  <div class="page-header header-filter clear-filter privacy-center-filter" data-parallax="true" style="background-image: url('https://source.unsplash.com/bJWcntcbsBc/1600x900/');"></div>
+  <div class="page-header header-filter clear-filter privacy-center-filter" data-parallax="true" style="background-image: url('https://source.unsplash.com/bJWcntcbsBc/1600x900/');">
+  <div class="container">
+  <div class="row">
+    <div class="col-md-12 ml-auto mr-auto">
+      <div class="brand">
+        <h2>Privacy center sample generated for</h2>
+        <h4>
+            <b>client_id:</b> {{session.clientId}}<br/>
+            <b>redirect_uri:</b> {{callback}}<br/>
+            <b>scope:</b> {{consentReceiptUri}}<br/>
+            {{#if userId}}
+            <b>user_id:</b> {{userId}}
+            {{/if}}
+        </h4>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+  
   <div class="main main-raised">
     <div class="profile-content">
       <div>
