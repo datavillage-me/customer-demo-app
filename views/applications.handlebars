@@ -14,6 +14,7 @@
                 <div class="card-body">
                 <div class="row justify-content-center">
                     <div class="col-10">
+                        <center><h4>{{error}}</h4></center>
                         <div class="form-group">
                             <h3><b>App Id:</b> 
                             <div class="input-group">
@@ -48,7 +49,41 @@
                         </div>
                     </div>
                 </div>
+                <br/>
+                <center><button type="button"  data-toggle="modal" data-target="#deleteModal" class="btn btn-danger"><i class="material-icons" style="font-size:28px">delete</i>&nbsp;&nbsp;&nbsp;Delete app</button></center>
+                <!-- Delete Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel"><b>Danger zone</b> - Delete this application</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <div class="modal-body">
+                        <div id="errorMessage"></div>
+                        <ul>
+                            <li>All your apps using this client will stop working.</li>
+                            <li>All your consent receipts linked to this app will be removed.</li>
+                            <li>All users linked to this app will be unlinked. Nevertheless users data will remain into their pod.</li>
+                        </ul>
+                        <b>This action cannot be undone.</b><br/>
+                        Please type in the name of the application to confirm.
+                        <form method="POST" id="deleteApp" action="/auth/applications/delete">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="appName" name="appName" placeholder="App Name">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" onclick="submitForm('deleteApp')";><i class="material-icons" style="font-size:28px">delete</i>&nbsp;&nbsp;&nbsp;Delete app</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                </div>
             </div>
            
             </div>
@@ -67,3 +102,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    function showError(errorMessage){
+        var htmlErrorMessage="<div class='alert alert-warning'><div class='container-fluid'><i class='material-icons'>warning</i> "+errorMessage+"</div></div>";
+        document.getElementById("errorMessage").innerHTML=htmlErrorMessage;
+    }
+    function submitForm(form){
+        if(document.getElementById("appName").value=="")
+            showError("App Name is required");
+        else
+            document.getElementById(form).submit();
+    }
+    $(document).ready(function() {  
+        //$('select[consentReceiptForPurpose]').val('https://w3id.org/GConsent#DataConsultation');
+        //$('select[consentReceiptForPurpose]').selectpicker('refresh');
+    });
+    
+</script>
+
+

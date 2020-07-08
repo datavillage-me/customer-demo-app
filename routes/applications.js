@@ -8,6 +8,7 @@
 import express from 'express';
 import User from '../server/lib/utils/user';
 import Authentication from '../server/lib/utils/authentication';
+import Consent from '../server/lib/utils/consent';
 var router = express.Router();
 const { check, validationResult } = require('express-validator/check');
 import sanitizeBody from 'express-validator/filter';
@@ -22,6 +23,7 @@ var ManagementClient = require('auth0').ManagementClient;
 function initClientSession(req,client,done){
   if(client!=null){ 
     req.session.clientId=client.id;
+    req.session.clientName=client.name;
     req.session.clientSecret=client.secret;
     req.session.clientMetadata=client.metaData;
     req.session.callbacks=client.callbacks;
@@ -32,8 +34,16 @@ function initClientSession(req,client,done){
       return done();
     });
   }
-  else
+  else{
+    req.session.clientId=null;
+    req.session.clientName=null;
+    req.session.clientSecret=null;
+    req.session.clientMetadata=null;
+    req.session.callbacks=null;
+    req.session.companyUri=null;
+    req.session.companyName=null;
     return done();
+  }
 }
 
 /***********************************
@@ -55,7 +65,7 @@ router.get('/auth/applications/form', function (req, res, next) {
     renderApplicationsForm(req,res);
 });
 
-/* POSTcreate application */
+/* POST create application */
 router.post('/auth/applications/create', function (req, res, next) {
   const errors = validationResult(req);
   var appName=req.body.appName;
@@ -108,33 +118,29 @@ router.post('/auth/applications/create', function (req, res, next) {
     });
 });
 
-/* POST try application access token end point */
-router.post('/auth/applications/test/oauth/token', function (req, res, next) {
-  var clientId=req.body.clientId;
-  var clientSecret=req.body.clientSecret;
 
-  //get application access token
-  var options = {
-    'method': 'POST',
-    'url': 'https://'+config.getApiDomain()+'/oauth/token',
-    'headers': {
-        'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded']
-    },
-    form: {
-        'client_id': clientId,
-        'client_secret': clientSecret
-    }
-    };
-    request(options, function (error, response) { 
-      if(response !=null){
-        req.session.applicationAccessToken=JSON.parse(response.body).access_token;
-        renderHttpResponse(req,res,response.body,"applicationAccessTokenResponseiFrame","250");
-      }
-      else
-        renderHttpResponse(req,res,"applicationAccessTokenResponseiFrame","10");
+/* POST delete application */
+router.post('/auth/applications/delete', function (req, res, next) {
+  var appName=req.body.appName;
+  if(req.session.clientName==appName){
+      //delete consent receipts
+      Consent.deleteAllConsentReceipts(req.session.applicationAccessToken,function(response){
+          //delete client
+          Authentication.deleteClient(req.session.clientId,function(response){
+            initClientSession(req,null,function(){
+              renderApplications(req,res);
+            });
+        });
     });
+  }
+  else{
+    Authentication.getClient(User.getApplicationId(req.user),null,function(client){
+      initClientSession(req,client,function(){
+        renderApplications(req,res,client,"App name does not exist!");
+      });
+    });
+  }
 });
-
 
 /***********************************
  * rendering functions
@@ -145,13 +151,14 @@ router.post('/auth/applications/test/oauth/token', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderApplications(req,res,client){
+function renderApplications(req,res,client,error){
   if(client!=null){
     res.render('applications', {
       layout: 'master',
       applications:'active',
       user:{id:User.getUserId(req.user)},
       application:{name:client.name,clientId:client.id,clientSecret:client.secret,url:client.description,callbacks:client.callbacks},
+      error:error
     });
   }
   else{

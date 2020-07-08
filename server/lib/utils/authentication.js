@@ -78,6 +78,26 @@ function _getClient(clientId,clientSecret,done){
     });
 }
 
+function _deleteClient(clientId,done){
+    var management = new ManagementClient({
+        domain: config.auth0Domain,
+        clientId: config.auth0ManagementClientID,
+        clientSecret: config.auth0ManagementClientSecret,
+        scope: 'delete:clients'
+        });
+        management.deleteClient(
+          {
+            client_id: clientId
+          }, function (err, client) {
+            if(err){
+                console.log("Client not deleted");
+                return done (null);
+            }
+            else
+                return done("Client sucessfully deleted");
+      });
+  }
+
   function _getApplicationToken(clientId,clientSecret,done){
     //get application access token
     var options = {
@@ -253,12 +273,47 @@ function _getClient(clientId,clientSecret,done){
     }
 }
 
+/**
+ * unlink all users linked to client id
+ *
+ * @param {string} applicationAccessToken 
+ * @param {function} done 
+ */
+function _unlinkAllUsers(applicationAccessToken,done){
+    if(applicationAccessToken!=null){
+      var options = {
+        'method': 'DELETE',
+        'url': 'https://'+config.getApiDomain()+'/users/',
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+applicationAccessToken
+        }
+      };
+      request(options, function (error, response) { 
+        if(response !=null){
+          try{
+            done(response.body);
+          }
+          catch(error){
+            done(null);
+          }
+        }
+      });
+    }
+    else
+      done(null);
+  }
+
+  
 /***********************************
  * Module exports.
  ************************************/
 var self=module.exports={
     getClient: function(clientId,clientSecret,done){
         _getClient(clientId,clientSecret,done);
+    },
+    deleteClient: function(clientId,done){
+        _deleteClient(clientId,done);
     },
     getDatavillageApplicationToken: function(done){
         _getApplicationToken(config.auth0ManagementClientID,config.auth0ManagementClientSecret,done);
@@ -274,5 +329,8 @@ var self=module.exports={
     },
     getApplicationUser: function(req,consentReceiptId,done){
          _getApplicationUser(req,consentReceiptId,done);
-    }
+    }, 
+    unlinkAllUsers:function(applicationAccessToken,done){
+      return _unlinkAllUsers(applicationAccessToken,done);
+    },
 };

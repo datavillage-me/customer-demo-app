@@ -218,6 +218,38 @@ function _createConsentReceipt(applicationAccessToken,consentReceipt,done){
     });
 }
 
+
+/**
+ * delete all consent receipt linked to client id
+ *
+ * @param {string} applicationAccessToken 
+ * @param {function} done 
+ */
+function _deleteAllConsentReceipts(applicationAccessToken,done){
+  if(applicationAccessToken!=null){
+    var options = {
+      'method': 'DELETE',
+      'url': 'https://'+config.getApiDomain()+'/consentReceipts/',
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+applicationAccessToken
+      }
+    };
+    request(options, function (error, response) { 
+      if(response !=null){
+        try{
+          done(response.body);
+        }
+        catch(error){
+          done(null);
+        }
+      }
+    });
+  }
+  else
+    done(null);
+}
+
 /***********************************
  * Module exports.
  ************************************/
@@ -230,6 +262,9 @@ var self=module.exports={
     },
     getConsentReceiptId:function(consentReceiptId){
       return _getConsentReceiptId(consentReceiptId);
+    }, 
+    deleteAllConsentReceipts:function(applicationAccessToken,done){
+      return _deleteAllConsentReceipts(applicationAccessToken,done);
     },  
     createUserConsent:function(jwtToken,consentReceiptId,token,duration,cb){
         _createUserConsent(jwtToken,consentReceiptId,token,duration,cb);
