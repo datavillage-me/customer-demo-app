@@ -39,18 +39,17 @@ var strategy = new Auth0Strategy(
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
     // asynchronous verification, for effect...
-      /*profile=User.setUserJWTToken(profile,extraParams.id_token);
-      console.log("2");
+    console.log("2"+profile);
+      profile=User.setUserJWTToken(profile,extraParams.id_token);
       User.loadUserProfile(profile,function (profile) {
+        console.log("3"+profile);
         if (profile){
           return done(null, profile);
         }
-      });*/
-      return done(null, profile);
+      });
   }
 );
 
-passport.use("datavillage",strategy);
 
 // You can use this section to keep a smaller payload
 passport.serializeUser(function (user, done) {
@@ -60,6 +59,9 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
   done(null, user);
 });
+
+
+passport.use("datavillage",strategy);
 
 
 /***********************************

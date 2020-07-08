@@ -32,7 +32,7 @@ router.get('/login', passport.authenticate('datavillage', {
 // Perform the final stage of authentication and redirect to previously requested URL or '/auth/dashboard'
 router.get('/callback', function (req, res, next) {
   passport.authenticate('datavillage', function (err, user, info) {
-    console.log("1");
+    console.log("1"+user);
     if (info=="unauthorized") {  return res.redirect('/error?unauthorized'); }
     if (err) {  return next(err); }
     if (!user) { return res.redirect('/error?nouser'); }
