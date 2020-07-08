@@ -34,7 +34,7 @@ router.get('/callback', function (req, res, next) {
   passport.authenticate('datavillage', function (err, user, info) {
     if (info=="unauthorized") {  return res.redirect('/error?unauthorized'); }
     if (err) {  return next(err); }
-    if (!user) { return res.redirect('/error?nouser'); }
+    if (!user) { return res.redirect('/login'); }
     req.logIn(user, function (err) {
       if (err) { return next(err); }
       const returnTo = req.session.returnTo;
