@@ -106,10 +106,9 @@ router.post('/auth/applications/create', function (req, res, next) {
                   renderApplicationsForm(req,res,err);
                 else{
                   User.setApplicationId(req.user,clientId,function (profile){
-                    req.session.callbacks=client.callbacks;
-                    req.session.companyUri=appName;
-                    req.session.companyName=appUrl;
-                    renderApplications(req,res,client);
+                    initClientSession(req,client,function(){
+                      renderApplications(req,res,client);
+                    });
                   });  
                 }
                   
