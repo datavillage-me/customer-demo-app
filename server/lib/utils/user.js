@@ -50,7 +50,9 @@ function _loadUserProfile(profile,cb){
                 }
             }
             return cb(updatedProfile);
-        }
+        } 
+        else
+            return cb(profile);
     });
 }
 
