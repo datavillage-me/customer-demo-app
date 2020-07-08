@@ -112,7 +112,7 @@ app.engine('handlebars', hbs.engine);
 
 if (config.env === 'production' || config.env === 'staging') {
   //sess.cookie.secure = true; // serve secure cookies, requires https
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  //app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 app.use(session(sess));
@@ -153,7 +153,7 @@ function ensureAuthenticated(req, res, next) {
 app.use(userInViews());
 
 app.all('*', function(req,res,next){
-  if (req.path === '/' || req.path === '/home' || req.path === '/pods' || req.path === '/consents' || req.path === '/cages' || req.path === '/login' || req.path === '/callback' || req.path === '/error')
+  if (req.path === '/' || req.path === '/home' || req.path === '/login' || req.path === '/callback' || req.path === '/error')
     next();
   else
     ensureAuthenticated(req,res,next);  
