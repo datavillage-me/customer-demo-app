@@ -39,10 +39,8 @@ var strategy = new Auth0Strategy(
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
     // asynchronous verification, for effect...
-    console.log("2"+profile);
       profile=User.setUserJWTToken(profile,extraParams.id_token);
       User.loadUserProfile(profile,function (profile) {
-        console.log("3"+profile);
         if (profile){
           return done(null, profile);
         }
@@ -116,7 +114,7 @@ app.engine('handlebars', hbs.engine);
 
 if (config.env === 'production' || config.env === 'staging') {
   //sess.cookie.secure = true; // serve secure cookies, requires https
-  //app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 app.use(session(sess));
