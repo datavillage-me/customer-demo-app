@@ -106,8 +106,10 @@ router.post('/auth/applications/create', function (req, res, next) {
                   renderApplicationsForm(req,res,err);
                 else{
                   User.setApplicationId(req.user,clientId,function (profile){
-                    initClientSession(req,client,function(){
-                      renderApplications(req,res,client);
+                    Authentication.getClient(User.getApplicationId(req.user),null,function(client){
+                      initClientSession(req,client,function(){
+                        renderApplications(req,res,client);
+                      });                      
                     });
                   });  
                 }
