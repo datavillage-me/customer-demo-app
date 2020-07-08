@@ -39,12 +39,14 @@ var strategy = new Auth0Strategy(
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
     // asynchronous verification, for effect...
-      profile=User.setUserJWTToken(profile,extraParams.id_token);
+      /*profile=User.setUserJWTToken(profile,extraParams.id_token);
+      console.log("2");
       User.loadUserProfile(profile,function (profile) {
         if (profile){
           return done(null, profile);
         }
-      });
+      });*/
+      return done(null, profile);
   }
 );
 
