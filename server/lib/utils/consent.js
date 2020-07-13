@@ -45,7 +45,7 @@ function _createUserConsent (userAccessToken,consentReceiptId,token,duration,cb)
         'url': 'https://'+config.getApiDomain()+'/consents/'+consentReceiptId,
         'headers': {
           'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded'],
-          'Authorization': 'bearer ' + userAccessToken
+          'Authorization': 'Bearer ' + userAccessToken
         },
         form: {
           'source-token': token,
@@ -123,7 +123,7 @@ function _getConsentReceipt (applicationAccessToken,consentReceiptId,consentRece
         'url': url,
         'headers': {
           'Content-Type': 'application/json',
-          'Authorization': 'bearer ' + applicationAccessToken
+          'Authorization': 'Bearer ' + applicationAccessToken
         }
       };
     request.get(options, function(err, response, body){
