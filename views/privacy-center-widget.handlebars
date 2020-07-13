@@ -18,14 +18,15 @@
                     <h5>To be able to {{consentReceipt.description}}, we will use your </h5>
                     <ul>
                     {{#each dataSources.sources}}
-                    <li><h5><b>{{this.name}}</b></h5></li>
+                    <li><h5><b>{{this.name}}</b></h5>
+                    {{#each this.forPersonalCategories}}
+                        <ul><li>{{this.name}}</li></ul>
+                    {{/each}}
+                    </li>
                     {{/each}}
                     </ul>
-                    <div class="row">
-                        <div class="col-lg-1 align-self-center"><i class="material-icons-outlined" style="font-size:32px;color:#ff4081">verified_user</i></div>
-                        <div class="col-lg-11 align-self-center"><i>All your personal data is under your control. {{session.companyName}} can only process your data with your explicit consent. We never obtain and store this data on our systems and it will never be used for purposes other than those agreed here. </i></div>
-                    </div>
-                    <hr/>
+                    
+                    
                     <center>
                     {{#ifConsentActif consents consentReceipt.id}}
                         <form name="revokeConsent" action="{{actionRevokeConsent}}" method="Post">
@@ -34,13 +35,17 @@
                             <input type="hidden" name="redirect_uri" value="{{callback}}"/>
                             <input type="hidden" name="scope" value="{{consentReceiptUri}}"/>
                             <input type="hidden" name="user_id" value="{{userId}}"/>
-                            <input type="submit" class="btn btn-success" style="background-color:#ff4081" value="I want to revoke {{consentReceipt.name}}"/> with <img style="width:48px" src="/img/logo.png"/>
+                            <input type="submit" class="btn btn-success" style="background-color:#ff4081" value="I want to revoke {{consentReceipt.name}}"/>
                         </form>
                     {{else}}
-                        <a href="{{actionActivateConsent}}" class="btn btn-success" style="background-color:#ff4081">Authorize</a> with <img style="width:48px" src="/img/logo.png"/>
+                        <a href="{{actionActivateConsent}}" class="btn btn-success" style="background-color:#ff4081">I authorize {{consentReceipt.name}}</a>
                     {{/ifConsentActif}}
                     </center>
-                    
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-1 align-self-center"><i class="material-icons-outlined" style="font-size:32px;color:#ff4081">verified_user</i></div>
+                        <div class="col-lg-11 align-self-center"><i>All your personal data is under your control. {{session.companyName}} can only process your data with your explicit consent. We never obtain and store this data on our systems and it will never be used for purposes other than those agreed here. </i></div>
+                    </div>
                 </div>
             </div>
         </div>

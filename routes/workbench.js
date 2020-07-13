@@ -211,22 +211,66 @@ function renderWorkbench(req,res,consentReceiptsList,tab,userAccessToken){
  * @param {res} response
  */
 function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consentsChain,refreshOpener,userId){
-  var dataCategoriesList="";
-
-  if(consentReceipt.main["gl:dataCategories"]!=null){
-    for(i=0;i<consentReceipt.main["gl:dataCategories"].length;i++){
-      var dataCategory=consentReceipt.main["gl:dataCategories"][i]["gl:forPersonalDataCategory"]["@type"];
-      dataCategoriesList+=dataCategory.split(":")[1]+",";
+  var mainForPersonalData=Array;
+  var mainForPersonalCategories=Array;
+  var forPersonalData="";
+  var forPersonalCategories="";
+  if(consentReceipt.main["gl:instructions"]!=null){
+    for(i=0;i<consentReceipt.main["gl:instructions"].length;i++){
+      var instruction=consentReceipt.main["gl:instructions"][i];
+      var sourceUri=instruction["gl:forPersonalData"]["rml:source"];
+      mainForPersonalData[sourceUri]=instruction["gl:forPersonalData"]["@id"];
+      mainForPersonalCategories[sourceUri]=instruction["gl:forPersonalData"]["gl:categories"];
     }
-    dataCategoriesList=dataCategoriesList.substr(0,dataCategoriesList.length-1);
   }
-  
   var dataSources="{\"sources\":[";
   for(var i=0;i<consentReceipt.sources.length;i++){
     dataSources+="{\"name\":\""+consentReceipt.sources[i]["gl:name"]+"\",";
     dataSources+="\"description\":\""+consentReceipt.sources[i]["gl:description"]+"\",";
     var arrayId=consentReceipt.sources[i]["@id"].split("/");
-    dataSources+="\"id\":\""+arrayId[arrayId.length-1]+"\"}";
+    var dataSourceId=arrayId[arrayId.length-1];
+    dataSources+="\"id\":\""+dataSourceId+"\",";
+
+    forPersonalCategories="\"forPersonalCategories\":[";
+    if(consentReceipt.sources[i]["gl:instructions"]!=null){
+      for(var j=0;j<consentReceipt.sources[i]["gl:instructions"].length;j++){
+        var instruction=consentReceipt.sources[i]["gl:instructions"][j];
+        var dataSourceForPersonalData=instruction["gl:forPersonalData"]["@id"];
+        for(var h=0;h<instruction["gl:forPersonalData"]["gl:categories"].length;h++){
+          var category=instruction["gl:forPersonalData"]["gl:categories"][h];
+          var categoryId=category["@id"];
+          var forPersonalCategoryName="";
+          if(JSON.stringify(category).indexOf(categoryId)>-1){
+            switch(categoryId){
+              case "https://www.datavillage.me/ontologies/Lconsent#PersonalDataActivity":
+                forPersonalCategoryName="What I do?";
+              break;
+              case "https://www.datavillage.me/ontologies/LConsent#PersonalDataLocation":
+                forPersonalCategoryName="Where I do?";
+              break;
+              case "https://www.datavillage.me/ontologies/Lconsent#PersonalDataTime":
+                forPersonalCategoryName="When I do?";
+              break;
+              case "https://www.datavillage.me/ontologies/LConsent#PersonalDataPerson":
+                forPersonalCategoryName="With whom I do?";
+              break;
+              case "https://www.datavillage.me/ontologies/LConsent#PersonalDataCharacteristic":
+                forPersonalCategoryName="How whom I do?";
+              break;
+              default:
+                forPersonalCategoryName="What I do?";
+              break;
+            }
+            forPersonalCategoryName+=" - "+category["gl:name"];
+            forPersonalCategories+="{\"name\":\""+forPersonalCategoryName+"\"},";
+          }
+        }
+        forPersonalCategories=forPersonalCategories.substr(0,forPersonalCategories.length-1);
+        forPersonalCategories+="]";
+      }
+    }
+    dataSources+=forPersonalCategories+"}";
+    //check categories of personal data available in the data source
     if(i!=consentReceipt.sources.length-1)
       dataSources+=",";
   }
@@ -272,7 +316,6 @@ function renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt
     consentReceipt:{id:consentReceiptSelected,name:consentReceipt.main["gl:name"],description:consentReceipt.main["gl:description"],purpose:consentReceipt.main["gl:forPurpose"]["gl:description"]},
     dataSources:JSON.parse(dataSources),
     consents:JSON.parse(consents),
-    dataCategoriesList:dataCategoriesList,
     actionActivateConsent:rootDomainPassportApp+'/oauth/authorize?client_id='+req.session.clientId+'&redirect_uri='+callback+'&response_type=code&scope='+consentReceiptUri+'&state=empty',
     actionRevokeConsent:rootDomainPassportApp+'/oauth/deauthorize',
     callback:callback,
