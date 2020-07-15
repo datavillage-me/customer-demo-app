@@ -61,7 +61,21 @@
                                                 <option value="https://w3id.org/GConsent#DataStructuring">DataStructuring</option>
                                             </select>
                                          </div>
-                                        <span class="badge badge-default">Array</span> <small>Set of processing (actions or activities) performed on personal data</small>
+                                        <span class="badge badge-default">String</span> <small>Type of processing (actions or activities) performed on personal data</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="consentReceiptRequiredValidStatus">Required valid status</label>
+                                            <div>
+                                            <select id="consentReceiptRequiredValidStatus" name="consentReceiptRequiredValidStatus"  class="form-control" data-live-search="true">
+                                                <option value="https://w3id.org/GConsent#ConsentStatusExplicitlyGiven" selected="true">Explicit (Default)</option>
+                                                <option value="https://w3id.org/GConsent#ConsentStatusImplicitlyGiven">Implicit (Not supported yet)</option>
+                                            </select>
+                                         </div>
+                                        <span class="badge badge-default">String</span> <small>Type of required status to make valid consent</small>
                                     </div>
                                 </div>
                             </div>
