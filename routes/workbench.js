@@ -125,6 +125,23 @@ router.post('/auth/workbench/import', function (req, res, next) {
   });
 });
 
+/*graphql data annonymous by purpose*/
+router.post('/workbench/graphql', function (req, res, next) {
+  var options = {
+    'method': 'Post',
+    'url': 'https://'+config.getApiDomain()+'/cages/graphql',
+    'headers': {
+      'Content-Type': 'application/json',
+      'Authorization': req.headers.authorization
+    },
+    body:JSON.stringify(req.body)
+    };
+    request(options, function (error, response) {
+      res.writeHead(response.statusCode, {"Content-Type": "application/json"});
+      res.end(JSON.stringify(response));
+    });
+});
+
 /*query data*/
 router.get('/auth/workbench/query', function (req, res, next) {
   var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;

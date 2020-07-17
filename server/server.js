@@ -155,7 +155,7 @@ function ensureAuthenticated(req, res, next) {
 app.use(userInViews());
 
 app.all('*', function(req,res,next){
-  if (req.path === '/' || req.path === '/home' || req.path === '/login' || req.path === '/callback' || req.path === '/error')
+  if (req.path === '/' || req.path === '/home' || req.path === '/login' || req.path === '/callback' || req.path === '/error' || req.path === '/workbench/graphql')
     next();
   else
     ensureAuthenticated(req,res,next);  
