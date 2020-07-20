@@ -44,7 +44,16 @@ function routePrivacyCenterWidget(req,res,consentReceiptSelected){
 /* GET dashboard home */
 router.get('/auth/workbench', function (req, res, next) {
   Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-    renderWorkbench(req,res,consentReceiptsList);
+    if(req.session.workbenchConsentReceiptSelected!=null){
+      Authentication.getApplicationUser(req,req.session.workbenchConsentReceiptSelected,function (applicationUser){
+        if(applicationUser!=null)
+          renderWorkbench(req,res,consentReceiptsList,null,applicationUser[req.session.workbenchConsentReceiptSelected].access_token);
+        else
+          renderWorkbench(req,res,consentReceiptsList,null);
+      });
+    }
+    else
+      renderWorkbench(req,res,consentReceiptsList);
   });
 });
 
@@ -380,7 +389,7 @@ function renderPrivacyCenterGraph(req,res,consentReceipt){
  */
 function renderDataExplorationWidget(req,res,consentReceiptSelected,userJwtToken,error){
   res.render('data-exploration-widget', {
-    layout: 'master',
+    layout: 'singlePage',
     workbench:'active',
     consentReceipt:{id:consentReceiptSelected},
     userJwtToken:userJwtToken

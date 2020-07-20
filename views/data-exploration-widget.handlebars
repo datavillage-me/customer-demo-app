@@ -5,12 +5,52 @@
 </div>
 <hr/>
 <div class="container">
+    <h3>Apply <b>enrichment modules</b> to unlock value of data.</h3> 
+   
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6" class="row justify-content-center">
+            <div class="card text-left" style="width: 100%;">
+                <div class="card-body">
+                    <div>
+                        <center>
+                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Discover and query actions based on date and time">
+                            <h6><i class="material-icons" style="font-size:28px">access_time</i> Temporal module (activated by default)</h6>
+                        </button>
+                        <span type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Discover correlations between actions based on duration">
+                            <h6><i class="material-icons" style="font-size:28px">update</i> Duration module (business version only)</h6>
+                        </span>
+                        <span type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Discover and query actions based on locations, cities, countries and more">
+                            <h6><i class="material-icons" style="font-size:28px">explore</i> Spatial module (business version only)</h6>
+                        </span>
+                        <span type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Discover actions attributes based on places types and categories">
+                            <h6><i class="material-icons" style="font-size:28px">location_on</i> Places module (business version only)</h6>
+                        </span>
+                        <span type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Discover and analyse behaviors based on health thresold">
+                            <h6><i class="material-icons" style="font-size:28px">favorite</i> Health module (business version only)</h6>
+                        </span>
+                        <br/><br/>
+                        <h6>And a lot more to come (Social module, Product module, Music module, ...)</h6>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6" class="row justify-content-center">
+            <div class="card text-left" style="width: 100%;heigh:100%">
+                <div class="card-body">
+                    <div id="graph" style="height:444px">Loading data ...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h3><b>Create questions </b>through Graph QL editor, query data and get answsers (see doc <a href="https://documenter.getpostman.com/view/7257320/SzYT52Me?version=latest#0d7d776b-4655-499e-99a1-5423c178dc4f" target="_blank">here</a>).</h3>     
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
             <div class="card text-left" style="width: 100%;">
                 <div class="card-body">
                 <div>
-                <h4><i>Simple Graph QL editor to query your data</i></h4> </br>
                 </div>
                 <div id="graphiql" style="height: 50vh;"></div>
                 </div>
@@ -42,20 +82,6 @@
     document.getElementById('graphiql'),
   );
 </script>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12" class="row justify-content-center">
-            <div class="card text-left" style="width: 100%;">
-                <div class="card-body">
-                    <div>
-                    <h4><i>Here is an extract of what you are playing with </i><i class="material-icons">favorite</i><i class="material-icons">favorite</i><i class="material-icons">favorite</i> </h4> </br>
-                    </div>
-                    <div id="graph" style="height:800px">Loading data ...</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <script>
     function init() {
                 var neo4jd3 = new Neo4jd3('#graph', {
