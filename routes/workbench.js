@@ -107,7 +107,6 @@ router.post('/auth/workbench/import', function (req, res, next) {
   var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
   var importStartDate=req.body.importStartDate;
   var importEndDate=req.body.importEndDate;
-
   Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
   if(applicationUser){
     var options = {
