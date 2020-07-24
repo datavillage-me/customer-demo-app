@@ -135,19 +135,26 @@ router.post('/auth/workbench/import', function (req, res, next) {
 
 /*graphql data annonymous by purpose*/
 router.post('/workbench/graphql', function (req, res, next) {
-  var options = {
-    'method': 'Post',
-    'url': 'https://'+config.getApiDomain()+'/cages/graphql',
-    'headers': {
-      'Content-Type': 'application/json',
-      'Authorization': req.headers.authorization
-    },
-    body:JSON.stringify(req.body)
-    };
-    request(options, function (error, response) {
-      res.writeHead(response.statusCode, {"Content-Type": "application/json"});
-      res.end(JSON.stringify(response));
-    });
+  //filter introspection query (not execute this query which is executed 2 times strangly when graphiql start)
+  if(req.body!=null && JSON.stringify(req.body).indexOf("IntrospectionQuery {")==-1){
+    var options = {
+      'method': 'Post',
+      'url': 'https://'+config.getApiDomain()+'/cages/graphql',
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': req.headers.authorization
+      },
+      body:JSON.stringify(req.body)
+      };
+      request(options, function (error, response) {
+        res.writeHead(response.statusCode, {"Content-Type": "application/json"});
+        res.end(JSON.stringify(response));
+      });
+    }
+    else {
+      res.writeHead("200", {"Content-Type": "application/json"});
+      res.end("{}");
+    } 
 });
 
 /*query data*/
