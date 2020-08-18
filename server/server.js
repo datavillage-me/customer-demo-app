@@ -16,6 +16,7 @@ import config from '../config/index';
 import User from '../server/lib/utils/user';
 import userInViews from './lib/middleware/userInViews';
 import dateFormat from 'dateformat';
+import OAuthDatabase from '../server/lib/utils/db';
 
 //routes
 import authRouter from '../routes/auth';
@@ -130,6 +131,11 @@ app.set('views', path.join(__dirname, '../views'));
 app.use(Logger.getRequestLogger());
 
 app.use(flash());
+
+/***********************************
+ * db instanciation for oAuth
+ ************************************/
+OAuthDatabase.initialize();
 
 /***********************************
  * auth message failure

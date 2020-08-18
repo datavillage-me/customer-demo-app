@@ -8,7 +8,7 @@
  ************************************/
 import request from 'request';
 import config from '../../../config/index';
-var ManagementClient = require('auth0').ManagementClient;
+import OAuthDatabase from './db';
 
 /***********************************
  * Private constants.
@@ -23,79 +23,115 @@ var ManagementClient = require('auth0').ManagementClient;
  ************************************/
 
 function _getClient(clientId,clientSecret,done){
-    var management = new ManagementClient({
-        domain: config.auth0Domain,
-        clientId: config.auth0ManagementClientID,
-        clientSecret: config.auth0ManagementClientSecret,
-        scope: 'read:clients read:client_keys'
-        });
-        management.getClient(
-          {
-            client_id: clientId
-          }, function (err, client) {
-            if(client!=null){
-                
-                if(clientSecret==null || (clientSecret!=null && clientSecret==client.client_secret)){
-                    var returnBody={
-                        id: client.client_id,
-                        secret: client.client_secret,
-                        name:client.name,
-                        description:client.description,
-                        callbacks: client.callbacks,
-                        metaData:client.client_metadata,
-                        grants: "authorization_code"
-                    };
-                  return done(returnBody);
-                }
-                else{
-                    console.log("Client secret not valid");
-                    return done (null);
-                }
-            }
-            else
-                return done (null);
-      });
-  }
-
-  function _updateClientMetadata(clientId,key,value,done){
-    var management = new ManagementClient({
-        domain: config.auth0Domain,
-        clientId: config.auth0ManagementClientID,
-        clientSecret: config.auth0ManagementClientSecret,
-        scope: 'update:clients'
-        });
-        var param="{\""+key+"\":\""+value+"\"}";
-        management.updateClient(
-        { client_id: clientId},
-        {"client_metadata":JSON.parse(param)}, function (err, client) {
-            if(err){
-                console.log(err);
-                done(null);
-            }               
-            else{
-                done(client);
-            }   
+    var url='https://'+config.getApiDomain()+'/clients/'+clientId;
+    if(clientSecret!=null)
+        url='https://'+config.getApiDomain()+'/clients/'+clientId+"?client_secret="+clientSecret;
+    //get application access token
+    var options = {
+        'method': 'GET',
+        'url': url,
+        'headers': {
+            'Content-Type': 'application/json'
+        }
+    };
+    request(options, function (error, response) { 
+        if (error) { 
+            console.log(error); 
+            return done(null);
+        }
+        if(response !=null){
+            
+            var client=JSON.parse(response.body);
+            var arrayId=client["@id"].split("/");
+            var clientId=arrayId[arrayId.length-1];
+            var refreshTokens=OAuthDatabase.getClientRefreshTokens(clientId);
+            var returnBody={
+                id: clientId,
+                secret: client["dt:secret"],
+                name:client["dt:appName"],
+                description:client["dt:appUrl"],
+                callbacks: client["dt:allowedCallBack"],
+                metaData:refreshTokens,
+                grants: "authorization_code"
+            };
+            return done(returnBody);               
+        }
+        else{
+            console.log("Client does not exist");
+            return done (null);
+        }
     });
 }
 
-function _deleteClient(clientId,done){
-    var management = new ManagementClient({
-        domain: config.auth0Domain,
-        clientId: config.auth0ManagementClientID,
-        clientSecret: config.auth0ManagementClientSecret,
-        scope: 'delete:clients'
-        });
-        management.deleteClient(
-          {
-            client_id: clientId
-          }, function (err, client) {
-            if(err){
-                console.log("Client not deleted");
-                return done (null);
-            }
-            else
-                return done("Client sucessfully deleted");
-      });
+function _createClient(appName,appUrl,allowedCallback,done){
+    var url='https://'+config.getApiDomain()+'/clients/';
+    //get application access token
+    var options = {
+        'method': 'POST',
+        'url': url,
+        'headers': {
+            'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded'],
+        }
+    };
+    request(options, function (error, response) { 
+        if (error) { 
+            console.log(error); 
+            return done(null);
+        }
+        if(response !=null && response.statusCode==201){
+            
+            var client=JSON.parse(response.body);
+            var arrayId=client["@id"].split("/");
+            var clientId=arrayId[arrayId.length-1];
+            var returnBody={
+                id: clientId,
+                secret: client["dt:secret"],
+                name:client["dt:appName"],
+                description:client["dt:appUrl"],
+                callbacks: client["dt:allowedCallBack"],
+                metaData:null,
+                grants: "authorization_code"
+            };
+            return done(returnBody);               
+        }
+        else{
+            console.log("Client creation error");
+            return done (null,"Client creation error");
+        }
+    });
+}
+
+function _updateClientMetadata(clientId,key,value,done){
+        OAuthDatabase.storeClientRefreshToken(clientId,key,value);
+        var refreshTokens=OAuthDatabase.getClientRefreshTokens(clientId);
+        done(refreshTokens);
+}
+
+function _deleteClient(clientId,clientSecret,done){
+    var url='https://'+config.getApiDomain()+'/clients/'+clientId;
+    if(clientSecret!=null)
+        url='https://'+config.getApiDomain()+'/clients/'+clientId+"?client_secret="+clientSecret;
+    //get application access token
+    var options = {
+        'method': 'DELETE',
+        'url': url,
+        'headers': {
+            'Content-Type': 'application/json'
+        }
+    };
+    request(options, function (error, response) { 
+        if (error) { 
+            console.log("Client not deleted");
+            return done (null);
+        }
+        if(response.statusCode ==200){
+            return done("Client sucessfully deleted");  
+        }
+        else{
+            console.log(response.body);
+            return done (response.body);
+        }
+    });
   }
 
   function _getApplicationToken(clientId,clientSecret,done){
@@ -152,8 +188,8 @@ function _deleteClient(clientId,done){
             try{
                 var responseJson=JSON.parse(response.body);
                 var arrayId=responseJson.scope.split("/");//get scope id (=consentReceiptId)
-                _updateClientMetadata(clientId,arrayId[arrayId.length-1],responseJson.refresh_token,function(client){
-                    if(client==null)
+                _updateClientMetadata(clientId,arrayId[arrayId.length-1],responseJson.refresh_token,function(refreshTokens){
+                    if(refreshTokens==null)
                         console.log("error updating refresh token");
                     //return access token
                     return done(responseJson);
@@ -197,12 +233,12 @@ function _deleteClient(clientId,done){
             try{
                 var responseJson=JSON.parse(response.body);
                 var arrayId=responseJson.scope.split("/");//get scope id (=consentReceiptId)
-                _updateClientMetadata(clientId,arrayId[arrayId.length-1],responseJson.refresh_token,function(client){
-                    if(client==null){
+                _updateClientMetadata(clientId,arrayId[arrayId.length-1],responseJson.refresh_token,function(refreshTokens){
+                    if(refreshTokens==null){
                         console.log("error updating refresh token");
                         return done(null);
                     }
-                    req.session.clientMetadata=client.metaData; //update client metadada in session
+                    req.session.clientMetadata=refreshTokens; //update client metadada in session
                     //return access token
                     return done(responseJson);
                 });
@@ -312,8 +348,11 @@ var self=module.exports={
     getClient: function(clientId,clientSecret,done){
         _getClient(clientId,clientSecret,done);
     },
-    deleteClient: function(clientId,done){
-        _deleteClient(clientId,done);
+    createClient: function(appName,appUrl,allowedCallback,done){
+        _createClient(appName,appUrl,allowedCallback,done);
+    },
+    deleteClient: function(clientId,clientSecret,done){
+        _deleteClient(clientId,clientSecret,done);
     },
     getDatavillageApplicationToken: function(done){
         _getApplicationToken(config.auth0ManagementClientID,config.auth0ManagementClientSecret,done);

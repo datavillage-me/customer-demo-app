@@ -83,3 +83,6 @@ typings/
 
 # sql file
 .sql
+
+# db file
+.db

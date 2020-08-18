@@ -71,52 +71,21 @@ router.post('/auth/applications/create', function (req, res, next) {
   var appName=req.body.appName;
   var appUrl=req.body.appUrl;
   var allowedCallbakUrl=req.body.allowedCallbakUrl;
-
-  var management = new ManagementClient({
-      domain: config.auth0Domain,
-      clientId: config.auth0ManagementClientID,
-      clientSecret: config.auth0ManagementClientSecret,
-      scope: 'create:clients create:client_grants'
-      });
-      management.createClient(
-        {
-          name: appName,
-          description: appUrl,
-          logo_uri: "",
-          callbacks: [
-            allowedCallbakUrl
-          ],
-          grant_types: [
-            "client_credentials"
-          ],
-          app_type: "non_interactive",
-        }, function (err, client) {
-          if(err)
-            renderApplicationsForm(req,res,err);
-          else{
-            //update grant to enable accesstoken creation by created application
-            var clientId=client.client_id;
-            management.createClientGrant(
-              {
-                client_id: clientId,
-                audience: "https://datavillage.eu.auth0.com/api/v2/",
-                scope: ["read:clients"]
-              }, function (err, grant) {
-                if(err)
-                  renderApplicationsForm(req,res,err);
-                else{
-                  User.setApplicationId(req.user,clientId,function (profile){
-                    Authentication.getClient(User.getApplicationId(req.user),null,function(client){
-                      initClientSession(req,client,function(){
-                        renderApplications(req,res,client);
-                      });                      
-                    });
-                  });  
-                }
-                  
-          });
-          }  
-    });
+  Authentication.createClient(appName,appUrl,allowedCallback, function (client,err){  
+    if(client==null)
+      renderApplicationsForm(req,res,err);
+    else{
+      //update grant to enable accesstoken creation by created application
+      var clientId=client.client_id;
+      User.setApplicationId(req.user,clientId,function (profile){
+        Authentication.getClient(User.getApplicationId(req.user),null,function(client){
+          initClientSession(req,client,function(){
+            renderApplications(req,res,client);
+          });                      
+        });
+      });  
+    }  
+  });
 });
 
 
@@ -127,7 +96,7 @@ router.post('/auth/applications/delete', function (req, res, next) {
       //delete consent receipts
       Consent.deleteAllConsentReceipts(req.session.applicationAccessToken,function(response){
           //delete client
-          Authentication.deleteClient(req.session.clientId,function(response){
+          Authentication.deleteClient(req.session.clientId,req.session.clientSecret,function(response){
             initClientSession(req,null,function(){
               renderApplications(req,res);
             });
