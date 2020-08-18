@@ -49,7 +49,8 @@ var _db
                 var refreshToken=row[i].refreshToken;
                 refreshTokens+="\""+consentReceiptId+"\":\""+refreshToken+"\",";
             }
-            refreshTokens=refreshTokens.substr(0,refreshTokens.length-1)+"}";
+            if(row.length>0)
+                refreshTokens=refreshTokens.substr(0,refreshTokens.length-1)+"}";
             done(JSON.parse(refreshTokens));
         }
       });
