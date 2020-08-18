@@ -39,7 +39,7 @@ function _getClient(clientId,clientSecret,done){
             console.log(error); 
             return done(null);
         }
-        if(response !=null){
+        if(response !=null && response.statusCode==200){
             
             var client=JSON.parse(response.body);
             var arrayId=client["@id"].split("/");
