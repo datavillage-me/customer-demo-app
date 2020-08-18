@@ -32,25 +32,26 @@ var _db
           return console.log(err.message);
         }
         // get the last insert id
-        return console.log('A row has been inserted with '+id);
+        return console.log('A row has been inserted with '+clientId);
       });
   }
 
-  function _getClientRefreshTokens(clientId){
+  function _getClientRefreshTokens(clientId,done){
+     var refreshTokens="{";
      let sql = 'SELECT * FROM oAuth WHERE clientId  = ? ';
-    _db.get(sql, [clientId], (err, row) => {
+    _db.all(sql, [clientId], (err, row) => {
         if (err) {
           return console.error(err.message);
         }
-        var refreshTokens={};
         if(row!=null){
-            for (var i=0;i<row.length;i++){
+            for(var i=0;i<row.length;i++){
                 var consentReceiptId=row[i].consentReceiptId;
                 var refreshToken=row[i].refreshToken;
-                refreshTokens[consentReceiptId]=refreshToken;
+                refreshTokens+="\""+consentReceiptId+"\":\""+refreshToken+"\",";
             }
+            refreshTokens=refreshTokens.substr(0,refreshTokens.length-1)+"}";
+            done(JSON.parse(refreshTokens));
         }
-        return refreshTokens;
       });
  }
 
@@ -72,8 +73,8 @@ var self=module.exports={
     storeClientRefreshToken:function(clientId,consentReceiptId,refreshToken){
         return _storeClientRefreshToken(clientId,consentReceiptId,refreshToken);
     },
-    getClientRefreshTokens:function(clientId){
-        _getClientRefreshTokens(clientId);
+    getClientRefreshTokens:function(clientId,done){
+        _getClientRefreshTokens(clientId,done);
     },
     deleteClientRefreshToken:function(clientId,consentReceiptId){
         _deleteClientRefreshToken(clientId,consentReceiptId);

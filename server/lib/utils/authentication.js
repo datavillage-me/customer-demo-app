@@ -44,17 +44,18 @@ function _getClient(clientId,clientSecret,done){
             var client=JSON.parse(response.body);
             var arrayId=client["@id"].split("/");
             var clientId=arrayId[arrayId.length-1];
-            var refreshTokens=OAuthDatabase.getClientRefreshTokens(clientId);
-            var returnBody={
-                id: clientId,
-                secret: client["dt:secret"],
-                name:client["dt:appName"],
-                description:client["dt:appUrl"],
-                callbacks: client["dt:allowedCallBack"],
-                metaData:refreshTokens,
-                grants: "authorization_code"
-            };
-            return done(returnBody);               
+            OAuthDatabase.getClientRefreshTokens(clientId,function (refreshTokens){
+                var returnBody={
+                    id: clientId,
+                    secret: client["dt:secret"],
+                    name:client["dt:appName"],
+                    description:client["dt:appUrl"],
+                    callbacks: client["dt:allowedCallBack"],
+                    metaData:refreshTokens,
+                    grants: "authorization_code"
+                };
+                return done(returnBody);       
+            });        
         }
         else{
             console.log("Client does not exist");
@@ -109,8 +110,9 @@ function _createClient(appName,appUrl,allowedCallback,done){
 
 function _updateClientMetadata(clientId,key,value,done){
         OAuthDatabase.storeClientRefreshToken(clientId,key,value);
-        var refreshTokens=OAuthDatabase.getClientRefreshTokens(clientId);
-        done(refreshTokens);
+        OAuthDatabase.getClientRefreshTokens(clientId,function (refreshTokens){
+            return done(refreshTokens);
+        });
 }
 
 function _deleteClient(clientId,clientSecret,done){
