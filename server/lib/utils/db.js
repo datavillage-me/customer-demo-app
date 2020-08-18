@@ -50,7 +50,8 @@ var _db
                 refreshTokens+="\""+consentReceiptId+"\":\""+refreshToken+"\",";
             }
             if(row.length>0)
-                refreshTokens=refreshTokens.substr(0,refreshTokens.length-1)+"}";
+                refreshTokens=refreshTokens.substr(0,refreshTokens.length-1);
+            refreshTokens+="}";
             done(JSON.parse(refreshTokens));
         }
       });
