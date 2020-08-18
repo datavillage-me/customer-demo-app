@@ -9,7 +9,7 @@
     "test-coverage": "NODE_ENV=test istanbul cover _mocha -- -R spec"
   },
   "dependencies": {
-    "auth0": "^2.14.0",
+    "auth0": "^2.27.1",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "body-parser": "^1.15.1",
