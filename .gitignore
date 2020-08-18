@@ -85,4 +85,4 @@ typings/
 .sql
 
 # db file
-.db
+*.db

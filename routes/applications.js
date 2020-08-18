@@ -76,7 +76,7 @@ router.post('/auth/applications/create', function (req, res, next) {
       renderApplicationsForm(req,res,err);
     else{
       //update grant to enable accesstoken creation by created application
-      var clientId=client.client_id;
+      var clientId=client.id;
       User.setApplicationId(req.user,clientId,function (profile){
         Authentication.getClient(User.getApplicationId(req.user),null,function(client){
           initClientSession(req,client,function(){

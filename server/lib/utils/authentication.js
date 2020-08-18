@@ -71,7 +71,13 @@ function _createClient(appName,appUrl,allowedCallback,done){
         'url': url,
         'headers': {
             'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded'],
+        },
+        form: {
+          'appName': appName,
+          'appUrl': appUrl,
+          'allowedCallback': allowedCallback
         }
+        
     };
     request(options, function (error, response) { 
         if (error) { 
@@ -127,7 +133,7 @@ function _deleteClient(clientId,clientSecret,done){
         if(response.statusCode ==200){
             return done("Client sucessfully deleted");  
         }
-        else{
+        else{ 
             console.log(response.body);
             return done (response.body);
         }
