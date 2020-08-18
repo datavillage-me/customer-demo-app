@@ -71,7 +71,7 @@ router.post('/auth/applications/create', function (req, res, next) {
   var appName=req.body.appName;
   var appUrl=req.body.appUrl;
   var allowedCallbakUrl=req.body.allowedCallbakUrl;
-  Authentication.createClient(appName,appUrl,allowedCallback, function (client,err){  
+  Authentication.createClient(appName,appUrl,allowedCallbakUrl, function (client,err){  
     if(client==null)
       renderApplicationsForm(req,res,err);
     else{
