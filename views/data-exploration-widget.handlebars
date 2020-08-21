@@ -66,13 +66,50 @@
     const graphQLFetcher = graphQLParams =>
         fetch('/workbench/graphql', {
           method: 'post',
-          headers: { 'Content-Type': 'application/json' ,'Authorization':'Bearer {{userJwtToken}}'},
+          headers: { 'Content-Type': 'application/json' ,'Authorization':'Bearer {{{userJwtToken}}}'},
           body: JSON.stringify(graphQLParams),
         })
           .then(response => response.json())
           .catch(() => response.text());
 
-  var defaultQuery="{Person{uri id actions{uri type dataProvider description distance startTime{year month day hour minute second formatted} movingTime elapseTime distance instruments{uri type}}}}";
+  var defaultQuery=`{
+    Person
+    {
+        uri 
+        actions
+        {
+            uri
+            type
+            description
+            distance
+            startTime
+            {
+                year
+                month
+                day
+                hour
+                minute
+                second
+                formatted
+            }
+            endTime
+            {
+                year
+                month
+                day
+                hour
+                minute
+                second
+                formatted
+            }
+            physicalActivities
+            {
+                uri
+                category
+            }
+        }
+    }
+}`;
   ReactDOM.render(
     React.createElement(GraphiQL, {
       fetcher: graphQLFetcher,
@@ -87,15 +124,15 @@
                 var neo4jd3 = new Neo4jd3('#graph', {
                     highlight: [
                         {
-                            class: 'ns0__Person.name',
+                            class: 'Person.uri',
                             property: 'userId',
                             value: 'person'
                         }
                     ],
                     icons: {
-                        'ns0__Person': 'user',
-                        'ns0__Action': 'map-marker',
-                        'ns0__Vehicle': 'gear'
+                        'Person': 'user',
+                        'Action': 'gear',
+                        'PhysicalActivity': 'arrow-circle-o-up'
                     },
                     images: {
                     },
@@ -105,7 +142,7 @@
                         '#2196f3',
                     ],
                     minCollision: 20,
-                    neo4jDataUrl: '/auth/workbench/load',
+                    neo4jDataUrl: '/auth/workbench/graphOverview',
                     nodeRadius: 12,
                     zoomFit: true
                 });

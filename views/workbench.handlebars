@@ -57,29 +57,49 @@
                                     </p>
                                 </div>
                                 <div class="tab-pane {{dataTab}}" id="data">
-                                    <img  style="width:10%;" src="/img/icons/atom.png" rel="nofollow" alt="Card image cap">
-                                    <h2 >Explore data</h2>
-                                    <p class="card-text">
-                                        <h4>Easily extract value and explore data through graphQL API's and enrichment modules.<br/><br/></h4>
-                                        {{#if session.applicationUser}}
-                                        <form method="POST" action="/auth/workbench/import" target="_blank">
-                                            <div class="request-parameters">
-                                                <div class="form-group">
-                                                    <label class="label-control">Date range</label>
-                                                    <input type="text" class="form-control" name="importRange" id="importRange" value="01/01/2018 - 01/15/2018" />
-                                                    <input type="hidden" name="importStartDate" id="importStartDate" value="" />
-                                                    <input type="hidden" name="importEndDate" id="importEndDate" value="" />
-                                                </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary"><i class="material-icons" style="font-size:28px">import_export</i>&nbsp;&nbsp;&nbsp;Import data</button>
-                                            <a href="/auth/workbench/query" target="_blank" class="btn btn-primary"><i class="material-icons" style="font-size:28px">bubble_chart</i>&nbsp;&nbsp;&nbsp;Explore data</a>
-                                        </form>
-                                        {{else}}
-                                        <h4>First, select consent receipt and get user's consent !</h4>
-                                        <span class="btn btn-secondary" style><i class="material-icons" style="font-size:28px">import_export</i>&nbsp;&nbsp;&nbsp;Import data</span>
-                                        <span class="btn btn-secondary" style><i class="material-icons" style="font-size:28px">bubble_chart</i>&nbsp;&nbsp;&nbsp;Explore data</span>
-                                        {{/if}}
-                                    </p>
+                                    <div class="card text-center" style="width: 100%;">
+                                        <div class="card-body">
+                                            <img  style="width:10%;" src="/img/icons/import.png" rel="nofollow" alt="Card image cap">
+                                            <h2>Import data</h2>
+                                            <p class="card-text">
+                                                <h4>First, import the data related to the selected consent receipt. Do it once, the data will remain stored in the user's personal data store.<br/><br/></h4>
+                                                {{#if session.applicationUser}}
+                                                <form method="POST" action="/auth/workbench/import">
+                                                    <div class="request-parameters">
+                                                        <div class="form-group">
+                                                            <label class="label-control">Date range</label>
+                                                            <input type="text" class="form-control" name="importRange" id="importRange" value="01/01/2018 - 01/15/2018" />
+                                                            <input type="hidden" name="importStartDate" id="importStartDate" value="" />
+                                                            <input type="hidden" name="importEndDate" id="importEndDate" value="" />
+                                                        </div>
+                                                    </div>
+                                                    {{#if dataImported}}
+                                                    <h4>Data imported into user's personal data store !</h4>
+                                                    {{/if}}
+                                                    <button type="submit" class="btn btn-primary"><i class="material-icons" style="font-size:28px">import_export</i>&nbsp;&nbsp;&nbsp;Import data</button>
+                                                </form>
+                                                {{else}}
+                                                <h4>First, select consent receipt and get user's consent !</h4>
+                                                <span class="btn btn-secondary" style><i class="material-icons" style="font-size:28px">import_export</i>&nbsp;&nbsp;&nbsp;Import data</span>
+                                                {{/if}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="card text-center" style="width: 100%;">
+                                        <div class="card-body">
+                                            <img  style="width:10%;" src="/img/icons/atom.png" rel="nofollow" alt="Card image cap">
+                                            <h2 >Explore data</h2>
+                                            <p class="card-text">
+                                                <h4>Second, enrich data with available modules, extract value and insights through graphQL API's.<br/><br/></h4>
+                                                {{#if session.applicationUser}}
+                                                    <a href="/auth/workbench/load" target="_blank" class="btn btn-primary"><i class="material-icons" style="font-size:28px">bubble_chart</i>&nbsp;&nbsp;&nbsp;Load &amp; explore data</a>
+                                                {{else}}
+                                                <h4>First, select consent receipt and get user's consent !</h4>
+                                                <span class="btn btn-secondary" style><i class="material-icons" style="font-size:28px">bubble_chart</i>&nbsp;&nbsp;&nbsp;Load &amp; explore data</span>
+                                                {{/if}}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="tab-pane {{algorithmTab}}" id="algorithm">
                                     <img  style="width:10%;" src="/img/icons/workbench.png" rel="nofollow" alt="Card image cap">

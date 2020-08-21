@@ -120,8 +120,16 @@ router.post('/auth/workbench/import', function (req, res, next) {
       request(options, function (error, response) { 
         Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
         if(response !=null && response.statusCode=="200"){
-            //redirect to another url to avoid refresh page reimport
-            res.redirect("/auth/workbench/query");
+          if(req.session.workbenchConsentReceiptSelected!=null){
+            Authentication.getApplicationUser(req,req.session.workbenchConsentReceiptSelected,function (applicationUser){
+              if(applicationUser!=null)
+                renderWorkbench(req,res,consentReceiptsList,"dataTab",applicationUser[req.session.workbenchConsentReceiptSelected].access_token,true);
+              else
+                renderError(req,res,"Problem user not existing");
+            });
+          }
+          else
+          renderError(req,res,"Problem no consent receipt selected");
         }
         else
           renderError(req,res,response.body);
@@ -158,19 +166,34 @@ router.post('/workbench/graphql', function (req, res, next) {
 });
 
 /*query data*/
-router.get('/auth/workbench/query', function (req, res, next) {
+router.get('/auth/workbench/load', function (req, res, next) {
   var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
   Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
     if(applicationUser){
-      renderDataExplorationWidget(req,res,consentReceiptSelected,applicationUser[consentReceiptSelected].access_token);
+      var options = {
+        'method': 'Get',
+        'url': 'https://'+config.getApiDomain()+'/cages/'+consentReceiptSelected+'/loadData',
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+applicationUser[consentReceiptSelected].access_token
+        }
+        };
+        request(options, function (error, response) { 
+       
+          if(response !=null && response.statusCode=="200"){
+            renderDataExplorationWidget(req,res,consentReceiptSelected,applicationUser[consentReceiptSelected].access_token);
+          }
+          else
+            renderError(req,res,"Problem to load data into data cage");
+          });
     }
     else
-    renderError(req,res,"User not existing");
+      renderError(req,res,"User not existing");
   });
 });
 
 /*load data*/
-router.get('/auth/workbench/load', function (req, res, next) {
+router.get('/auth/workbench/graphOverview', function (req, res, next) {
   var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
   Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
     if(applicationUser){
@@ -207,7 +230,7 @@ router.get('/auth/workbench/load', function (req, res, next) {
  * @param {req} request
  * @param {res} response
  */
-function renderWorkbench(req,res,consentReceiptsList,tab,userAccessToken){
+function renderWorkbench(req,res,consentReceiptsList,tab,userAccessToken,dataImported){
   var hasConsentReceipts=false;
   if(consentReceiptsList!=null && consentReceiptsList.consentReceipts.length>0)
     hasConsentReceipts=true;
@@ -230,6 +253,7 @@ function renderWorkbench(req,res,consentReceiptsList,tab,userAccessToken){
     workbench:'active',
     consentTab:consentTab,
     dataTab:dataTab,
+    dataImported:dataImported,
     algorithmTab:algorithmTab,
     consentReceiptsList:consentReceiptsList,
     hasConsentReceipts:hasConsentReceipts,
