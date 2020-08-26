@@ -90,9 +90,7 @@ router.get('/auth/workbench/privacyCenter/createWidgetCallback', function (req, 
   var code=req.query.code;
   if(code!=null){
     //get token
-    console.log("1******"+code);
     Authentication.getUserTokensFromCode(req,req.session.clientId,req.session.clientSecret,code,function(response){
-      console.log("4******"+response);
       if(response!=null){
         //store access token in session
         var applicationUser=Authentication.setApplicationUser(req,response);
