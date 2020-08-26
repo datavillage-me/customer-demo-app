@@ -63,7 +63,7 @@ router.get('/auth/workbench/selectConsentReceipt', function (req, res, next) {
   Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
     //get default user if activated
     Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
-      if(applicationUser!=null)
+      if(applicationUser!=null && applicationUser[consentReceiptSelected]!=null)
         renderWorkbench(req,res,consentReceiptsList,null,applicationUser[consentReceiptSelected].access_token);
       else
         renderWorkbench(req,res,consentReceiptsList,null);
@@ -73,7 +73,14 @@ router.get('/auth/workbench/selectConsentReceipt', function (req, res, next) {
 
 /* POST generate privacy center widget */
 router.get('/auth/workbench/privacyCenter/createWidget', function (req, res, next) {
-  routePrivacyCenterWidget(req,res,req.session.workbenchConsentReceiptSelected);
+  var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
+ Consent.getConsentReceiptChain(req.session.applicationAccessToken,consentReceiptSelected,null,function(consentReceipt){
+    if(consentReceipt !=null){
+      renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt);
+    }
+    else
+      renderPrivacyCenterWidget(req,res,consentReceiptSelected);
+  });
 });
 
 /* GET generate privacy center widget */
@@ -83,18 +90,32 @@ router.get('/auth/workbench/privacyCenter/createWidgetCallback', function (req, 
   var code=req.query.code;
   if(code!=null){
     //get token
-    Authentication.getUserTokensFromCode(req.session.clientId,req.session.clientSecret,code,function(response){
+    console.log("1******"+code);
+    Authentication.getUserTokensFromCode(req,req.session.clientId,req.session.clientSecret,code,function(response){
+      console.log("4******"+response);
       if(response!=null){
         //store access token in session
         var applicationUser=Authentication.setApplicationUser(req,response);
-        routePrivacyCenterWidget(req,res,consentReceiptSelected);
+        
+        Consent.getConsentReceiptChain(req.session.applicationAccessToken,consentReceiptSelected,null,function(consentReceipt){
+          if(consentReceipt !=null){
+            //store in session for second call to show the graph
+            req.session.privacyCenterConsentReceipt=consentReceipt;
+              Consent.getConsentsChain(req.session.applicationAccessToken,consentReceiptSelected,applicationUser[consentReceiptSelected].user_id,req.session.clientId,function(consents){
+                renderPrivacyCenterWidget(req,res,consentReceiptSelected,consentReceipt,consents,true,applicationUser[consentReceiptSelected].user_id);
+              });
+          }
+          else
+            renderPrivacyCenterWidget(req,res,consentReceiptSelected);
+        });
+
       }
       else 
         renderError(req, res,"Error occur during authorization flow");
     });
   }
   else
-    routePrivacyCenterWidget(req,res,consentReceiptSelected);
+    renderError(req, res,"Error occur during authorization flow");
 });
 
 /* GET generate graph data sources for privacy center widget */
@@ -121,12 +142,7 @@ router.post('/auth/workbench/import', function (req, res, next) {
         Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
         if(response !=null && response.statusCode=="200"){
           if(req.session.workbenchConsentReceiptSelected!=null){
-            Authentication.getApplicationUser(req,req.session.workbenchConsentReceiptSelected,function (applicationUser){
-              if(applicationUser!=null)
-                renderWorkbench(req,res,consentReceiptsList,"dataTab",applicationUser[req.session.workbenchConsentReceiptSelected].access_token,true);
-              else
-                renderError(req,res,"Problem user not existing");
-            });
+            renderWorkbench(req,res,consentReceiptsList,"dataTab",applicationUser[req.session.workbenchConsentReceiptSelected].access_token,true);
           }
           else
           renderError(req,res,"Problem no consent receipt selected");

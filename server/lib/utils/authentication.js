@@ -168,7 +168,7 @@ function _deleteClient(clientId,clientSecret,done){
       });
   }
 
-  function _getUserTokensFromCode(clientId,clientSecret,code,done){
+  function _getUserTokensFromCode(req,clientId,clientSecret,code,done){
     //get application access token
     var options = {
       'method': 'POST',
@@ -197,9 +197,11 @@ function _deleteClient(clientId,clientSecret,done){
                 var responseJson=JSON.parse(response.body);
                 var arrayId=responseJson.scope.split("/");//get scope id (=consentReceiptId)
                 _updateClientMetadata(clientId,arrayId[arrayId.length-1],responseJson.refresh_token,function(refreshTokens){
-                    if(refreshTokens==null)
+                    if(refreshTokens==null){
                         console.log("error updating refresh token");
-                    //return access token
+                        return done(null);
+                    }
+                    req.session.clientMetadata=refreshTokens; //update client metadada in session
                     return done(responseJson);
                 });
             }
@@ -287,8 +289,10 @@ function _deleteClient(clientId,clientSecret,done){
             req.session.applicationUser=user;
             return req.session.applicationUser;
        }
-       else
-        return null;
+       else{
+            req.session.applicationUser=null;
+            return null;
+       }
   }
 
   function _getApplicationUser(req,consentReceiptId,done){
@@ -297,7 +301,7 @@ function _deleteClient(clientId,clientSecret,done){
     } 
     else{
         var user=req.session.applicationUser;
-        if(user!=null){
+        if(user!=null && user[consentReceiptId]!=null){
             return done(user);
         }
         else{
@@ -307,7 +311,12 @@ function _deleteClient(clientId,clientSecret,done){
                 var refreshToken=clientMetadata[consentReceiptId];
                 //get access token from refresh token for user
                 _getUserTokenFromRefreshToken(req,req.session.clientId,req.session.clientSecret,refreshToken,"https://api.datavillage.me/consentReceipts/"+consentReceiptId,function (response){
-                    return done(_setApplicationUser(req,response));
+                    if(response!=null)
+                        return done(_setApplicationUser(req,response));
+                    else {
+                        _setApplicationUser(req,null);
+                        return done(null);
+                    }
                 });
             }
             else{
@@ -368,8 +377,8 @@ var self=module.exports={
     getApplicationToken: function(clientId,clientSecret,done){
         _getApplicationToken(clientId,clientSecret,done);
     },
-    getUserTokensFromCode: function(clientId,clientSecret,code,done){
-        _getUserTokensFromCode(clientId,clientSecret,code,done);
+    getUserTokensFromCode: function(req,clientId,clientSecret,code,done){
+        _getUserTokensFromCode(req,clientId,clientSecret,code,done);
     },
     setApplicationUser: function(req,userTokens){
         return _setApplicationUser(req,userTokens);
