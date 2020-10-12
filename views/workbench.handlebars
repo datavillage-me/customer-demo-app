@@ -18,56 +18,54 @@
                 <div class="card-body">
                     <br/> 
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <ul class="nav nav-pills nav-pills-icons" role="tablist" flex-column>
                                 <li class="nav-item">
                                     <a class="nav-link {{consentTab}}" href="#consent" role="tab" data-toggle="tab">
                                         <i class="material-icons">verified_user</i>
-                                        Consent
+                                        Get Consent
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link {{dataTab}}" href="#data" role="tab" data-toggle="tab">
-                                        <i class="material-icons">bubble_chart</i>
-                                        Data
+                                        <i class="material-icons">import_export</i>
+                                        Import Data
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link {{algorithmTab}}" href="#algorithm" role="tab" data-toggle="tab">
                                         <i class="material-icons">blur_on</i>
-                                        Algorithm
+                                        Process Data
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-md-10">
+                        <div class="col-md-9">
                             <div class="tab-content">
                                 <div class="tab-pane {{consentTab}}" id="consent">
                                     <img  style="width:10%;" src="/img/icons/privacy-center.png" rel="nofollow" alt="Card image cap">
                                     <h2>Get user's consent</h2>
                                     <p class="card-text">
-                                        <h4>Give your users the ability to ackowledge consent in a user-friendly way.</h4>
+                                        <h4>Start the Data Passport wizard and get consent from your test user.</h4>
                                         <br/>
                                         {{#if session.workbenchConsentReceiptSelected}}
-                                        <a href="/auth/workbench/privacyCenter/createWidget" target="_blank" class="btn btn-primary ld-ext-right hovering" onmouseover="this.classList.add('running')"><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Generate privacy center</a>
+                                        <a href="{{actionActivateConsent}}" class="btn btn-primary ld-ext-right hovering" onmouseover="this.classList.add('running')"><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Get consent</a>
                                         {{else}}
                                         <h4>First, select consent receipt!</h4>
-                                        <span class="btn btn-secondary" style><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Generate privacy center</span>
+                                        <span class="btn btn-secondary" style><i class="material-icons" style="font-size:28px">verified_user</i>&nbsp;&nbsp;&nbsp;Get consent</span>
                                         {{/if}}
                                     </p>
                                 </div>
                                 <div class="tab-pane {{dataTab}}" id="data">
-                                    <div class="card text-center" style="width: 100%;">
-                                        <div class="card-body">
                                             <img  style="width:10%;" src="/img/icons/import.png" rel="nofollow" alt="Card image cap">
                                             <h2>Import data</h2>
                                             <p class="card-text">
-                                                <h4>First, import the data related to the selected consent receipt. Do it once, the data will remain stored in the user's personal data store.<br/><br/></h4>
+                                                <h4>Import the data related to the selected consent receipt. Do it once, the data will remain stored in the test user's personal data store.<br/><br/></h4>
                                                 {{#if session.applicationUser}}
                                                 <form method="POST" action="/auth/workbench/import">
                                                     <div class="request-parameters">
                                                         <div class="form-group">
-                                                            <label class="label-control">Date range</label>
+                                                            <label class="label-control">Date range (not always required)</label>
                                                             <input type="text" class="form-control" name="importRange" id="importRange" value="01/01/2018 - 01/15/2018" />
                                                             <input type="hidden" name="importStartDate" id="importStartDate" value="" />
                                                             <input type="hidden" name="importEndDate" id="importEndDate" value="" />
@@ -83,9 +81,7 @@
                                                 <span class="btn btn-secondary" style><i class="material-icons" style="font-size:28px">import_export</i>&nbsp;&nbsp;&nbsp;Import data</span>
                                                 {{/if}}
                                             </p>
-                                        </div>
-                                    </div>
-                                    <div class="card text-center" style="width: 100%;">
+                                    <!--<div class="card text-center" style="width: 100%;">
                                         <div class="card-body">
                                             <img  style="width:10%;" src="/img/icons/atom.png" rel="nofollow" alt="Card image cap">
                                             <h2 >Explore data</h2>
@@ -99,15 +95,15 @@
                                                 {{/if}}
                                             </p>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <div class="tab-pane {{algorithmTab}}" id="algorithm">
                                     <img  style="width:10%;" src="/img/icons/workbench.png" rel="nofollow" alt="Card image cap">
-                                    <h2 >Create algorithm</h2>
+                                    <h2 >Process data</h2>
                                     <p class="card-text">
-                                        <h4>Quickly build and test your algorithm through notebook in Google Colab.<br/><br/></h4>
+                                        <h4>Quickly build and test your algorithm within your Data Cage.<br/><br/></h4>
                                         {{#if session.applicationUser}}
-                                            <h5>Copy your <b>user access token</b> to initiate Colab working session:</h5> 
+                                            <h5>Copy your <b>user access token</b> to initiate Jupyter Notebook working session:</h5> 
                                             <div class="input-group">
                                             <input class="form-control" id="accessToken" readonly="true" type="password" value="{{applicationUserAccessToken}}">
                                             <div class="input-group-addon">
@@ -116,10 +112,15 @@
                                             </div>
                                             </div>
                                             <br/><br/>
-                                        <a href="https://colab.research.google.com/github/datavillage-me/data-workbench-notebook/blob/master/datavillage_tutorial.ipynb" target="_blank" class="btn btn-primary"><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Create notebook</a> with <img style="width:48px" src="/img/colab.png"/> <span style="color:#FEB60D">(Google Colab)</span>
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-lg-6"><a href="{{session.cageUrl}}:8888" target="_blank" class="btn btn-primary"><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Open notebook</a><br/>with <img width="48px" src="/img/logo/jupyter.png"/></div>
+                                                    <div class="col-lg-6"><a href="{{session.cageUrl}}:7474/browser" target="_blank" class="btn btn-primary"><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Open graph</a><br/>with <img width="98px" src="/img/logo/neo4j.png"/> </div>
+                                                </div>
+                                            </div>
                                         {{else}}
                                         <h4>First, select consent receipt and get user's consent !</h4>
-                                        <span class="btn btn-secondary" style><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Create notebook</span> with <img style="width:48px" src="/img/colab.png"/> <span style="color:#FEB60D">(Google Colab)</span>
+                                        <span class="btn btn-secondary" style><i class="material-icons" style="font-size:28px">blur_on</i>&nbsp;&nbsp;&nbsp;Process data</span> 
                                         {{/if}}
                                     </p>
                                 </div>

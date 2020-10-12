@@ -29,6 +29,7 @@ function initClientSession(req,client,done){
     req.session.callbacks=client.callbacks;
     req.session.companyUri=client.description;
     req.session.companyName=client.name;
+    req.session.cageUrl=client.cageUrl;
     Authentication.getApplicationToken(client.id,client.secret,function (accessToken){
       req.session.applicationAccessToken=accessToken;
       return done();

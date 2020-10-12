@@ -52,7 +52,8 @@ function _getClient(clientId,clientSecret,done){
                     description:client["dt:appUrl"],
                     callbacks: client["dt:allowedCallBack"],
                     metaData:refreshTokens,
-                    grants: "authorization_code"
+                    grants: "authorization_code",
+                    cageUrl: client["dt:cageUrl"],
                 };
                 return done(returnBody);       
             });        

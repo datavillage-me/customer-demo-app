@@ -83,6 +83,38 @@ router.get('/auth/workbench/privacyCenter/createWidget', function (req, res, nex
   });
 });
 
+/* GET call back after consent */
+router.get('/auth/workbench/callback', function (req, res, next) {
+  var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
+  //get authorization code
+  var code=req.query.code;
+  if(code!=null){
+    //get token
+    Authentication.getUserTokensFromCode(req,req.session.clientId,req.session.clientSecret,code,function(response){
+      if(response!=null){
+        //store access token in session
+        var applicationUser=Authentication.setApplicationUser(req,response);
+        
+        Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
+          if(applicationUser!=null && applicationUser[consentReceiptSelected]!=null)
+              renderWorkbench(req,res,consentReceiptsList,null,applicationUser[consentReceiptSelected].access_token);
+            else
+              renderWorkbench(req,res,consentReceiptsList,null);
+      });
+    }
+    else
+      renderError(req, res,"Error occur during authorization flow");
+    });
+  }
+  else
+      renderError(req, res,"Error occur during authorization flow");
+});
+
+/* GET generate graph data sources for privacy center widget */
+router.get('/auth/workbench/privacyCenter/graph', function (req, res, next) {
+  renderPrivacyCenterGraph(req,res,req.session.privacyCenterConsentReceipt);
+});
+
 /* GET generate privacy center widget */
 router.get('/auth/workbench/privacyCenter/createWidgetCallback', function (req, res, next) {
   var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
@@ -137,22 +169,32 @@ router.post('/auth/workbench/import', function (req, res, next) {
       }
       };
       request(options, function (error, response) { 
-        Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
-        if(response !=null && response.statusCode=="200"){
-          if(req.session.workbenchConsentReceiptSelected!=null){
-            renderWorkbench(req,res,consentReceiptsList,"dataTab",applicationUser[req.session.workbenchConsentReceiptSelected].access_token,true);
-          }
-          else
-          renderError(req,res,"Problem no consent receipt selected");
-        }
+        if(response !=null && response.statusCode=="200")
+          res.redirect("/auth/workbench/importData");
         else
           renderError(req,res,response.body);
-        });
       });
   }
   else
     renderError(req,res,"User not existing");
   });
+});
+
+router.get('/auth/workbench/importData', function (req, res, next) {
+  var consentReceiptSelected=req.session.workbenchConsentReceiptSelected;
+  Authentication.getApplicationUser(req,consentReceiptSelected,function (applicationUser){
+    if(applicationUser){
+      Consent.getConsentReceiptsList(req.session.applicationAccessToken,function (consentReceiptsList){
+          if(req.session.workbenchConsentReceiptSelected!=null){
+            renderWorkbench(req,res,consentReceiptsList,"dataTab",applicationUser[req.session.workbenchConsentReceiptSelected].access_token,true);
+          }
+          else
+            renderError(req,res,"Problem no consent receipt selected");
+        });
+    }
+    else
+      renderError(req,res,"Problem no consent receipt selected");
+  });     
 });
 
 /*graphql data annonymous by purpose*/
@@ -262,6 +304,10 @@ function renderWorkbench(req,res,consentReceiptsList,tab,userAccessToken,dataImp
       consentTab='active';
     break;
   }
+  var rootDomainDemoApp=config.rootDomainDemoApp;
+  var rootDomainPassportApp=config.rootDomainPassportApp;
+  var callback=rootDomainDemoApp+'/auth/workbench/callback';
+  var consentReceiptUri="https://api.datavillage.me/consentReceipts/"+req.session.workbenchConsentReceiptSelected;
   res.render('workbench', {
     layout: 'master',
     workbench:'active',
@@ -271,7 +317,8 @@ function renderWorkbench(req,res,consentReceiptsList,tab,userAccessToken,dataImp
     algorithmTab:algorithmTab,
     consentReceiptsList:consentReceiptsList,
     hasConsentReceipts:hasConsentReceipts,
-    applicationUserAccessToken:userAccessToken
+    applicationUserAccessToken:userAccessToken,
+    actionActivateConsent:rootDomainPassportApp+'/oauth/authorize?client_id='+req.session.clientId+'&redirect_uri='+callback+'&response_type=code&scope='+consentReceiptUri+'&state=empty'
   });
 }
 
