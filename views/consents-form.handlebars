@@ -99,11 +99,9 @@
                                             <div class="col">
                                                 <div>
                                                     <select id="consentReceiptDataCategories"  name="consentReceiptDataCategories" class="form-control selectpicker" multiple="multiple">
-                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataActivity">PersonalDataActivity - What?</option>
-                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataLocation">PersonalDataLocation - Where?</option>
-                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataTime">PersonalDataTime - When?</option>
-                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataPerson">PersonalDataPerson - With Whom?</option>
-                                                        <option value="https://www.datavillage.me/ontologies/LConsent#PersonalDataCharacteristic">PersonalDataCharacteristic - How?</option>
+                                                        <option value="http://schema.org/FollowAction">FollowAction</option>
+                                                        <option value="http://schema.org/LikeAction">LikeAction</option>
+                                                        <option value="http://schema.org/DislikeAction">DislikeAction</option>
                                                     </select>
                                                 </div>
                                                 <span class="badge badge-default">Array</span> <small>Set of personal data categories</small>
@@ -119,27 +117,27 @@
                                             <div>
                                             <select id="consentReceiptDataSources"  name="consentReceiptDataSources" class="form-control selectpicker" multiple="multiple">
                                                 <optgroup label="Sports & health">
-                                                        <option value="20f2fc315a06ed54663bdfd5efa4a51234b27fd4d4690bd58d0944120bcd31d08d28ae5891ba9243c91f5eab608d5d364c1681e2bf0d9e30c25822d8350c5a5d">Strava (Available for sensitivity: "PersonalData" - category: "What | When")</option>
-                                                        <option value="bca154aab2acb04a332df47c7cfc90f30914678b66824924a67ef6f164f53431144ffba71840e240ee553137ad6d2bf56d10caf8e55c2bf56fdaca3f476b7626">Fitbit (Available for sensitivity: "PersonalData" - category: "What | When")</option>
+                                                        <option value="20f2fc315a06ed54663bdfd5efa4a51234b27fd4d4690bd58d0944120bcd31d08d28ae5891ba9243c91f5eab608d5d364c1681e2bf0d9e30c25822d8350c5a5d">Strava</option>
+                                                        <option value="bca154aab2acb04a332df47c7cfc90f30914678b66824924a67ef6f164f53431144ffba71840e240ee553137ad6d2bf56d10caf8e55c2bf56fdaca3f476b7626">Fitbit</option>
                                                 </optgroup>
                                                 <optgroup label="Social & interests">
-                                                        <option value="4f6c4a9045ae3fdc7c457a6998a2ec538c87cfadd52529eccfc3f81676eca9b9130e0c3e3cdbf5d47cc0114ac3b4e248d74e2c5d8ef6d8aa79a8fddfc4bb4098">Facebook (Available for sensitivity: "PersonalData" - category: "What | When")</option>
-                                                        <option value="9c7eabb50816242175562fa9ae5ad4dd66c0b7b03a813a7ef021ec9c07c80f8e45a6383b82d5164342cb82d585d20ecb33d7ed7fe020c12b18d44ec5d238ede1">Spotify (Available for sensitivity: "PersonalData" - category: "What")</option>
-                                                        <option value="21a51fa4894901daf2123b825e083e9b3e0ce13dcb930bd3689ad132c42dc861bfdebaea0fb28e69314432d049a37b51c4f351c477d157470ae3ee24f0d7f98b">VRT Nu (Available for sensitivity: "PersonalData" - category: "What | When")</option>
-                                                        <option value="5941b703d4e5585e37709636dfd03e2d443f5abfa107702d1718dd6f542ea97a6c7ef6401ed0c49d2658d88641100fae92273764d4dfbe81186013590e035b25">VTM GO (Available for sensitivity: "PersonalData" - category: "What | When")</option>
-                                                        <option value="9d84b14f152b965ddd34cb79fdc1ed88e589f6e01085702af77d0837c84c8b85f0ad1ad25122c110a04761a5edc3831de0bdb3edd9a2db959b45a3625db4e98c">Auvio (Available for sensitivity: "PersonalData" - category: "What | When")</option>
+                                                        <option value="4f6c4a9045ae3fdc7c457a6998a2ec538c87cfadd52529eccfc3f81676eca9b9130e0c3e3cdbf5d47cc0114ac3b4e248d74e2c5d8ef6d8aa79a8fddfc4bb4098">Facebook (category: "LikeAction")</option>
+                                                        <option value="9c7eabb50816242175562fa9ae5ad4dd66c0b7b03a813a7ef021ec9c07c80f8e45a6383b82d5164342cb82d585d20ecb33d7ed7fe020c12b18d44ec5d238ede1">Spotify (category: "FollowAction, LikeAction")</option>
+                                                        <option value="21a51fa4894901daf2123b825e083e9b3e0ce13dcb930bd3689ad132c42dc861bfdebaea0fb28e69314432d049a37b51c4f351c477d157470ae3ee24f0d7f98b">VRT Nu </option>
+                                                        <option value="5941b703d4e5585e37709636dfd03e2d443f5abfa107702d1718dd6f542ea97a6c7ef6401ed0c49d2658d88641100fae92273764d4dfbe81186013590e035b25">VTM GO </option>
+                                                        <option value="9d84b14f152b965ddd34cb79fdc1ed88e589f6e01085702af77d0837c84c8b85f0ad1ad25122c110a04761a5edc3831de0bdb3edd9a2db959b45a3625db4e98c">RTBF Auvio (category: "LikeAction, DislikeAction")</option>
                                                 </optgroup>
                                                 <optgroup label="Professional & interests">
-                                                        <option value="d3641841bac4cd079759ad45bd71e380d228c8eb248a9ac2d535f2a8d4c207c44d3d85c1de30b5269779b4bd56cbcf3e3e57ca07c4b8fb1a25688fa1ee6ed82b">LinkedIn (Available for sensitivity: "PersonalData" - category: "What")</option>
-                                                        <option value="2fd135571fce75a093a5782d3d013d309a6533f4efb599f6cda7112cf662731bc8e4537559e20bee2fbc11cbd95d6aa9aeb382d27b6c2e7a08075f5c436e14cc">VDAB (Available for sensitivity: "PersonalData" - category: "What | When")</option>
-                                                        <option value="e2bbf6c612c3121814bc462acd9e08299bc46e72f0b72b25b71b1cbb585b0227488079fc22da026cd5ef26ccd74ef039a52cf7decfd81937e687a434d9b41875">Syntra (Available for sensitivity: "PersonalData" - category: "What | When")</option>
+                                                        <option value="d3641841bac4cd079759ad45bd71e380d228c8eb248a9ac2d535f2a8d4c207c44d3d85c1de30b5269779b4bd56cbcf3e3e57ca07c4b8fb1a25688fa1ee6ed82b">LinkedIn</option>
+                                                        <option value="2fd135571fce75a093a5782d3d013d309a6533f4efb599f6cda7112cf662731bc8e4537559e20bee2fbc11cbd95d6aa9aeb382d27b6c2e7a08075f5c436e14cc">VDAB </option>
+                                                        <option value="e2bbf6c612c3121814bc462acd9e08299bc46e72f0b72b25b71b1cbb585b0227488079fc22da026cd5ef26ccd74ef039a52cf7decfd81937e687a434d9b41875">Syntra </option>
                                                 </optgroup>
                                                 <optgroup label="Mobility">
-                                                        <option value="c9a5509d3f1ecd150f4f049a92d359482d4d41885591ad444c9762d4bf1bcad1b6e069eae7b320e5703801c985461de38e8fce0bb903e5c71a94c9b411f4a939">Google timeline (Available for sensitivity: "PersonalData" - category: "What | When | Where")</option>
+                                                        <option value="c9a5509d3f1ecd150f4f049a92d359482d4d41885591ad444c9762d4bf1bcad1b6e069eae7b320e5703801c985461de38e8fce0bb903e5c71a94c9b411f4a939">Google timeline </option>
                                                 </optgroup>
                                                 <optgroup label="Finance & consumption">
-                                                        <option value="c257eeeb1d7e9cf0522a1c6876d6a4b110dfecd131ea1883682869a654881c445be3b3d1daa0ee0bd541dc3487f71072bd638f9bd2b72b6e045729a145d1126a">Bnp Paribas Fortis statements (Available for sensitivity: "PersonalData" - category: "What | When | Where")</option>
-                                                        <option value="e0f7e4427e5b7013fd9a92b96f8deb0f0e95d8ef654425afeb8591551555b69334c9e1260fe4a6c51f7ff2397a731980102a3483ee4f46633f3c7ea84c5e3f97">ING statements (Available for sensitivity: "PersonalData" - category: "What | When | Where")</option>
+                                                        <option value="c257eeeb1d7e9cf0522a1c6876d6a4b110dfecd131ea1883682869a654881c445be3b3d1daa0ee0bd541dc3487f71072bd638f9bd2b72b6e045729a145d1126a">Bnp Paribas Fortis statements </option>
+                                                        <option value="e0f7e4427e5b7013fd9a92b96f8deb0f0e95d8ef654425afeb8591551555b69334c9e1260fe4a6c51f7ff2397a731980102a3483ee4f46633f3c7ea84c5e3f97">ING statements </option>
                                                 </optgroup>
                                             </select>
                                         </div>
