@@ -23,9 +23,9 @@ import OAuthDatabase from './db';
  ************************************/
 
 function _getClient(clientId,clientSecret,done){
-    var url='https://'+config.getApiDomain()+'/clients/'+clientId;
+    var url=config.getApiDomain()+'/clients/'+clientId;
     if(clientSecret!=null)
-        url='https://'+config.getApiDomain()+'/clients/'+clientId+"?client_secret="+clientSecret;
+        url=config.getApiDomain()+'/clients/'+clientId+"?client_secret="+clientSecret;
     //get application access token
     var options = {
         'method': 'GET',
@@ -66,7 +66,7 @@ function _getClient(clientId,clientSecret,done){
 }
 
 function _createClient(appName,appUrl,allowedCallback,done){
-    var url='https://'+config.getApiDomain()+'/clients/';
+    var url=config.getApiDomain()+'/clients/';
     //get application access token
     var options = {
         'method': 'POST',
@@ -117,9 +117,9 @@ function _updateClientMetadata(clientId,key,value,done){
 }
 
 function _deleteClient(clientId,clientSecret,done){
-    var url='https://'+config.getApiDomain()+'/clients/'+clientId;
+    var url=config.getApiDomain()+'/clients/'+clientId;
     if(clientSecret!=null)
-        url='https://'+config.getApiDomain()+'/clients/'+clientId+"?client_secret="+clientSecret;
+        url=config.getApiDomain()+'/clients/'+clientId+"?client_secret="+clientSecret;
     //get application access token
     var options = {
         'method': 'DELETE',
@@ -147,7 +147,7 @@ function _deleteClient(clientId,clientSecret,done){
     //get application access token
     var options = {
       'method': 'POST',
-      'url': 'https://'+config.getApiDomain()+'/oauth/token',
+      'url': config.getApiDomain()+'/oauth/token',
       'headers': {
           'Content-Type': ['application/x-www-form-urlencoded', 'application/x-www-form-urlencoded']
       },
@@ -337,7 +337,7 @@ function _unlinkAllUsers(applicationAccessToken,done){
     if(applicationAccessToken!=null){
       var options = {
         'method': 'DELETE',
-        'url': 'https://'+config.getApiDomain()+'/users/',
+        'url': config.getApiDomain()+'/users/',
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer '+applicationAccessToken

@@ -3,12 +3,19 @@
 import dotenv from 'dotenv';
 dotenv.load();
 
+/**
+ * Returns the API endpoint base URL, taken from the env variable.
+ * If not provided in env, returns https://api[-dev].datavillage.me
+ * @returns {string}
+ */
 function _getApiDomain() {
-  if(process.env.ENV=="staging" || process.env.ENV=="production")
-    return "api.datavillage.me";
+  if(process.env.API_URL)
+    return process.env.API_URL;
+  else if(process.env.ENV=="staging" || process.env.ENV=="production")
+    return "https://api.datavillage.me";
   else
-    return "api-dev.datavillage.me";
- } 
+    return "https://api-dev.datavillage.me";
+}
 
 
 module.exports = {

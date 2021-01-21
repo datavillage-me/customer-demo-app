@@ -162,7 +162,7 @@ router.post('/auth/workbench/import', function (req, res, next) {
   if(applicationUser){
     var options = {
       'method': 'Get',
-      'url': 'https://'+config.getApiDomain()+'/cages/'+consentReceiptSelected+'/importData?startDate='+importStartDate+'&endDate='+importEndDate,
+      'url': config.getApiDomain()+'/bridge/'+consentReceiptSelected+'/importData?startDate='+importStartDate+'&endDate='+importEndDate,
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer '+applicationUser[consentReceiptSelected].access_token
@@ -203,7 +203,7 @@ router.post('/workbench/graphql', function (req, res, next) {
   if(req.body!=null && JSON.stringify(req.body).indexOf("IntrospectionQuery {")==-1){
     var options = {
       'method': 'Post',
-      'url': 'https://'+config.getApiDomain()+'/cages/graphql',
+      'url': config.getApiDomain()+'/cages/graphql',
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': req.headers.authorization
@@ -228,7 +228,7 @@ router.get('/auth/workbench/load', function (req, res, next) {
     if(applicationUser){
       var options = {
         'method': 'Get',
-        'url': 'https://'+config.getApiDomain()+'/cages/'+consentReceiptSelected+'/loadData',
+        'url': config.getApiDomain()+'/cages/'+consentReceiptSelected+'/loadData',
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer '+applicationUser[consentReceiptSelected].access_token
@@ -255,7 +255,7 @@ router.get('/auth/workbench/graphOverview', function (req, res, next) {
     if(applicationUser){
       var options = {
         'method': 'Post',
-        'url': 'https://'+config.getApiDomain()+'/cages/'+consentReceiptSelected+'/queryData',
+        'url': config.getApiDomain()+'/cages/'+consentReceiptSelected+'/queryData',
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer '+applicationUser[consentReceiptSelected].access_token
